@@ -14,6 +14,59 @@ const ICONS = {
 };
 function icon(name, cls){ return `<svg class="${cls||''}" viewBox="0 0 24 24">${ICONS[name]}</svg>`; }
 
+/* ---------- COMPANION: qalam (reed pen) & inkwell — no figurative/facial elements ---------- */
+function companionSVG(state){
+  // shared inkwell base
+  const inkwell = `
+    <ellipse cx="19" cy="30" rx="12" ry="4" fill="var(--teal-deep)" opacity="0.9"/>
+    <path d="M8 30 L10 21 Q10 18 13 18 H25 Q28 18 28 21 L30 30 Z" fill="var(--teal)"/>
+    <ellipse cx="19" cy="21" rx="9" ry="2.6" fill="#0a4a4a"/>
+    <ellipse cx="19" cy="21" rx="6.5" ry="1.6" fill="#052f2f"/>
+  `;
+  if(state === 'thriving'){
+    return `<svg viewBox="0 0 40 40">
+      ${inkwell}
+      <g class="quill-g">
+        <path d="M19 20 L30 5" stroke="#8a6b3d" stroke-width="2" stroke-linecap="round"/>
+        <path d="M30 5 L34 2 M30 5 L33 7" stroke="#8a6b3d" stroke-width="1.6" stroke-linecap="round"/>
+        <circle class="nib-glow" cx="19" cy="20" r="2.4" fill="var(--gold)"/>
+      </g>
+    </svg>`;
+  }
+  if(state === 'struggling'){
+    return `<svg viewBox="0 0 40 40">
+      ${inkwell}
+      <path d="M19 20 L27 9" stroke="#8a6b3d" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      <path d="M27 9 L30 6.5 M27 9 L29.5 10.5" stroke="#8a6b3d" stroke-width="1.4" stroke-linecap="round" opacity="0.7"/>
+    </svg>`;
+  }
+  // idle
+  return `<svg viewBox="0 0 40 40">
+    ${inkwell}
+    <path d="M19 20 L29 6" stroke="#8a6b3d" stroke-width="2" stroke-linecap="round"/>
+    <path d="M29 6 L32.5 3.5 M29 6 L32 8" stroke="#8a6b3d" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="19" cy="20" r="1.8" fill="var(--gold-soft)"/>
+  </svg>`;
+}
+function companionState(){
+  if(state.hearts <= 1) return 'struggling';
+  if(state.streak >= 3 || (lessonCtx && lessonCtx.mistakes === 0 && lessonCtx.idx > 0)) return 'thriving';
+  return 'idle';
+}
+function companionNote(){
+  const s = companionState();
+  if(s === 'struggling') return "Ink's running low — take it slow, your scribe's still with you.";
+  if(s === 'thriving') return "<b>Flowing well</b> — the qalam moves fastest when you're on a streak.";
+  return "Your scribe rests, ready when you are.";
+}
+function renderCompanion(){
+  const s = companionState();
+  return `<div class="companion-row">
+    <div class="companion-box ${s}">${companionSVG(s)}</div>
+    <div class="companion-note">${companionNote()}</div>
+  </div>`;
+}
+
 function rosetteSVG(size, filled){
   // 8-pointed star (khatam) rosette
   const c = filled ? "var(--gold)" : "var(--line)";
@@ -160,6 +213,7 @@ function renderHome(){
       <h1><span class="arabic">دَرْب</span>Darb</h1>
       <div class="rank-line">Rank: <b>${rank.title}</b> <span class="arabic">${rank.ar}</span></div>
     </div>
+    ${renderCompanion()}
     <div class="trail">
       <div class="trail-svg-line"></div>
       ${stations}
@@ -197,7 +251,7 @@ function renderLesson(){
     <div class="screen active">
       <div class="lesson-top">
         <button class="close-btn" onclick="navigate('home')">${icon('close')}</button>
-        <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+        ${tileRow(unit.exercises.length, 0)}
         <div class="hearts-mini">${heartsRow()}</div>
       </div>
       <div class="exercise-wrap">
@@ -215,7 +269,6 @@ function renderLesson(){
   const total = unit.exercises.length;
   const idx = lessonCtx.idx;
   const ex = unit.exercises[idx];
-  const pct = Math.round((idx/total)*100);
 
   let bodyHtml = '';
   if(ex.type === 'mcq'){
@@ -240,12 +293,25 @@ function renderLesson(){
   <div class="screen active">
     <div class="lesson-top">
       <button class="close-btn" onclick="if(confirm('Leave this lesson? Progress on this lesson will be lost.')) navigate('home')">${icon('close')}</button>
-      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      ${tileRow(total, idx)}
       <div class="hearts-mini">${heartsRow()}</div>
     </div>
     <div class="exercise-wrap" id="exWrap">${bodyHtml}</div>
     <div class="footer-bar" id="footerBar" style="display:none;"></div>
   </div>`;
+}
+
+function tileRow(total, currentIdx){
+  // currentIdx: -1 = none started (teach screen), else index of exercise in progress; earlier ones are filled
+  let out = '<div class="tile-row">';
+  for(let i=0;i<total;i++){
+    let cls = 'tile';
+    if(i < currentIdx || (currentIdx===-1 && false)) cls += ' filled';
+    if(i === currentIdx) cls += ' current';
+    out += `<div class="${cls}"></div>`;
+  }
+  out += '</div>';
+  return out;
 }
 
 function heartsRow(){

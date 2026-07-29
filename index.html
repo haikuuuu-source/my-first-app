@@ -249,6 +249,48 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 .reset-row{padding:10px 24px 30px;text-align:center;}
 .reset-link{font-size:12px;color:var(--ink-soft);text-decoration:underline;}
 
+/* ---------- COMPANION (qalam & inkwell) ---------- */
+.companion-row{display:flex;align-items:center;gap:12px;padding:2px 24px 16px;}
+.companion-box{
+  width:56px;height:56px;flex:none;border-radius:16px;background:#fff;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);position:relative;overflow:visible;
+}
+.companion-box svg{width:38px;height:38px;}
+.companion-note{font-size:12.5px;color:var(--ink-soft);line-height:1.4;}
+.companion-note b{color:var(--ink);}
+.companion-box.thriving{border-color:var(--gold);}
+.companion-box.thriving .nib-glow{animation:nibGlow 1.6s ease-in-out infinite;}
+.companion-box.thriving .quill-g{animation:quillWrite 1.8s ease-in-out infinite;transform-origin:80% 80%;}
+.companion-box.struggling{border-color:var(--terracotta);}
+.companion-box.struggling svg{opacity:0.55;}
+@keyframes nibGlow{
+  0%,100%{opacity:0.55;}
+  50%{opacity:1;}
+}
+@keyframes quillWrite{
+  0%,100%{transform:rotate(0deg);}
+  50%{transform:rotate(-6deg);}
+}
+@keyframes idleBob{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-2px);}
+}
+.companion-box.idle svg{animation:idleBob 3.4s ease-in-out infinite;}
+
+/* ---------- MANUSCRIPT TILE PROGRESS ---------- */
+.tile-row{display:flex;gap:6px;flex:1;align-items:center;}
+.tile{
+  width:20px;height:20px;flex:1;max-width:26px;border-radius:5px;
+  transform:rotate(45deg);
+  background:var(--parchment-deep);border:1.5px solid var(--line);
+  transition:background .3s ease, border-color .3s ease, transform .3s ease;
+}
+.tile.filled{
+  background:linear-gradient(135deg, var(--gold-soft), var(--gold));
+  border-color:var(--gold);
+}
+.tile.current{border-color:var(--teal);transform:rotate(45deg) scale(1.12);}
+
 @media (max-width:360px){
   .ex-sentence{font-size:24px;}
   .path-header h1{font-size:25px;}
