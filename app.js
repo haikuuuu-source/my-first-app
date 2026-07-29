@@ -14,6 +14,30 @@ const ICONS = {
 };
 function icon(name, cls){ return `<svg class="${cls||''}" viewBox="0 0 24 24">${ICONS[name]}</svg>`; }
 
+/* ---------- STARFIELD BACKGROUND ---------- */
+function buildStarfield(){
+  const field = document.getElementById('starfield');
+  if(!field || field.dataset.built) return;
+  field.dataset.built = '1';
+  let html = '';
+  // small twinkling dots
+  for(let i=0;i<55;i++){
+    const x = Math.random()*100, y = Math.random()*100;
+    const size = (Math.random()*2 + 1).toFixed(1);
+    const delay = (Math.random()*3.5).toFixed(2);
+    const dur = (2.4 + Math.random()*2.4).toFixed(2);
+    html += `<div class="star-pt" style="left:${x}%;top:${y}%;width:${size}px;height:${size}px;animation-delay:${delay}s;animation-duration:${dur}s;"></div>`;
+  }
+  // occasional small 8-point geometric star-rosettes (echoes the achievement rosette, not figurative)
+  for(let i=0;i<7;i++){
+    const x = Math.random()*100, y = Math.random()*70 + 5;
+    const size = 10 + Math.random()*10;
+    const delay = (Math.random()*4).toFixed(2);
+    html += `<div class="star-rosette" style="left:${x}%;top:${y}%;animation-delay:${delay}s;">${rosetteSVG(size, true)}</div>`;
+  }
+  field.innerHTML = html;
+}
+
 /* ---------- COMPANION: qalam (reed pen) & inkwell — no figurative/facial elements ---------- */
 function companionSVG(state){
   // shared inkwell base
@@ -55,9 +79,9 @@ function companionState(){
 }
 function companionNote(){
   const s = companionState();
-  if(s === 'struggling') return "Ink's running low — take it slow, your scribe's still with you.";
-  if(s === 'thriving') return "<b>Flowing well</b> — the qalam moves fastest when you're on a streak.";
-  return "Your scribe rests, ready when you are.";
+  if(s === 'struggling') return "Ink's running low tonight — that's okay! Even the brightest stars dim sometimes. One more try? 💫";
+  if(s === 'thriving') return "<b>You're absolutely glowing right now!</b> The qalam can barely keep up with you ✨";
+  return "Your scribe is waiting under the stars — ready to light something up together?";
 }
 function renderCompanion(){
   const s = companionState();
@@ -150,7 +174,7 @@ function flushToasts(){
   const ach = toastQueue.shift();
   const toast = document.getElementById('toast');
   document.getElementById('toastIcon').innerHTML = ICONS[ach.icon] || ICONS.star;
-  document.getElementById('toastTitle').textContent = "ACHIEVEMENT UNLOCKED";
+  document.getElementById('toastTitle').textContent = "✨ YOU EARNED A STAR";
   document.getElementById('toastBody').textContent = ach.title + " — " + ach.body;
   toast.classList.add('show');
   setTimeout(()=>{
@@ -196,7 +220,7 @@ function renderHome(){
         <div class="day-label">Day ${u.day}${done ? ' · Complete' : ''}</div>
         <h3>${u.title}</h3>
         <div class="ar-title arabic">${u.arTitle}</div>
-        <div class="prog">${done ? '5 / 5 exercises' : (unlocked ? 'Tap to begin' : 'Locked')}</div>
+        <div class="prog">${done ? '✨ all 5 stars earned' : (unlocked ? "Let's go!" : 'Locked')}</div>
       </div>
     </div>`;
   }).join('');
@@ -209,9 +233,9 @@ function renderHome(){
       <div class="stat-pill hearts">${icon('heart','stat-icon')}${state.hearts}/${state.heartsMax}</div>
     </div>
     <div class="path-header">
-      <div class="eyebrow">10-Day Nahw Path</div>
+      <div class="eyebrow">Your 10-Night Journey ✨</div>
       <h1><span class="arabic">دَرْب</span>Darb</h1>
-      <div class="rank-line">Rank: <b>${rank.title}</b> <span class="arabic">${rank.ar}</span></div>
+      <div class="rank-line">You're shining as a <b>${rank.title}</b> <span class="arabic">${rank.ar}</span> right now</div>
     </div>
     ${renderCompanion()}
     <div class="trail">
@@ -223,6 +247,7 @@ function renderHome(){
       <button class="nav-btn" onclick="navigate('profile')">${icon('profile')}<span>Profile</span></button>
     </div>
   </div>`;
+  buildStarfield();
 }
 
 function startUnit(unitId){
@@ -260,7 +285,7 @@ function renderLesson(){
         <p style="font-size:15.5px;line-height:1.7;color:var(--ink-soft);">${unit.teach}</p>
       </div>
       <div class="footer-bar">
-        <button class="primary-btn" onclick="beginExercises()">Start (5 exercises)</button>
+        <button class="primary-btn" onclick="beginExercises()">Let's light this up ✨ (5 stars)</button>
       </div>
     </div>`;
     return;
@@ -423,21 +448,29 @@ function finishLesson(){
 }
 
 /* ============ RESULT SCREEN ============ */
+const CELEBRATIONS = [
+  "You just made the sky brighter! 🌙",
+  "Look at you go!! ✨",
+  "That was beautiful to watch.",
+  "You're on fire tonight!",
+  "Another star, just like that ⭐"
+];
 function renderResult(){
   const {unit, mistakes, xpGained} = lessonCtx;
   const correct = unit.exercises.length - mistakes;
+  const headline = CELEBRATIONS[unit.id % CELEBRATIONS.length];
   app.innerHTML = `
   <div class="screen active">
     <div class="result-wrap">
       ${rosetteSVG(140, true)}
-      <h1>Day ${unit.day} Complete</h1>
-      <p>${unit.title} — ${unit.arTitle}</p>
+      <h1>${headline}</h1>
+      <p>Day ${unit.day} complete — ${unit.title} · ${unit.arTitle}</p>
       <div class="result-stats">
         <div class="rstat"><div class="num">+${xpGained}</div><div class="lab">XP earned</div></div>
         <div class="rstat"><div class="num">${correct}/${unit.exercises.length}</div><div class="lab">Correct</div></div>
         <div class="rstat"><div class="num">${state.streak}</div><div class="lab">Day streak</div></div>
       </div>
-      <button class="primary-btn" onclick="navigate('home')">Continue</button>
+      <button class="primary-btn" onclick="navigate('home')">Keep the magic going →</button>
     </div>
   </div>`;
   setTimeout(flushToasts, 500);
@@ -464,7 +497,7 @@ function renderProfile(){
     </div>
     <div class="profile-header">
       <div class="profile-avatar arabic">ن</div>
-      <h2>Your Path</h2>
+      <h2>Your Constellation</h2>
       <div class="rank-tag">${rank.title} · <span class="arabic">${rank.ar}</span></div>
     </div>
     <div class="grid-stats">
