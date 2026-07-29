@@ -20,58 +20,60 @@ function buildStarfield(){
   if(!field || field.dataset.built) return;
   field.dataset.built = '1';
   let html = '';
-  // small twinkling dots
-  for(let i=0;i<55;i++){
+  // twinkling dot stars
+  for(let i=0;i<70;i++){
     const x = Math.random()*100, y = Math.random()*100;
     const size = (Math.random()*2 + 1).toFixed(1);
     const delay = (Math.random()*3.5).toFixed(2);
     const dur = (2.4 + Math.random()*2.4).toFixed(2);
     html += `<div class="star-pt" style="left:${x}%;top:${y}%;width:${size}px;height:${size}px;animation-delay:${delay}s;animation-duration:${dur}s;"></div>`;
   }
-  // occasional small 8-point geometric star-rosettes (echoes the achievement rosette, not figurative)
-  for(let i=0;i<7;i++){
-    const x = Math.random()*100, y = Math.random()*70 + 5;
-    const size = 10 + Math.random()*10;
-    const delay = (Math.random()*4).toFixed(2);
-    html += `<div class="star-rosette" style="left:${x}%;top:${y}%;animation-delay:${delay}s;">${rosetteSVG(size, true)}</div>`;
+  // a couple of slow drifting comet streaks for atmosphere
+  for(let i=0;i<2;i++){
+    const y = 10 + Math.random()*50;
+    const delay = (i*4 + Math.random()*3).toFixed(2);
+    html += `<div class="comet" style="top:${y}%;animation-delay:${delay}s;"></div>`;
   }
   field.innerHTML = html;
 }
 
-/* ---------- COMPANION: qalam (reed pen) & inkwell — no figurative/facial elements ---------- */
-function companionSVG(state){
-  // shared inkwell base
-  const inkwell = `
-    <ellipse cx="19" cy="30" rx="12" ry="4" fill="var(--teal-deep)" opacity="0.9"/>
-    <path d="M8 30 L10 21 Q10 18 13 18 H25 Q28 18 28 21 L30 30 Z" fill="var(--teal)"/>
-    <ellipse cx="19" cy="21" rx="9" ry="2.6" fill="#0a4a4a"/>
-    <ellipse cx="19" cy="21" rx="6.5" ry="1.6" fill="#052f2f"/>
-  `;
-  if(state === 'thriving'){
-    return `<svg viewBox="0 0 40 40">
-      ${inkwell}
-      <g class="quill-g">
-        <path d="M19 20 L30 5" stroke="#8a6b3d" stroke-width="2" stroke-linecap="round"/>
-        <path d="M30 5 L34 2 M30 5 L33 7" stroke="#8a6b3d" stroke-width="1.6" stroke-linecap="round"/>
-        <circle class="nib-glow" cx="19" cy="20" r="2.4" fill="var(--gold)"/>
-      </g>
-    </svg>`;
-  }
-  if(state === 'struggling'){
-    return `<svg viewBox="0 0 40 40">
-      ${inkwell}
-      <path d="M19 20 L27 9" stroke="#8a6b3d" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-      <path d="M27 9 L30 6.5 M27 9 L29.5 10.5" stroke="#8a6b3d" stroke-width="1.4" stroke-linecap="round" opacity="0.7"/>
-    </svg>`;
-  }
-  // idle
+/* ---------- COMPANION: astronaut riding a small ship — no facial features (blank visor only) ---------- */
+function astronautSVG(state){
+  // ship pod
+  const podFill = state==='struggling' ? '#5A5580' : 'var(--teal-bright)';
+  const trimFill = state==='struggling' ? '#3F3B5C' : '#1F9C8A';
+  const flameOn = state !== 'struggling';
+  const flicker = state === 'thriving' ? 'flame-flicker' : 'flame-idle';
   return `<svg viewBox="0 0 40 40">
-    ${inkwell}
-    <path d="M19 20 L29 6" stroke="#8a6b3d" stroke-width="2" stroke-linecap="round"/>
-    <path d="M29 6 L32.5 3.5 M29 6 L32 8" stroke="#8a6b3d" stroke-width="1.5" stroke-linecap="round"/>
-    <circle cx="19" cy="20" r="1.8" fill="var(--gold-soft)"/>
+    <!-- thruster flame -->
+    ${flameOn ? `<g class="${flicker}">
+      <path d="M16 30 Q19 38 19 41 Q22 38 24 30 Z" fill="var(--bloom)" opacity="0.9"/>
+      <path d="M17.5 30 Q19.5 35 19.5 37 Q21.5 35 22.5 30 Z" fill="var(--star-gold)"/>
+    </g>` : ''}
+    <!-- ship body -->
+    <path d="M9 26 Q6 20 12 12 Q16 6 20 6 Q24 6 28 12 Q34 20 31 26 Q30 29 20 29 Q10 29 9 26Z" fill="${podFill}"/>
+    <path d="M9 26 Q6 20 12 12 Q16 6 20 6 Q24 6 28 12 Q34 20 31 26" fill="none" stroke="${trimFill}" stroke-width="1.4"/>
+    <!-- fins -->
+    <path d="M9 24 L4 27 L9 27Z" fill="${trimFill}"/>
+    <path d="M31 24 L36 27 L31 27Z" fill="${trimFill}"/>
+    <!-- cockpit window -->
+    <circle cx="20" cy="17" r="9.5" fill="${trimFill}"/>
+    <circle cx="20" cy="17" r="8" fill="#DCEFEE"/>
+    <!-- astronaut helmet bust, no facial features: blank gradient visor only -->
+    <circle cx="20" cy="15.5" r="5.2" fill="#F4F1E8"/>
+    <circle cx="20" cy="15.5" r="4.1" fill="url(#visorGrad)"/>
+    <path d="M15.3 21 Q20 24.5 24.7 21 L24.7 23 Q20 26 15.3 23 Z" fill="#F4F1E8"/>
   </svg>`;
 }
+const SVG_DEFS = `<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <linearGradient id="visorGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8FE3D8"/>
+      <stop offset="55%" stop-color="#2B6E7A"/>
+      <stop offset="100%" stop-color="#12313D"/>
+    </linearGradient>
+  </defs>
+</svg>`;
 function companionState(){
   if(state.hearts <= 1) return 'struggling';
   if(state.streak >= 3 || (lessonCtx && lessonCtx.mistakes === 0 && lessonCtx.idx > 0)) return 'thriving';
@@ -79,30 +81,36 @@ function companionState(){
 }
 function companionNote(){
   const s = companionState();
-  if(s === 'struggling') return "Ink's running low tonight — that's okay! Even the brightest stars dim sometimes. One more try? 💫";
-  if(s === 'thriving') return "<b>You're absolutely glowing right now!</b> The qalam can barely keep up with you ✨";
-  return "Your scribe is waiting under the stars — ready to light something up together?";
+  if(s === 'struggling') return "Fuel's running low tonight — that's okay! Even the brightest ships slow down sometimes. One more try? 💫";
+  if(s === 'thriving') return "<b>You're flying right now!</b> Full speed ahead ✨";
+  return "Your ship is docked and ready — where should we launch to next?";
 }
 function renderCompanion(){
   const s = companionState();
   return `<div class="companion-row">
-    <div class="companion-box ${s}">${companionSVG(s)}</div>
+    <div class="companion-box ${s}">${astronautSVG(s)}</div>
     <div class="companion-note">${companionNote()}</div>
   </div>`;
 }
 
-function rosetteSVG(size, filled){
-  // 8-pointed star (khatam) rosette
-  const c = filled ? "var(--gold)" : "var(--line)";
-  const inner = filled ? "#fff" : "var(--parchment-deep)";
-  return `<svg width="${size}" height="${size}" viewBox="0 0 100 100">
-    <g transform="translate(50,50)">
-      <rect x="-32" y="-32" width="64" height="64" rx="10" fill="${c}" transform="rotate(0)"/>
-      <rect x="-32" y="-32" width="64" height="64" rx="10" fill="${c}" transform="rotate(45)"/>
-    </g>
-    <circle cx="50" cy="50" r="22" fill="${inner}" stroke="${filled?'var(--gold)':'var(--line)'}" stroke-width="2"/>
+function planetBadgeSVG(size){
+  // simple ringed-planet badge for completed days — space-themed, replaces the old flower rosette
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+    <ellipse cx="20" cy="21" rx="15" ry="4.2" fill="none" stroke="var(--night-1)" stroke-width="2" opacity="0.55" transform="rotate(-14 20 21)"/>
+    <circle cx="20" cy="19" r="10" fill="var(--star-gold-soft)"/>
+    <circle cx="20" cy="19" r="10" fill="url(#planetShade)"/>
+    <ellipse cx="20" cy="19" rx="15" ry="4.2" fill="none" stroke="var(--night-1)" stroke-width="2" transform="rotate(-14 20 19)"/>
   </svg>`;
 }
+const PLANET_DEFS = `<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <radialGradient id="planetShade" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#FFEFC2"/>
+      <stop offset="60%" stop-color="var(--star-gold)"/>
+      <stop offset="100%" stop-color="#B8862E"/>
+    </radialGradient>
+  </defs>
+</svg>`;
 
 /* ============ STATE ============ */
 const STORAGE_KEY = 'darb_nahw_state_v1';
@@ -210,7 +218,10 @@ function renderHome(){
     const unlocked = isUnitUnlocked(u.id);
     const isCurrent = !done && unlocked;
     const cls = done ? 'done' : (isCurrent ? 'current' : 'locked');
-    const inner = done ? rosetteSVG(38, true) : `<span class="station-num">${u.day}</span>`;
+    let inner;
+    if(done) inner = planetBadgeSVG(38);
+    else if(isCurrent) inner = astronautSVG(companionState());
+    else inner = `<span class="station-num">${u.day}</span>`;
     return `
     <div class="station">
       <div class="station-node ${cls}">
@@ -220,7 +231,7 @@ function renderHome(){
         <div class="day-label">Day ${u.day}${done ? ' · Complete' : ''}</div>
         <h3>${u.title}</h3>
         <div class="ar-title arabic">${u.arTitle}</div>
-        <div class="prog">${done ? '✨ all 5 stars earned' : (unlocked ? "Let's go!" : 'Locked')}</div>
+        <div class="prog">${done ? '✨ all 5 stars earned' : (unlocked ? "Your ship is docked here" : 'Locked')}</div>
       </div>
     </div>`;
   }).join('');
@@ -462,7 +473,7 @@ function renderResult(){
   app.innerHTML = `
   <div class="screen active">
     <div class="result-wrap">
-      ${rosetteSVG(140, true)}
+      ${planetBadgeSVG(140)}
       <h1>${headline}</h1>
       <p>Day ${unit.day} complete — ${unit.title} · ${unit.arTitle}</p>
       <div class="result-stats">
@@ -524,5 +535,6 @@ function resetProgress(){
 window.resetProgress = resetProgress;
 
 /* ============ INIT ============ */
+document.body.insertAdjacentHTML('afterbegin', SVG_DEFS + PLANET_DEFS);
 regenCheck(); // simple generous regen on load
 navigate('home');
