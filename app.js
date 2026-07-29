@@ -38,32 +38,35 @@ function buildStarfield(){
 }
 
 /* ---------- COMPANION: astronaut riding a small ship — no facial features (blank visor only) ---------- */
+/* ---------- COMPANION: astronaut sitting on a crescent moon, legs swinging — no facial features (blank visor only) ---------- */
 function astronautSVG(state){
-  const podFill = state==='struggling' ? '#5A5580' : 'var(--teal-bright)';
-  const trimFill = state==='struggling' ? '#3F3B5C' : '#1F9C8A';
-  const flameOn = state !== 'struggling';
-  const flicker = state === 'thriving' ? 'flame-flicker' : 'flame-idle';
-  return `<svg viewBox="0 0 40 40">
-    <!-- thruster flame -->
-    ${flameOn ? `<g class="${flicker}">
-      <path d="M16 30 Q19 38 19 41 Q22 38 24 30 Z" fill="var(--bloom)" opacity="0.9"/>
-      <path d="M17.5 30 Q19.5 35 19.5 37 Q21.5 35 22.5 30 Z" fill="var(--star-gold)"/>
-    </g>` : ''}
-    <!-- ship body -->
-    <path d="M9 26 Q6 20 12 12 Q16 6 20 6 Q24 6 28 12 Q34 20 31 26 Q30 29 20 29 Q10 29 9 26Z" fill="${podFill}"/>
-    <path d="M9 26 Q6 20 12 12 Q16 6 20 6 Q24 6 28 12 Q34 20 31 26" fill="none" stroke="${trimFill}" stroke-width="1.4"/>
-    <!-- fins -->
-    <path d="M9 24 L4 27 L9 27Z" fill="${trimFill}"/>
-    <path d="M31 24 L36 27 L31 27Z" fill="${trimFill}"/>
-    <!-- cockpit: dark glass so the helmet reads clearly against it -->
-    <circle cx="20" cy="17" r="9.5" fill="${trimFill}"/>
-    <circle cx="20" cy="17" r="8" fill="#0C2430"/>
-    <!-- astronaut helmet bust, no facial features: bright suit + blank reflective visor only -->
-    <path d="M13.6 24.5 Q20 28.5 26.4 24.5 L26.4 22 Q20 25.5 13.6 22 Z" fill="#EDEAE0"/>
-    <circle cx="20" cy="15.8" r="5.6" fill="#EDEAE0"/>
-    <circle cx="20" cy="15.8" r="5.6" fill="none" stroke="#B7C9C6" stroke-width="0.6"/>
-    <circle cx="20" cy="15.8" r="4.3" fill="url(#visorGrad)"/>
-    <ellipse cx="18.2" cy="13.8" rx="1.3" ry="0.8" fill="#EAF7F4" opacity="0.65"/>
+  const suitFill = state==='struggling' ? '#BDB9A8' : '#EDEAE0';
+  const moonFill = state==='struggling' ? '#4A4568' : 'url(#moonGrad)';
+  const glow = state==='thriving' ? 'filter:drop-shadow(0 0 5px rgba(243,201,105,0.7));' : '';
+  const legClass = state==='struggling' ? '' : (state==='thriving' ? 'leg-fast' : 'leg-slow');
+  return `<svg viewBox="0 0 40 40" style="${glow}">
+    <!-- crescent moon -->
+    <path d="M20 12 A11 11 0 1 0 20 34 A8 8 0 1 1 20 12 Z" fill="${moonFill}"/>
+    <!-- legs (behind torso, swinging from hip) -->
+    <g class="${legClass}" style="transform-origin:16.5px 20px;transform-box:view-box;">
+      <path d="M16.5 20 L14.5 29" stroke="${suitFill}" stroke-width="2.3" stroke-linecap="round"/>
+      <circle cx="14.3" cy="29.6" r="1.6" fill="var(--teal-bright)"/>
+    </g>
+    <g class="${legClass}" style="transform-origin:23.5px 20px;animation-delay:-1.1s;transform-box:view-box;">
+      <path d="M23.5 20 L25.5 29" stroke="${suitFill}" stroke-width="2.3" stroke-linecap="round"/>
+      <circle cx="25.7" cy="29.6" r="1.6" fill="var(--teal-bright)"/>
+    </g>
+    <!-- arms resting -->
+    <path d="M15.5 17 L12.5 20.5" stroke="${suitFill}" stroke-width="2" stroke-linecap="round"/>
+    <path d="M24.5 17 L27.5 20.5" stroke="${suitFill}" stroke-width="2" stroke-linecap="round"/>
+    <!-- torso -->
+    <rect x="14.5" y="13.5" width="11" height="8" rx="4" fill="${suitFill}"/>
+    <circle cx="20" cy="17.2" r="1.6" fill="${state==='struggling' ? '#8983B8' : 'var(--star-gold)'}" opacity="0.85"/>
+    <!-- helmet, no facial features: dark ring + blank reflective visor only -->
+    <circle cx="20" cy="9.5" r="5.8" fill="${suitFill}"/>
+    <circle cx="20" cy="9.5" r="5.8" fill="none" stroke="#0A2530" stroke-width="0.5" opacity="0.4"/>
+    <circle cx="20" cy="9.5" r="4.4" fill="url(#visorGrad)"/>
+    <ellipse cx="18.1" cy="7.3" rx="1.3" ry="0.8" fill="#EAF7F4" opacity="0.65"/>
   </svg>`;
 }
 const SVG_DEFS = `<svg width="0" height="0" style="position:absolute;">
@@ -72,6 +75,10 @@ const SVG_DEFS = `<svg width="0" height="0" style="position:absolute;">
       <stop offset="0%" stop-color="#A8EDE0"/>
       <stop offset="55%" stop-color="#1F6E78"/>
       <stop offset="100%" stop-color="#0A2530"/>
+    </linearGradient>
+    <linearGradient id="moonGrad" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#F3EFE0"/>
+      <stop offset="100%" stop-color="#C7C0DE"/>
     </linearGradient>
   </defs>
 </svg>`;
@@ -82,9 +89,9 @@ function companionState(){
 }
 function companionNote(){
   const s = companionState();
-  if(s === 'struggling') return "Fuel's running low tonight — that's okay! Even the brightest ships slow down sometimes. One more try? 💫";
-  if(s === 'thriving') return "<b>You're flying right now!</b> Full speed ahead ✨";
-  return "Your ship is docked and ready — where should we launch to next?";
+  if(s === 'struggling') return "Your astronaut's taking it slow tonight — that's okay! Even the brightest stars dim sometimes. One more try? 💫";
+  if(s === 'thriving') return "<b>You're on a roll!</b> Your astronaut is kicking their feet with excitement ✨";
+  return "Your astronaut is perched on the moon, legs swinging — ready when you are.";
 }
 function renderCompanion(){
   const s = companionState();
@@ -94,11 +101,36 @@ function renderCompanion(){
   </div>`;
 }
 
-function planetBadgeSVG(size){
-  // simple ringed-planet badge for completed days — space-themed, replaces the old flower rosette
+/* ---------- SPACE BADGES: varied icons (planet / star / moon / ufo) for completed days ---------- */
+const BADGE_TYPES = ['planet','star','moon','ufo'];
+function badgeTypeForDay(day){ return BADGE_TYPES[(day-1) % BADGE_TYPES.length]; }
+
+function spaceBadgeSVG(type, size){
+  if(type === 'star'){
+    return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+      <path d="M20 4 L24.2 14.8 L36 15.6 L26.8 23 L30 34.4 L20 27.6 L10 34.4 L13.2 23 L4 15.6 L15.8 14.8 Z" fill="url(#planetShade)" stroke="var(--night-1)" stroke-width="1.6" stroke-linejoin="round"/>
+    </svg>`;
+  }
+  if(type === 'moon'){
+    return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="12" fill="url(#moonBadgeGrad)" stroke="var(--night-1)" stroke-width="1.6"/>
+      <circle cx="15.5" cy="16" r="2.1" fill="#B7AFC9" opacity="0.55"/>
+      <circle cx="24" cy="24" r="1.5" fill="#B7AFC9" opacity="0.5"/>
+      <circle cx="25" cy="14.5" r="1.1" fill="#B7AFC9" opacity="0.5"/>
+    </svg>`;
+  }
+  if(type === 'ufo'){
+    return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+      <ellipse cx="20" cy="23" rx="15" ry="5" fill="url(#planetShade)" stroke="var(--night-1)" stroke-width="1.6"/>
+      <path d="M12 21 Q14 12 20 12 Q26 12 28 21 Z" fill="url(#visorGrad)" stroke="var(--night-1)" stroke-width="1.4"/>
+      <circle cx="13" cy="24" r="1.4" fill="#EDEAE0"/>
+      <circle cx="20" cy="26.5" r="1.4" fill="#EDEAE0"/>
+      <circle cx="27" cy="24" r="1.4" fill="#EDEAE0"/>
+    </svg>`;
+  }
+  // planet (default)
   return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
     <ellipse cx="20" cy="21" rx="15" ry="4.2" fill="none" stroke="var(--night-1)" stroke-width="2" opacity="0.55" transform="rotate(-14 20 21)"/>
-    <circle cx="20" cy="19" r="10" fill="var(--star-gold-soft)"/>
     <circle cx="20" cy="19" r="10" fill="url(#planetShade)"/>
     <ellipse cx="20" cy="19" rx="15" ry="4.2" fill="none" stroke="var(--night-1)" stroke-width="2" transform="rotate(-14 20 19)"/>
   </svg>`;
@@ -109,6 +141,11 @@ const PLANET_DEFS = `<svg width="0" height="0" style="position:absolute;">
       <stop offset="0%" stop-color="#FFEFC2"/>
       <stop offset="60%" stop-color="var(--star-gold)"/>
       <stop offset="100%" stop-color="#B8862E"/>
+    </radialGradient>
+    <radialGradient id="moonBadgeGrad" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#F3EFE0"/>
+      <stop offset="60%" stop-color="#D8D3E8"/>
+      <stop offset="100%" stop-color="#9C93B8"/>
     </radialGradient>
   </defs>
 </svg>`;
@@ -220,7 +257,7 @@ function renderHome(){
     const isCurrent = !done && unlocked;
     const cls = done ? 'done' : (isCurrent ? 'current' : 'locked');
     let inner;
-    if(done) inner = planetBadgeSVG(38);
+    if(done) inner = spaceBadgeSVG(badgeTypeForDay(u.day), 38);
     else if(isCurrent) inner = astronautSVG(companionState());
     else inner = `<span class="station-num">${u.day}</span>`;
     return `
@@ -474,7 +511,7 @@ function renderResult(){
   app.innerHTML = `
   <div class="screen active">
     <div class="result-wrap">
-      ${planetBadgeSVG(140)}
+      ${spaceBadgeSVG(badgeTypeForDay(unit.day), 140)}
       <h1>${headline}</h1>
       <p>Day ${unit.day} complete — ${unit.title} · ${unit.arTitle}</p>
       <div class="result-stats">
