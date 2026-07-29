@@ -39,7 +39,6 @@ function buildStarfield(){
 
 /* ---------- COMPANION: astronaut riding a small ship — no facial features (blank visor only) ---------- */
 function astronautSVG(state){
-  // ship pod
   const podFill = state==='struggling' ? '#5A5580' : 'var(--teal-bright)';
   const trimFill = state==='struggling' ? '#3F3B5C' : '#1F9C8A';
   const flameOn = state !== 'struggling';
@@ -56,21 +55,23 @@ function astronautSVG(state){
     <!-- fins -->
     <path d="M9 24 L4 27 L9 27Z" fill="${trimFill}"/>
     <path d="M31 24 L36 27 L31 27Z" fill="${trimFill}"/>
-    <!-- cockpit window -->
+    <!-- cockpit: dark glass so the helmet reads clearly against it -->
     <circle cx="20" cy="17" r="9.5" fill="${trimFill}"/>
-    <circle cx="20" cy="17" r="8" fill="#DCEFEE"/>
-    <!-- astronaut helmet bust, no facial features: blank gradient visor only -->
-    <circle cx="20" cy="15.5" r="5.2" fill="#F4F1E8"/>
-    <circle cx="20" cy="15.5" r="4.1" fill="url(#visorGrad)"/>
-    <path d="M15.3 21 Q20 24.5 24.7 21 L24.7 23 Q20 26 15.3 23 Z" fill="#F4F1E8"/>
+    <circle cx="20" cy="17" r="8" fill="#0C2430"/>
+    <!-- astronaut helmet bust, no facial features: bright suit + blank reflective visor only -->
+    <path d="M13.6 24.5 Q20 28.5 26.4 24.5 L26.4 22 Q20 25.5 13.6 22 Z" fill="#EDEAE0"/>
+    <circle cx="20" cy="15.8" r="5.6" fill="#EDEAE0"/>
+    <circle cx="20" cy="15.8" r="5.6" fill="none" stroke="#B7C9C6" stroke-width="0.6"/>
+    <circle cx="20" cy="15.8" r="4.3" fill="url(#visorGrad)"/>
+    <ellipse cx="18.2" cy="13.8" rx="1.3" ry="0.8" fill="#EAF7F4" opacity="0.65"/>
   </svg>`;
 }
 const SVG_DEFS = `<svg width="0" height="0" style="position:absolute;">
   <defs>
     <linearGradient id="visorGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#8FE3D8"/>
-      <stop offset="55%" stop-color="#2B6E7A"/>
-      <stop offset="100%" stop-color="#12313D"/>
+      <stop offset="0%" stop-color="#A8EDE0"/>
+      <stop offset="55%" stop-color="#1F6E78"/>
+      <stop offset="100%" stop-color="#0A2530"/>
     </linearGradient>
   </defs>
 </svg>`;
