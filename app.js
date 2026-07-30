@@ -40,33 +40,35 @@ function buildStarfield(){
 /* ---------- COMPANION: astronaut riding a small ship — no facial features (blank visor only) ---------- */
 /* ---------- COMPANION: astronaut sitting on a crescent moon, legs swinging — no facial features (blank visor only) ---------- */
 function astronautSVG(state){
-  const suitFill = state==='struggling' ? '#BDB9A8' : '#EDEAE0';
+  const suitFill = state==='struggling' ? '#BDB9A8' : '#F2EFE4';
   const moonFill = state==='struggling' ? '#4A4568' : 'url(#moonGrad)';
-  const glow = state==='thriving' ? 'filter:drop-shadow(0 0 5px rgba(243,201,105,0.7));' : '';
+  const glowExtra = state==='thriving' ? 'drop-shadow(0 0 6px rgba(243,201,105,0.75)) ' : '';
   const legClass = state==='struggling' ? '' : (state==='thriving' ? 'leg-fast' : 'leg-slow');
-  return `<svg viewBox="0 0 40 40" style="${glow}">
-    <!-- crescent moon -->
-    <path d="M20 12 A11 11 0 1 0 20 34 A8 8 0 1 1 20 12 Z" fill="${moonFill}"/>
-    <!-- legs (behind torso, swinging from hip) -->
-    <g class="${legClass}" style="transform-origin:16.5px 20px;transform-box:view-box;">
-      <path d="M16.5 20 L14.5 29" stroke="${suitFill}" stroke-width="2.3" stroke-linecap="round"/>
-      <circle cx="14.3" cy="29.6" r="1.6" fill="var(--teal-bright)"/>
+  return `<svg viewBox="0 0 40 40" style="filter:${glowExtra}drop-shadow(0 0 5px rgba(199,192,222,0.45));">
+    <!-- crescent moon: proven non-degenerate arc pair (distinct radii, non-diametric endpoints) -->
+    <g transform="translate(2,10) scale(1.42)">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="${moonFill}"/>
     </g>
-    <g class="${legClass}" style="transform-origin:23.5px 20px;animation-delay:-1.1s;transform-box:view-box;">
-      <path d="M23.5 20 L25.5 29" stroke="${suitFill}" stroke-width="2.3" stroke-linecap="round"/>
-      <circle cx="25.7" cy="29.6" r="1.6" fill="var(--teal-bright)"/>
+    <!-- legs (swinging from hip, draped over the moon's front curve) -->
+    <g class="${legClass}" style="transform-origin:17px 24px;transform-box:view-box;">
+      <path d="M17 24 L14.5 33" stroke="${suitFill}" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="14.2" cy="33.6" r="1.7" fill="var(--teal-bright)"/>
     </g>
-    <!-- arms resting -->
-    <path d="M15.5 17 L12.5 20.5" stroke="${suitFill}" stroke-width="2" stroke-linecap="round"/>
-    <path d="M24.5 17 L27.5 20.5" stroke="${suitFill}" stroke-width="2" stroke-linecap="round"/>
+    <g class="${legClass}" style="transform-origin:23px 24px;animation-delay:-1.1s;transform-box:view-box;">
+      <path d="M23 24 L25.5 33" stroke="${suitFill}" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="25.8" cy="33.6" r="1.7" fill="var(--teal-bright)"/>
+    </g>
+    <!-- arms resting on the moon's surface -->
+    <path d="M15 20.5 L11.5 23.5" stroke="${suitFill}" stroke-width="2.1" stroke-linecap="round"/>
+    <path d="M25 20.5 L28.5 23.5" stroke="${suitFill}" stroke-width="2.1" stroke-linecap="round"/>
     <!-- torso -->
-    <rect x="14.5" y="13.5" width="11" height="8" rx="4" fill="${suitFill}"/>
-    <circle cx="20" cy="17.2" r="1.6" fill="${state==='struggling' ? '#8983B8' : 'var(--star-gold)'}" opacity="0.85"/>
-    <!-- helmet, no facial features: dark ring + blank reflective visor only -->
-    <circle cx="20" cy="9.5" r="5.8" fill="${suitFill}"/>
-    <circle cx="20" cy="9.5" r="5.8" fill="none" stroke="#0A2530" stroke-width="0.5" opacity="0.4"/>
-    <circle cx="20" cy="9.5" r="4.4" fill="url(#visorGrad)"/>
-    <ellipse cx="18.1" cy="7.3" rx="1.3" ry="0.8" fill="#EAF7F4" opacity="0.65"/>
+    <rect x="14" y="16.5" width="12" height="8.5" rx="4.2" fill="${suitFill}"/>
+    <circle cx="20" cy="20.5" r="1.7" fill="${state==='struggling' ? '#8983B8' : 'var(--star-gold)'}" opacity="0.9"/>
+    <!-- helmet, no facial features: bright suit ring + blank reflective visor only -->
+    <circle cx="20" cy="11.5" r="6.4" fill="${suitFill}"/>
+    <circle cx="20" cy="11.5" r="6.4" fill="none" stroke="#0A2530" stroke-width="0.5" opacity="0.35"/>
+    <circle cx="20" cy="11.5" r="4.9" fill="url(#visorGrad)"/>
+    <ellipse cx="17.9" cy="9.1" rx="1.5" ry="0.9" fill="#EAF7F4" opacity="0.7"/>
   </svg>`;
 }
 const SVG_DEFS = `<svg width="0" height="0" style="position:absolute;">
@@ -76,10 +78,55 @@ const SVG_DEFS = `<svg width="0" height="0" style="position:absolute;">
       <stop offset="55%" stop-color="#1F6E78"/>
       <stop offset="100%" stop-color="#0A2530"/>
     </linearGradient>
-    <linearGradient id="moonGrad" x1="0" y1="0" x2="0.3" y2="1">
-      <stop offset="0%" stop-color="#F3EFE0"/>
+    <linearGradient id="moonGrad" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#FBF8ED"/>
       <stop offset="100%" stop-color="#C7C0DE"/>
     </linearGradient>
+    <radialGradient id="planetShade" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#FFF3D2"/>
+      <stop offset="55%" stop-color="var(--star-gold)"/>
+      <stop offset="100%" stop-color="#A9782A"/>
+    </radialGradient>
+    <radialGradient id="moonBadgeGrad" cx="32%" cy="28%" r="80%">
+      <stop offset="0%" stop-color="#FBF8ED"/>
+      <stop offset="55%" stop-color="#DCD6EC"/>
+      <stop offset="100%" stop-color="#9C93B8"/>
+    </radialGradient>
+    <linearGradient id="rocketGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#C7C9D6"/>
+      <stop offset="45%" stop-color="#F5F3EA"/>
+      <stop offset="100%" stop-color="#B7B4C4"/>
+    </linearGradient>
+    <radialGradient id="cometGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFAE6"/>
+      <stop offset="55%" stop-color="var(--star-gold)"/>
+      <stop offset="100%" stop-color="#B8862E"/>
+    </radialGradient>
+    <linearGradient id="cometTailGrad" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--star-gold)" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="var(--star-gold)" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="galaxyGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFCF0"/>
+      <stop offset="35%" stop-color="var(--star-gold)"/>
+      <stop offset="70%" stop-color="var(--violet-glow)"/>
+      <stop offset="100%" stop-color="#241A4D"/>
+    </radialGradient>
+    <radialGradient id="nebulaGrad1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="var(--violet-glow)" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="var(--violet-glow)" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebulaGrad2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="var(--teal-bright)" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="var(--teal-bright)" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebulaGrad3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="var(--star-gold)" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="var(--star-gold)" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.2"/>
+    </filter>
   </defs>
 </svg>`;
 function companionState(){
@@ -101,54 +148,118 @@ function renderCompanion(){
   </div>`;
 }
 
-/* ---------- SPACE BADGES: varied icons (planet / star / moon / ufo) for completed days ---------- */
-const BADGE_TYPES = ['planet','star','moon','ufo'];
-function badgeTypeForDay(day){ return BADGE_TYPES[(day-1) % BADGE_TYPES.length]; }
+/* ---------- SPACE BADGES: 10 fully unique icons, one per day, sized to fill the badge circle ---------- */
+const BADGE_TYPES_BY_DAY = ['rocket','star','moon','planet','ufo','cluster','comet','satellite','nebula','galaxy'];
+function badgeTypeForDay(day){ return BADGE_TYPES_BY_DAY[(day-1) % BADGE_TYPES_BY_DAY.length]; }
 
 function spaceBadgeSVG(type, size){
+  const S = `width="${size}" height="${size}" viewBox="0 0 40 40"`;
+
+  if(type === 'rocket'){
+    return `<svg ${S}>
+      <g transform="rotate(0 20 20)">
+        <path d="M15 33 Q13 29 15 25 L25 25 Q27 29 25 33 Q20 36 15 33Z" fill="var(--bloom)"/>
+        <path d="M16.5 32 Q15.5 29 16.5 26.5 L23.5 26.5 Q24.5 29 23.5 32 Q20 34 16.5 32Z" fill="var(--star-gold)"/>
+        <path d="M20 3 Q28 10 27 24 Q27 27 20 28 Q13 27 13 24 Q12 10 20 3Z" fill="url(#rocketGrad)" stroke="var(--night-1)" stroke-width="1.5"/>
+        <path d="M13 22 L6 27 L9 19 Z" fill="var(--teal-bright)" stroke="var(--night-1)" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M27 22 L34 27 L31 19 Z" fill="var(--teal-bright)" stroke="var(--night-1)" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M20 3 Q28 10 27 24" fill="none" stroke="var(--night-1)" stroke-width="1.5"/>
+        <circle cx="20" cy="15" r="4.6" fill="url(#visorGrad)" stroke="var(--night-1)" stroke-width="1.3"/>
+      </g>
+    </svg>`;
+  }
   if(type === 'star'){
-    return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
-      <path d="M20 4 L24.2 14.8 L36 15.6 L26.8 23 L30 34.4 L20 27.6 L10 34.4 L13.2 23 L4 15.6 L15.8 14.8 Z" fill="url(#planetShade)" stroke="var(--night-1)" stroke-width="1.6" stroke-linejoin="round"/>
+    return `<svg ${S}>
+      <path d="M20 2 L25 14.5 L38 15.5 L28 24 L31.5 37 L20 29.5 L8.5 37 L12 24 L2 15.5 L15 14.5 Z" fill="url(#planetShade)" stroke="var(--night-1)" stroke-width="1.6" stroke-linejoin="round"/>
     </svg>`;
   }
   if(type === 'moon'){
-    return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
-      <circle cx="20" cy="20" r="12" fill="url(#moonBadgeGrad)" stroke="var(--night-1)" stroke-width="1.6"/>
-      <circle cx="15.5" cy="16" r="2.1" fill="#B7AFC9" opacity="0.55"/>
-      <circle cx="24" cy="24" r="1.5" fill="#B7AFC9" opacity="0.5"/>
-      <circle cx="25" cy="14.5" r="1.1" fill="#B7AFC9" opacity="0.5"/>
+    return `<svg ${S}>
+      <g transform="translate(2,2) scale(1.55)">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="url(#moonBadgeGrad)" stroke="var(--night-1)" stroke-width="1.1" stroke-linejoin="round"/>
+      </g>
+      <circle cx="12" cy="27" r="1.6" fill="#9C93B8" opacity="0.6"/>
+      <circle cx="17" cy="32" r="1.1" fill="#9C93B8" opacity="0.5"/>
+    </svg>`;
+  }
+  if(type === 'planet'){
+    return `<svg ${S}>
+      <ellipse cx="20" cy="22" rx="18" ry="5" fill="none" stroke="var(--night-1)" stroke-width="2.2" opacity="0.5" transform="rotate(-15 20 22)"/>
+      <circle cx="19" cy="19" r="13" fill="url(#planetShade)"/>
+      <ellipse cx="19" cy="19" rx="18" ry="5" fill="none" stroke="var(--night-1)" stroke-width="2.2" transform="rotate(-15 19 19)"/>
+      <circle cx="34" cy="9" r="2.2" fill="url(#moonBadgeGrad)" stroke="var(--night-1)" stroke-width="0.9"/>
     </svg>`;
   }
   if(type === 'ufo'){
-    return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
-      <ellipse cx="20" cy="23" rx="15" ry="5" fill="url(#planetShade)" stroke="var(--night-1)" stroke-width="1.6"/>
-      <path d="M12 21 Q14 12 20 12 Q26 12 28 21 Z" fill="url(#visorGrad)" stroke="var(--night-1)" stroke-width="1.4"/>
-      <circle cx="13" cy="24" r="1.4" fill="#EDEAE0"/>
-      <circle cx="20" cy="26.5" r="1.4" fill="#EDEAE0"/>
-      <circle cx="27" cy="24" r="1.4" fill="#EDEAE0"/>
+    return `<svg ${S}>
+      <ellipse cx="20" cy="25" rx="19" ry="6.5" fill="url(#planetShade)" stroke="var(--night-1)" stroke-width="1.8"/>
+      <path d="M9 23 Q11 9 20 9 Q29 9 31 23 Z" fill="url(#visorGrad)" stroke="var(--night-1)" stroke-width="1.6"/>
+      <ellipse cx="20" cy="25" rx="19" ry="6.5" fill="none" stroke="var(--night-1)" stroke-width="1.8"/>
+      <circle cx="11" cy="26.5" r="1.8" fill="#F2EFE4"/>
+      <circle cx="20" cy="30" r="1.8" fill="#F2EFE4"/>
+      <circle cx="29" cy="26.5" r="1.8" fill="#F2EFE4"/>
     </svg>`;
   }
-  // planet (default)
-  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
-    <ellipse cx="20" cy="21" rx="15" ry="4.2" fill="none" stroke="var(--night-1)" stroke-width="2" opacity="0.55" transform="rotate(-14 20 21)"/>
-    <circle cx="20" cy="19" r="10" fill="url(#planetShade)"/>
-    <ellipse cx="20" cy="19" rx="15" ry="4.2" fill="none" stroke="var(--night-1)" stroke-width="2" transform="rotate(-14 20 19)"/>
+  if(type === 'cluster'){
+    const pts = [[13,12,4.2],[26,9,3],[31,20,5],[10,25,3.2],[21,29,4.6],[18,19,2.4]];
+    let stars = pts.map(([cx,cy,r])=>{
+      const R2=r*2.2;
+      return `<path d="M${cx} ${cy-R2} L${cx+r*0.55} ${cy-r*0.55} L${cx+R2} ${cy} L${cx+r*0.55} ${cy+r*0.55} L${cx} ${cy+R2} L${cx-r*0.55} ${cy+r*0.55} L${cx-R2} ${cy} L${cx-r*0.55} ${cy-r*0.55} Z" fill="url(#planetShade)" stroke="var(--night-1)" stroke-width="1"/>`;
+    }).join('');
+    return `<svg ${S}>
+      <line x1="13" y1="12" x2="21" y2="29" stroke="var(--star-gold-soft)" stroke-width="0.6" opacity="0.4"/>
+      <line x1="26" y1="9" x2="31" y2="20" stroke="var(--star-gold-soft)" stroke-width="0.6" opacity="0.4"/>
+      <line x1="10" y1="25" x2="18" y2="19" stroke="var(--star-gold-soft)" stroke-width="0.6" opacity="0.4"/>
+      ${stars}
+    </svg>`;
+  }
+  if(type === 'comet'){
+    return `<svg ${S}>
+      <path d="M27 13 L6 33" stroke="url(#cometTailGrad)" stroke-width="9" stroke-linecap="round"/>
+      <path d="M29 11 L12 30" stroke="url(#cometTailGrad)" stroke-width="4.5" stroke-linecap="round" opacity="0.8"/>
+      <circle cx="29.5" cy="10.5" r="7" fill="url(#cometGrad)" stroke="var(--night-1)" stroke-width="1.4"/>
+    </svg>`;
+  }
+  if(type === 'satellite'){
+    return `<svg ${S}>
+      <g transform="rotate(-25 20 20)">
+        <rect x="4" y="15" width="10" height="10" rx="1" fill="url(#visorGrad)" stroke="var(--night-1)" stroke-width="1.3"/>
+        <line x1="6" y1="15" x2="6" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
+        <line x1="9" y1="15" x2="9" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
+        <line x1="12" y1="15" x2="12" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
+        <rect x="26" y="15" width="10" height="10" rx="1" fill="url(#visorGrad)" stroke="var(--night-1)" stroke-width="1.3"/>
+        <line x1="28" y1="15" x2="28" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
+        <line x1="31" y1="15" x2="31" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
+        <line x1="34" y1="15" x2="34" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
+        <rect x="15.5" y="16" width="9" height="8" rx="2" fill="url(#rocketGrad)" stroke="var(--night-1)" stroke-width="1.4"/>
+        <line x1="20" y1="16" x2="20" y2="9" stroke="var(--night-1)" stroke-width="1.3"/>
+        <circle cx="20" cy="8" r="1.5" fill="var(--star-gold)" stroke="var(--night-1)" stroke-width="1"/>
+      </g>
+    </svg>`;
+  }
+  if(type === 'nebula'){
+    return `<svg ${S}>
+      <g filter="url(#softBlur)">
+        <ellipse cx="15" cy="17" rx="11" ry="8" fill="url(#nebulaGrad1)"/>
+        <ellipse cx="25" cy="22" rx="10" ry="7.5" fill="url(#nebulaGrad2)"/>
+        <ellipse cx="20" cy="14" rx="8" ry="6" fill="url(#nebulaGrad3)"/>
+      </g>
+      <circle cx="14" cy="16" r="1.3" fill="#FFFCF0"/>
+      <circle cx="26" cy="24" r="1" fill="#FFFCF0"/>
+      <circle cx="22" cy="11" r="0.9" fill="#FFFCF0"/>
+      <circle cx="18" cy="27" r="1.1" fill="#FFFCF0"/>
+    </svg>`;
+  }
+  // galaxy — finale badge (day 10)
+  const beams = [0,45,90,135,180,225,270,315].map(a=>
+    `<path d="M20 20 L20 3" stroke="var(--star-gold-soft)" stroke-width="1.4" stroke-linecap="round" opacity="0.75" transform="rotate(${a} 20 20)"/>`
+  ).join('');
+  return `<svg ${S}>
+    <circle cx="20" cy="20" r="18" fill="none" stroke="var(--violet-glow)" stroke-width="1" opacity="0.4"/>
+    ${beams}
+    <circle cx="20" cy="20" r="9" fill="url(#galaxyGrad)" stroke="var(--night-1)" stroke-width="1.4"/>
   </svg>`;
 }
-const PLANET_DEFS = `<svg width="0" height="0" style="position:absolute;">
-  <defs>
-    <radialGradient id="planetShade" cx="35%" cy="30%" r="75%">
-      <stop offset="0%" stop-color="#FFEFC2"/>
-      <stop offset="60%" stop-color="var(--star-gold)"/>
-      <stop offset="100%" stop-color="#B8862E"/>
-    </radialGradient>
-    <radialGradient id="moonBadgeGrad" cx="35%" cy="30%" r="75%">
-      <stop offset="0%" stop-color="#F3EFE0"/>
-      <stop offset="60%" stop-color="#D8D3E8"/>
-      <stop offset="100%" stop-color="#9C93B8"/>
-    </radialGradient>
-  </defs>
-</svg>`;
 
 /* ============ STATE ============ */
 const STORAGE_KEY = 'darb_nahw_state_v1';
@@ -321,6 +432,7 @@ function renderLesson(){
   const {unit} = lessonCtx;
 
   if(lessonCtx.showingTeach){
+    const badgeType = badgeTypeForDay(unit.day);
     app.innerHTML = `
     <div class="screen active">
       <div class="lesson-top">
@@ -329,9 +441,13 @@ function renderLesson(){
         <div class="hearts-mini">${heartsRow()}</div>
       </div>
       <div class="exercise-wrap">
-        <div class="ex-kicker">Day ${unit.day} · ${unit.arTitle}</div>
-        <h2 style="font-size:22px;margin-bottom:14px;">${unit.title}</h2>
-        <p style="font-size:15.5px;line-height:1.7;color:var(--ink-soft);">${unit.teach}</p>
+        <div class="teach-card">
+          <div class="teach-badge">${spaceBadgeSVG(badgeType, 76)}</div>
+          <div class="ex-kicker" style="text-align:center;">Day ${unit.day}</div>
+          <h2 class="teach-title">${unit.title}</h2>
+          <div class="teach-ar arabic">${unit.arTitle}</div>
+          <p class="teach-desc">${unit.teach}</p>
+        </div>
       </div>
       <div class="footer-bar">
         <button class="primary-btn" onclick="beginExercises()">Let's light this up ✨ (5 stars)</button>
@@ -511,7 +627,7 @@ function renderResult(){
   app.innerHTML = `
   <div class="screen active">
     <div class="result-wrap">
-      ${spaceBadgeSVG(badgeTypeForDay(unit.day), 140)}
+      <div class="result-rosette">${spaceBadgeSVG(badgeTypeForDay(unit.day), 140)}</div>
       <h1>${headline}</h1>
       <p>Day ${unit.day} complete — ${unit.title} · ${unit.arTitle}</p>
       <div class="result-stats">
@@ -573,6 +689,6 @@ function resetProgress(){
 window.resetProgress = resetProgress;
 
 /* ============ INIT ============ */
-document.body.insertAdjacentHTML('afterbegin', SVG_DEFS + PLANET_DEFS);
+document.body.insertAdjacentHTML('afterbegin', SVG_DEFS);
 regenCheck(); // simple generous regen on load
 navigate('home');
