@@ -2,15 +2,19 @@
 const ICONS = {
   flame:`<path d="M12 2c1 3-2 4-2 7a4 4 0 0 0 8 0c0-1-.5-2-1-2 1 4-1 6-3 6a3 3 0 0 1-3-3c0-2 1.5-3 1-4-2 1-4 3-4 6a5 5 0 0 0 10 0C18 7 14 5 12 2Z" fill="currentColor"/>`,
   bolt:`<path d="M13 2 3 14h6l-1 8 11-13h-6l1-7Z" fill="currentColor"/>`,
-  heart:`<path d="M12 21s-7-4.4-9.5-9C1 8.5 2.4 5 6 5c2 0 3.5 1.2 4 2.4C10.5 6.2 12 5 14 5c3.6 0 5 3.5 3.5 7-2.5 4.6-9.5 9-9.5 9Z" fill="currentColor"/>`,
-  heartOutline:`<path d="M12 21s-7-4.4-9.5-9C1 8.5 2.4 5 6 5c2 0 3.5 1.2 4 2.4C10.5 6.2 12 5 14 5c3.6 0 5 3.5 3.5 7-2.5 4.6-9.5 9-9.5 9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>`,
+  heart:`<path d="M12 21.3c-.3 0-.6-.1-.8-.3C7.6 18.3 2 13.8 2 9.2 2 6 4.4 3.6 7.5 3.6c1.7 0 3.4.8 4.5 2.2 1.1-1.4 2.8-2.2 4.5-2.2 3.1 0 5.5 2.4 5.5 5.6 0 4.6-5.6 9.1-9.2 11.8-.2.2-.5.3-.8.3Z" fill="currentColor"/>`,
+  heartOutline:`<path d="M12 21.3c-.3 0-.6-.1-.8-.3C7.6 18.3 2 13.8 2 9.2 2 6 4.4 3.6 7.5 3.6c1.7 0 3.4.8 4.5 2.2 1.1-1.4 2.8-2.2 4.5-2.2 3.1 0 5.5 2.4 5.5 5.6 0 4.6-5.6 9.1-9.2 11.8-.2.2-.5.3-.8.3Z" fill="none" stroke="currentColor" stroke-width="1.6"/>`,
   star:`<path d="M12 2.5 15 9l7 .8-5.2 4.8L18.2 21 12 17.3 5.8 21l1.4-6.4L2 9.8 9 9l3-6.5Z" fill="currentColor"/>`,
   gem:`<path d="M6 3h12l3 6-9 12L3 9l3-6Z" fill="currentColor"/>`,
   compass:`<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15 9l-2 6-4-2 2-6 4 2Z" fill="currentColor"/>`,
   crown:`<path d="M3 8l4 3 5-6 5 6 4-3-2 10H5L3 8Z" fill="currentColor"/>`,
   close:`<path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>`,
   home:`<path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1v-9Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>`,
-  profile:`<circle cx="12" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.5 20c1.5-4 5-5.5 7.5-5.5s6 1.5 7.5 5.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`
+  profile:`<circle cx="12" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.5 20c1.5-4 5-5.5 7.5-5.5s6 1.5 7.5 5.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`,
+  trophy:`<path d="M6 4h12v2a6 6 0 0 1-6 6 6 6 0 0 1-6-6V4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M6 5H3.5A2.5 2.5 0 0 0 6 9.5M18 5h2.5A2.5 2.5 0 0 1 18 9.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 12v3.5M9.3 16.5h5.4l.9 3.5H8.4l.9-3.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>`,
+  chartBar:`<rect x="4" y="12" width="4" height="8" rx="1" fill="currentColor"/><rect x="10" y="6.5" width="4" height="13.5" rx="1" fill="currentColor"/><rect x="16" y="3" width="4" height="17" rx="1" fill="currentColor"/>`,
+  pencil:`<path d="M4 20l1-4.2L15.5 5.3l3.2 3.2L8.2 19 4 20Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M13.6 6.9l3.2 3.2" stroke="currentColor" stroke-width="1.6"/>`,
+  check:`<path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`
 };
 function icon(name, cls){ return `<svg class="${cls||''}" viewBox="0 0 24 24">${ICONS[name]}</svg>`; }
 
@@ -78,35 +82,37 @@ const SVG_DEFS = `<svg width="0" height="0" style="position:absolute;">
       <stop offset="55%" stop-color="#1F6E78"/>
       <stop offset="100%" stop-color="#0A2530"/>
     </linearGradient>
-    <linearGradient id="moonGrad" x1="0" y1="0" x2="0.4" y2="1">
-      <stop offset="0%" stop-color="#FBF8ED"/>
-      <stop offset="100%" stop-color="#C7C0DE"/>
+    <linearGradient id="moonGrad" x1="0.1" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#FFEFB0"/>
+      <stop offset="55%" stop-color="#F6CE5B"/>
+      <stop offset="100%" stop-color="#D89A2E"/>
     </linearGradient>
-    <radialGradient id="planetShade" cx="35%" cy="30%" r="75%">
-      <stop offset="0%" stop-color="#FFF3D2"/>
-      <stop offset="55%" stop-color="var(--star-gold)"/>
-      <stop offset="100%" stop-color="#A9782A"/>
+    <radialGradient id="planetShade" cx="32%" cy="26%" r="80%">
+      <stop offset="0%" stop-color="#FFF6DC"/>
+      <stop offset="45%" stop-color="var(--star-gold)"/>
+      <stop offset="100%" stop-color="#8F621E"/>
     </radialGradient>
-    <radialGradient id="moonBadgeGrad" cx="32%" cy="28%" r="80%">
-      <stop offset="0%" stop-color="#FBF8ED"/>
-      <stop offset="55%" stop-color="#DCD6EC"/>
-      <stop offset="100%" stop-color="#9C93B8"/>
+    <radialGradient id="moonBadgeGrad" cx="30%" cy="26%" r="85%">
+      <stop offset="0%" stop-color="#FFF3C4"/>
+      <stop offset="45%" stop-color="#F6CE5B"/>
+      <stop offset="100%" stop-color="#B8791E"/>
     </radialGradient>
-    <linearGradient id="rocketGrad" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#C7C9D6"/>
-      <stop offset="45%" stop-color="#F5F3EA"/>
-      <stop offset="100%" stop-color="#B7B4C4"/>
+    <linearGradient id="rocketGrad" x1="0.15" y1="0" x2="0.85" y2="0">
+      <stop offset="0%" stop-color="#9A9AAE"/>
+      <stop offset="40%" stop-color="#F7F5EE"/>
+      <stop offset="60%" stop-color="#F7F5EE"/>
+      <stop offset="100%" stop-color="#8A8798"/>
     </linearGradient>
-    <radialGradient id="cometGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#FFFAE6"/>
-      <stop offset="55%" stop-color="var(--star-gold)"/>
-      <stop offset="100%" stop-color="#B8862E"/>
+    <radialGradient id="cometGrad" cx="38%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#FFFDF2"/>
+      <stop offset="45%" stop-color="var(--star-gold)"/>
+      <stop offset="100%" stop-color="#9C6E1E"/>
     </radialGradient>
     <linearGradient id="cometTailGrad" x1="1" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="var(--star-gold)" stop-opacity="0.85"/>
       <stop offset="100%" stop-color="var(--star-gold)" stop-opacity="0"/>
     </linearGradient>
-    <radialGradient id="galaxyGrad" cx="50%" cy="50%" r="50%">
+    <radialGradient id="galaxyGrad" cx="42%" cy="38%" r="60%">
       <stop offset="0%" stop-color="#FFFCF0"/>
       <stop offset="35%" stop-color="var(--star-gold)"/>
       <stop offset="70%" stop-color="var(--violet-glow)"/>
@@ -124,8 +130,15 @@ const SVG_DEFS = `<svg width="0" height="0" style="position:absolute;">
       <stop offset="0%" stop-color="var(--star-gold)" stop-opacity="0.9"/>
       <stop offset="100%" stop-color="var(--star-gold)" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="metalGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EAEAF2"/>
+      <stop offset="100%" stop-color="#9D9CB0"/>
+    </radialGradient>
     <filter id="softBlur" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="2.2"/>
+    </filter>
+    <filter id="iconShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="1.2" stdDeviation="1.4" flood-color="#000000" flood-opacity="0.4"/>
     </filter>
   </defs>
 </svg>`;
@@ -157,107 +170,130 @@ function spaceBadgeSVG(type, size){
 
   if(type === 'rocket'){
     return `<svg ${S}>
-      <g transform="rotate(0 20 20)">
+      <g filter="url(#iconShadow)">
         <path d="M15 33 Q13 29 15 25 L25 25 Q27 29 25 33 Q20 36 15 33Z" fill="var(--bloom)"/>
         <path d="M16.5 32 Q15.5 29 16.5 26.5 L23.5 26.5 Q24.5 29 23.5 32 Q20 34 16.5 32Z" fill="var(--star-gold)"/>
-        <path d="M20 3 Q28 10 27 24 Q27 27 20 28 Q13 27 13 24 Q12 10 20 3Z" fill="url(#rocketGrad)" stroke="var(--night-1)" stroke-width="1.5"/>
-        <path d="M13 22 L6 27 L9 19 Z" fill="var(--teal-bright)" stroke="var(--night-1)" stroke-width="1.2" stroke-linejoin="round"/>
-        <path d="M27 22 L34 27 L31 19 Z" fill="var(--teal-bright)" stroke="var(--night-1)" stroke-width="1.2" stroke-linejoin="round"/>
-        <path d="M20 3 Q28 10 27 24" fill="none" stroke="var(--night-1)" stroke-width="1.5"/>
-        <circle cx="20" cy="15" r="4.6" fill="url(#visorGrad)" stroke="var(--night-1)" stroke-width="1.3"/>
+        <path d="M20 2 Q29 9.5 27.5 24.5 Q27.5 28 20 29 Q12.5 28 12.5 24.5 Q11 9.5 20 2Z" fill="url(#rocketGrad)"/>
+        <path d="M13.5 22 L5.5 27.5 L9 18.5 Z" fill="var(--teal-bright)"/>
+        <path d="M26.5 22 L34.5 27.5 L31 18.5 Z" fill="var(--teal-bright)"/>
+        <ellipse cx="16.5" cy="9" rx="1.8" ry="6.5" fill="#fff" opacity="0.35" transform="rotate(-8 16.5 9)"/>
+        <circle cx="20" cy="15" r="4.8" fill="url(#visorGrad)"/>
+        <ellipse cx="18.3" cy="12.8" rx="1.3" ry="0.8" fill="#EAF7F4" opacity="0.75"/>
       </g>
     </svg>`;
   }
   if(type === 'star'){
     return `<svg ${S}>
-      <path d="M20 2 L25 14.5 L38 15.5 L28 24 L31.5 37 L20 29.5 L8.5 37 L12 24 L2 15.5 L15 14.5 Z" fill="url(#planetShade)" stroke="var(--night-1)" stroke-width="1.6" stroke-linejoin="round"/>
+      <g filter="url(#iconShadow)">
+        <path d="M20 1.5 L25.3 14.6 L39 15.6 L28.2 24.4 L31.8 38 L20 30.2 L8.2 38 L11.8 24.4 L1 15.6 L14.7 14.6 Z" fill="url(#planetShade)"/>
+        <path d="M20 1.5 L23 13 L20 20 L17 13 Z" fill="#fff" opacity="0.3"/>
+      </g>
     </svg>`;
   }
   if(type === 'moon'){
     return `<svg ${S}>
-      <g transform="translate(2,2) scale(1.55)">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="url(#moonBadgeGrad)" stroke="var(--night-1)" stroke-width="1.1" stroke-linejoin="round"/>
+      <g filter="url(#iconShadow)">
+        <g transform="translate(1,1) scale(1.62)">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="url(#moonBadgeGrad)"/>
+        </g>
+        <circle cx="14" cy="24" r="1.7" fill="#B8791E" opacity="0.45"/>
+        <circle cx="19" cy="30" r="1.2" fill="#B8791E" opacity="0.4"/>
+        <circle cx="10" cy="30" r="1" fill="#B8791E" opacity="0.35"/>
+        <ellipse cx="11" cy="10" rx="2.5" ry="5" fill="#fff" opacity="0.3" transform="rotate(-20 11 10)"/>
       </g>
-      <circle cx="12" cy="27" r="1.6" fill="#9C93B8" opacity="0.6"/>
-      <circle cx="17" cy="32" r="1.1" fill="#9C93B8" opacity="0.5"/>
     </svg>`;
   }
   if(type === 'planet'){
     return `<svg ${S}>
-      <ellipse cx="20" cy="22" rx="18" ry="5" fill="none" stroke="var(--night-1)" stroke-width="2.2" opacity="0.5" transform="rotate(-15 20 22)"/>
-      <circle cx="19" cy="19" r="13" fill="url(#planetShade)"/>
-      <ellipse cx="19" cy="19" rx="18" ry="5" fill="none" stroke="var(--night-1)" stroke-width="2.2" transform="rotate(-15 19 19)"/>
-      <circle cx="34" cy="9" r="2.2" fill="url(#moonBadgeGrad)" stroke="var(--night-1)" stroke-width="0.9"/>
+      <g filter="url(#iconShadow)">
+        <ellipse cx="19" cy="19" rx="18.5" ry="5.2" fill="none" stroke="#8F621E" stroke-width="2.4" opacity="0.55" transform="rotate(-15 19 19)"/>
+        <circle cx="19" cy="19" r="14" fill="url(#planetShade)"/>
+        <path d="M8 24 A14 14 0 0 0 19 33 A16 8 0 0 1 8 24Z" fill="#5A3E10" opacity="0.28"/>
+        <ellipse cx="14.5" cy="12.5" rx="3.5" ry="5.5" fill="#fff" opacity="0.3" transform="rotate(-15 14.5 12.5)"/>
+        <ellipse cx="19" cy="19" rx="18.5" ry="5.2" fill="none" stroke="#FFE9A8" stroke-width="1" opacity="0.4" transform="rotate(-15 19 19)"/>
+        <circle cx="35" cy="8" r="2.4" fill="url(#moonBadgeGrad)"/>
+      </g>
     </svg>`;
   }
   if(type === 'ufo'){
     return `<svg ${S}>
-      <ellipse cx="20" cy="25" rx="19" ry="6.5" fill="url(#planetShade)" stroke="var(--night-1)" stroke-width="1.8"/>
-      <path d="M9 23 Q11 9 20 9 Q29 9 31 23 Z" fill="url(#visorGrad)" stroke="var(--night-1)" stroke-width="1.6"/>
-      <ellipse cx="20" cy="25" rx="19" ry="6.5" fill="none" stroke="var(--night-1)" stroke-width="1.8"/>
-      <circle cx="11" cy="26.5" r="1.8" fill="#F2EFE4"/>
-      <circle cx="20" cy="30" r="1.8" fill="#F2EFE4"/>
-      <circle cx="29" cy="26.5" r="1.8" fill="#F2EFE4"/>
+      <g filter="url(#iconShadow)">
+        <ellipse cx="20" cy="26" rx="19.5" ry="6.8" fill="url(#metalGrad)"/>
+        <path d="M8 24 Q10 8.5 20 8.5 Q30 8.5 32 24 Z" fill="url(#visorGrad)"/>
+        <ellipse cx="16" cy="15" rx="3" ry="4.5" fill="#fff" opacity="0.35" transform="rotate(-10 16 15)"/>
+        <ellipse cx="20" cy="26" rx="19.5" ry="6.8" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.25"/>
+        <circle cx="10.5" cy="27.5" r="1.9" fill="var(--star-gold)"/>
+        <circle cx="20" cy="31.5" r="1.9" fill="var(--star-gold)"/>
+        <circle cx="29.5" cy="27.5" r="1.9" fill="var(--star-gold)"/>
+      </g>
     </svg>`;
   }
   if(type === 'cluster'){
-    const pts = [[13,12,4.2],[26,9,3],[31,20,5],[10,25,3.2],[21,29,4.6],[18,19,2.4]];
+    const pts = [[12,11,4.6],[27,8,3.2],[32,20,5.4],[9,26,3.4],[21,30,5],[17,19,2.6]];
     let stars = pts.map(([cx,cy,r])=>{
       const R2=r*2.2;
-      return `<path d="M${cx} ${cy-R2} L${cx+r*0.55} ${cy-r*0.55} L${cx+R2} ${cy} L${cx+r*0.55} ${cy+r*0.55} L${cx} ${cy+R2} L${cx-r*0.55} ${cy+r*0.55} L${cx-R2} ${cy} L${cx-r*0.55} ${cy-r*0.55} Z" fill="url(#planetShade)" stroke="var(--night-1)" stroke-width="1"/>`;
+      return `<path d="M${cx} ${cy-R2} L${cx+r*0.55} ${cy-r*0.55} L${cx+R2} ${cy} L${cx+r*0.55} ${cy+r*0.55} L${cx} ${cy+R2} L${cx-r*0.55} ${cy+r*0.55} L${cx-R2} ${cy} L${cx-r*0.55} ${cy-r*0.55} Z" fill="url(#planetShade)"/>`;
     }).join('');
     return `<svg ${S}>
-      <line x1="13" y1="12" x2="21" y2="29" stroke="var(--star-gold-soft)" stroke-width="0.6" opacity="0.4"/>
-      <line x1="26" y1="9" x2="31" y2="20" stroke="var(--star-gold-soft)" stroke-width="0.6" opacity="0.4"/>
-      <line x1="10" y1="25" x2="18" y2="19" stroke="var(--star-gold-soft)" stroke-width="0.6" opacity="0.4"/>
-      ${stars}
+      <line x1="12" y1="11" x2="21" y2="30" stroke="var(--star-gold-soft)" stroke-width="0.6" opacity="0.4"/>
+      <line x1="27" y1="8" x2="32" y2="20" stroke="var(--star-gold-soft)" stroke-width="0.6" opacity="0.4"/>
+      <line x1="9" y1="26" x2="17" y2="19" stroke="var(--star-gold-soft)" stroke-width="0.6" opacity="0.4"/>
+      <g filter="url(#iconShadow)">${stars}</g>
     </svg>`;
   }
   if(type === 'comet'){
     return `<svg ${S}>
-      <path d="M27 13 L6 33" stroke="url(#cometTailGrad)" stroke-width="9" stroke-linecap="round"/>
-      <path d="M29 11 L12 30" stroke="url(#cometTailGrad)" stroke-width="4.5" stroke-linecap="round" opacity="0.8"/>
-      <circle cx="29.5" cy="10.5" r="7" fill="url(#cometGrad)" stroke="var(--night-1)" stroke-width="1.4"/>
+      <path d="M28 13 L5 34" stroke="url(#cometTailGrad)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M30 11 L13 30" stroke="url(#cometTailGrad)" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+      <g filter="url(#iconShadow)">
+        <circle cx="30" cy="10" r="8" fill="url(#cometGrad)"/>
+        <ellipse cx="27" cy="7" rx="2" ry="3" fill="#fff" opacity="0.4" transform="rotate(-30 27 7)"/>
+      </g>
     </svg>`;
   }
   if(type === 'satellite'){
     return `<svg ${S}>
-      <g transform="rotate(-25 20 20)">
-        <rect x="4" y="15" width="10" height="10" rx="1" fill="url(#visorGrad)" stroke="var(--night-1)" stroke-width="1.3"/>
-        <line x1="6" y1="15" x2="6" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
-        <line x1="9" y1="15" x2="9" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
-        <line x1="12" y1="15" x2="12" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
-        <rect x="26" y="15" width="10" height="10" rx="1" fill="url(#visorGrad)" stroke="var(--night-1)" stroke-width="1.3"/>
-        <line x1="28" y1="15" x2="28" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
-        <line x1="31" y1="15" x2="31" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
-        <line x1="34" y1="15" x2="34" y2="25" stroke="var(--night-1)" stroke-width="0.7" opacity="0.5"/>
-        <rect x="15.5" y="16" width="9" height="8" rx="2" fill="url(#rocketGrad)" stroke="var(--night-1)" stroke-width="1.4"/>
-        <line x1="20" y1="16" x2="20" y2="9" stroke="var(--night-1)" stroke-width="1.3"/>
-        <circle cx="20" cy="8" r="1.5" fill="var(--star-gold)" stroke="var(--night-1)" stroke-width="1"/>
+      <g filter="url(#iconShadow)" transform="rotate(-25 20 20)">
+        <rect x="3" y="14" width="11" height="11" rx="1.2" fill="url(#visorGrad)"/>
+        <line x1="5.3" y1="14" x2="5.3" y2="25" stroke="#0A2530" stroke-width="0.6" opacity="0.4"/>
+        <line x1="8.5" y1="14" x2="8.5" y2="25" stroke="#0A2530" stroke-width="0.6" opacity="0.4"/>
+        <line x1="11.7" y1="14" x2="11.7" y2="25" stroke="#0A2530" stroke-width="0.6" opacity="0.4"/>
+        <rect x="26" y="14" width="11" height="11" rx="1.2" fill="url(#visorGrad)"/>
+        <line x1="28.3" y1="14" x2="28.3" y2="25" stroke="#0A2530" stroke-width="0.6" opacity="0.4"/>
+        <line x1="31.5" y1="14" x2="31.5" y2="25" stroke="#0A2530" stroke-width="0.6" opacity="0.4"/>
+        <line x1="34.7" y1="14" x2="34.7" y2="25" stroke="#0A2530" stroke-width="0.6" opacity="0.4"/>
+        <rect x="15" y="15.5" width="10" height="9" rx="2.2" fill="url(#rocketGrad)"/>
+        <ellipse cx="17.5" cy="18" rx="1" ry="2.6" fill="#fff" opacity="0.4"/>
+        <line x1="20" y1="15.5" x2="20" y2="8" stroke="#B7B4C4" stroke-width="1.3"/>
+        <circle cx="20" cy="7" r="1.6" fill="var(--star-gold)"/>
       </g>
     </svg>`;
   }
   if(type === 'nebula'){
     return `<svg ${S}>
       <g filter="url(#softBlur)">
-        <ellipse cx="15" cy="17" rx="11" ry="8" fill="url(#nebulaGrad1)"/>
-        <ellipse cx="25" cy="22" rx="10" ry="7.5" fill="url(#nebulaGrad2)"/>
-        <ellipse cx="20" cy="14" rx="8" ry="6" fill="url(#nebulaGrad3)"/>
+        <ellipse cx="14" cy="18" rx="12.5" ry="9.5" fill="url(#nebulaGrad1)"/>
+        <ellipse cx="26" cy="23" rx="11.5" ry="9" fill="url(#nebulaGrad2)"/>
+        <ellipse cx="20" cy="13" rx="9.5" ry="7.5" fill="url(#nebulaGrad3)"/>
       </g>
-      <circle cx="14" cy="16" r="1.3" fill="#FFFCF0"/>
-      <circle cx="26" cy="24" r="1" fill="#FFFCF0"/>
-      <circle cx="22" cy="11" r="0.9" fill="#FFFCF0"/>
-      <circle cx="18" cy="27" r="1.1" fill="#FFFCF0"/>
+      <circle cx="13" cy="16" r="1.4" fill="#FFFCF0"/>
+      <circle cx="27" cy="25" r="1.1" fill="#FFFCF0"/>
+      <circle cx="22" cy="10" r="1" fill="#FFFCF0"/>
+      <circle cx="17" cy="28" r="1.2" fill="#FFFCF0"/>
+      <circle cx="30" cy="15" r="0.8" fill="#FFFCF0"/>
     </svg>`;
   }
   // galaxy — finale badge (day 10)
   const beams = [0,45,90,135,180,225,270,315].map(a=>
-    `<path d="M20 20 L20 3" stroke="var(--star-gold-soft)" stroke-width="1.4" stroke-linecap="round" opacity="0.75" transform="rotate(${a} 20 20)"/>`
+    `<path d="M20 20 L20 1.5" stroke="var(--star-gold-soft)" stroke-width="1.5" stroke-linecap="round" opacity="0.8" transform="rotate(${a} 20 20)"/>`
   ).join('');
   return `<svg ${S}>
-    <circle cx="20" cy="20" r="18" fill="none" stroke="var(--violet-glow)" stroke-width="1" opacity="0.4"/>
+    <circle cx="20" cy="20" r="19" fill="none" stroke="var(--violet-glow)" stroke-width="1" opacity="0.35"/>
     ${beams}
-    <circle cx="20" cy="20" r="9" fill="url(#galaxyGrad)" stroke="var(--night-1)" stroke-width="1.4"/>
+    <g filter="url(#iconShadow)">
+      <circle cx="20" cy="20" r="10" fill="url(#galaxyGrad)"/>
+      <ellipse cx="17" cy="16.5" rx="2.5" ry="4" fill="#fff" opacity="0.4" transform="rotate(-25 17 16.5)"/>
+    </g>
   </svg>`;
 }
 
@@ -272,7 +308,12 @@ function defaultState(){
     heartsMax:5,
     completedUnits:{},     // {unitId: {mistakes:0}}
     unlockedAchievements:[],
-    currentUnit:1
+    currentUnit:1,
+    profileName:'',
+    unitStats:{},          // {unitId: {correct:0, total:0}} — powers Insights
+    perfectRunCount:0,     // consecutive perfect (0-mistake) lessons — powers a Challenge
+    lastLessonDate:null,
+    lessonsToday:0         // lessons finished on lastLessonDate — powers a Challenge
   };
 }
 function loadState(){
@@ -344,6 +385,7 @@ function flushToasts(){
 const app = document.getElementById('app');
 let route = 'home';
 let lessonCtx = null;
+let profileEditing = false;
 
 function navigate(r, params){
   route = r;
@@ -357,6 +399,8 @@ function render(){
   else if(route === 'lesson') renderLesson();
   else if(route === 'result') renderResult();
   else if(route === 'profile') renderProfile();
+  else if(route === 'challenges') renderChallenges();
+  else if(route === 'insights') renderInsights();
 }
 
 /* ============ HOME / PATH SCREEN ============ */
@@ -394,8 +438,7 @@ function renderHome(){
     </div>
     <div class="path-header">
       <div class="eyebrow">Your 10-Night Journey ✨</div>
-      <h1><span class="arabic">دَرْب</span>Darb</h1>
-      <div class="rank-line">You're shining as a <b>${rank.title}</b> <span class="arabic">${rank.ar}</span> right now</div>
+      <h1 class="arabic solo">دَرْب</h1>
     </div>
     ${renderCompanion()}
     <div class="trail">
@@ -404,6 +447,8 @@ function renderHome(){
     </div>
     <div class="bottom-nav">
       <button class="nav-btn active">${icon('home')}<span>Path</span></button>
+      <button class="nav-btn" onclick="navigate('challenges')">${icon('trophy')}<span>Challenges</span></button>
+      <button class="nav-btn" onclick="navigate('insights')">${icon('chartBar')}<span>Insights</span></button>
       <button class="nav-btn" onclick="navigate('profile')">${icon('profile')}<span>Profile</span></button>
     </div>
   </div>`;
@@ -463,16 +508,20 @@ function renderLesson(){
   let bodyHtml = '';
   if(ex.type === 'mcq'){
     bodyHtml = `
-      <div class="ex-kicker">Multiple Choice</div>
-      <div class="ex-prompt">${ex.prompt}</div>
+      <div class="ex-header-card">
+        <div class="ex-kicker">Multiple Choice · Question ${idx+1} of ${total}</div>
+        <div class="ex-prompt">${ex.prompt}</div>
+      </div>
       <div class="options" id="optWrap">
         ${ex.options.map((o,i)=>`<button class="opt-btn" data-i="${i}" onclick="selectMcq(${i})"><span>${o}</span></button>`).join('')}
       </div>`;
   } else if(ex.type === 'tap'){
     bodyHtml = `
-      <div class="ex-kicker">Tap the Word</div>
-      <div class="ex-prompt">${ex.prompt}</div>
-      <div class="ex-sub">${ex.sub}</div>
+      <div class="ex-header-card">
+        <div class="ex-kicker">Tap the Word · Question ${idx+1} of ${total}</div>
+        <div class="ex-prompt">${ex.prompt}</div>
+        <div class="ex-sub">${ex.sub}</div>
+      </div>
       <div class="ex-sentence" id="tapSentence">
         ${ex.words.map((w,i)=>`<span class="tap-word" data-i="${i}" onclick="selectTap(${i})">${w}</span>`).join(' ')}
       </div>
@@ -507,7 +556,7 @@ function tileRow(total, currentIdx){
 function heartsRow(){
   let h = '';
   for(let i=0;i<state.heartsMax;i++){
-    h += icon(i < state.hearts ? 'heart' : 'heartOutline', 'stat-icon');
+    h += icon(i < state.hearts ? 'heart' : 'heartOutline', 'heart-icon');
   }
   return h;
 }
@@ -554,12 +603,16 @@ window.selectTap = selectTap;
 function handleAnswer(correct, explanation){
   const footer = document.getElementById('footerBar');
   footer.style.display = 'block';
+  const uid = lessonCtx.unit.id;
+  if(!state.unitStats[uid]) state.unitStats[uid] = {correct:0, total:0};
+  state.unitStats[uid].total += 1;
   if(!correct){
     lessonCtx.mistakes += 1;
     state.hearts = Math.max(0, state.hearts - 1);
     saveState();
   } else {
     state.xp += 10;
+    state.unitStats[uid].correct += 1;
     saveState();
   }
   footer.innerHTML = `
@@ -571,6 +624,10 @@ function handleAnswer(correct, explanation){
   `;
   // update hearts display live
   document.querySelector('.hearts-mini').innerHTML = heartsRow();
+  if(!correct){
+    const hm = document.querySelector('.hearts-mini');
+    hm.classList.remove('heart-lost'); void hm.offsetWidth; hm.classList.add('heart-lost');
+  }
 
   if(state.hearts <= 0 && !correct){
     footer.innerHTML += `<p style="text-align:center;font-size:12px;color:var(--ink-soft);margin-top:10px;">Out of hearts — you can still finish this lesson, hearts just won't go lower.</p>`;
@@ -596,6 +653,15 @@ function finishLesson(){
   const wasAlreadyDone = !!state.completedUnits[unit.id];
   state.completedUnits[unit.id] = {mistakes};
   checkStreak();
+
+  // perfect-run tracking (consecutive 0-mistake lessons)
+  state.perfectRunCount = (mistakes === 0) ? (state.perfectRunCount + 1) : 0;
+
+  // same-day lesson count tracking
+  const today = todayStr();
+  if(state.lastLessonDate === today){ state.lessonsToday += 1; }
+  else { state.lastLessonDate = today; state.lessonsToday = 1; }
+
   saveState();
 
   if(!wasAlreadyDone && Object.keys(state.completedUnits).length === 1){
@@ -653,6 +719,16 @@ function renderProfile(){
     </div>`;
   }).join('');
 
+  const nameBlock = profileEditing
+    ? `<div class="name-edit-row">
+        <input id="nameInput" class="name-input" maxlength="24" placeholder="Your name" value="${(state.profileName||'').replace(/"/g,'')}" />
+        <button class="name-save-btn" onclick="saveProfileName()">${icon('check')}</button>
+       </div>`
+    : `<div class="name-display-row" onclick="startEditProfile()">
+        <h2>${state.profileName ? state.profileName : 'Set your name'}</h2>
+        ${icon('pencil','edit-pencil')}
+       </div>`;
+
   app.innerHTML = `
   <div class="screen active">
     <div class="topbar">
@@ -661,8 +737,8 @@ function renderProfile(){
       <div class="stat-pill hearts">${icon('heart','stat-icon')}${state.hearts}/${state.heartsMax}</div>
     </div>
     <div class="profile-header">
-      <div class="profile-avatar arabic">ن</div>
-      <h2>Your Constellation</h2>
+      <div class="profile-avatar">${astronautSVG('idle')}</div>
+      ${nameBlock}
       <div class="rank-tag">${rank.title} · <span class="arabic">${rank.ar}</span></div>
     </div>
     <div class="grid-stats">
@@ -675,9 +751,143 @@ function renderProfile(){
     <div class="reset-row"><button class="reset-link" onclick="resetProgress()">Reset all progress</button></div>
     <div class="bottom-nav">
       <button class="nav-btn" onclick="navigate('home')">${icon('home')}<span>Path</span></button>
+      <button class="nav-btn" onclick="navigate('challenges')">${icon('trophy')}<span>Challenges</span></button>
+      <button class="nav-btn" onclick="navigate('insights')">${icon('chartBar')}<span>Insights</span></button>
       <button class="nav-btn active">${icon('profile')}<span>Profile</span></button>
     </div>
   </div>`;
+  if(profileEditing){
+    const inp = document.getElementById('nameInput');
+    inp.focus();
+    inp.select();
+    inp.addEventListener('keydown', e=>{ if(e.key==='Enter') saveProfileName(); });
+  }
+}
+function startEditProfile(){ profileEditing = true; render(); }
+function saveProfileName(){
+  const inp = document.getElementById('nameInput');
+  state.profileName = (inp.value || '').trim().slice(0,24);
+  saveState();
+  profileEditing = false;
+  render();
+}
+window.startEditProfile = startEditProfile;
+window.saveProfileName = saveProfileName;
+
+/* ============ CHALLENGES SCREEN ============ */
+function renderChallenges(){
+  const completedCount = Object.keys(state.completedUnits).length;
+  const lessonsTodayCount = (state.lastLessonDate === todayStr()) ? state.lessonsToday : 0;
+  const challenges = [
+    {icon:'flame', title:'Streak Keeper', desc:'Reach a 7-day streak', progress:Math.min(state.streak,7), goal:7},
+    {icon:'gem', title:'Flawless Run', desc:'Finish 3 lessons in a row with zero mistakes', progress:Math.min(state.perfectRunCount,3), goal:3},
+    {icon:'bolt', title:'Double Session', desc:'Complete 2 lessons in a single day', progress:Math.min(lessonsTodayCount,2), goal:2},
+    {icon:'crown', title:'Full Constellation', desc:'Complete all 10 days of the path', progress:completedCount, goal:10}
+  ];
+  const cards = challenges.map(c=>{
+    const pct = Math.round((c.progress/c.goal)*100);
+    const done = c.progress >= c.goal;
+    return `<div class="challenge-card ${done?'done':''}">
+      <div class="challenge-icon ${done?'done':''}">${icon(c.icon)}</div>
+      <div class="challenge-body">
+        <div class="challenge-title">${c.title}${done?icon('check','ch-check'):''}</div>
+        <div class="challenge-desc">${c.desc}</div>
+        <div class="challenge-track"><div class="challenge-fill" style="width:${pct}%"></div></div>
+        <div class="challenge-count">${c.progress}/${c.goal}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  app.innerHTML = `
+  <div class="screen active">
+    <div class="topbar">
+      <div class="stat-pill streak">${icon('flame','stat-icon')}${state.streak}</div>
+      <div class="stat-pill xp">${icon('bolt','stat-icon')}${state.xp} XP</div>
+      <div class="stat-pill hearts">${icon('heart','stat-icon')}${state.hearts}/${state.heartsMax}</div>
+    </div>
+    <div class="path-header">
+      <div class="eyebrow">Keep Pushing ✨</div>
+      <h1 class="section-h1">Challenges</h1>
+    </div>
+    <div class="challenge-list">${cards}</div>
+    <div class="bottom-nav">
+      <button class="nav-btn" onclick="navigate('home')">${icon('home')}<span>Path</span></button>
+      <button class="nav-btn active">${icon('trophy')}<span>Challenges</span></button>
+      <button class="nav-btn" onclick="navigate('insights')">${icon('chartBar')}<span>Insights</span></button>
+      <button class="nav-btn" onclick="navigate('profile')">${icon('profile')}<span>Profile</span></button>
+    </div>
+  </div>`;
+  buildStarfield();
+}
+
+/* ============ INSIGHTS SCREEN ============ */
+function insightRow(x, kind){
+  const barColor = kind==='strong' ? 'var(--teal-bright)' : (kind==='weak' ? 'var(--bloom)' : 'var(--star-gold)');
+  return `<div class="insight-row">
+    <div class="insight-row-top">
+      <span class="insight-row-title">Day ${x.unit.day} · ${x.unit.title}</span>
+      <span class="insight-row-pct">${x.acc}%</span>
+    </div>
+    <div class="insight-row-ar arabic">${x.unit.arTitle}</div>
+    <div class="insight-track"><div class="insight-fill" style="width:${x.acc}%;background:${barColor};"></div></div>
+  </div>`;
+}
+function renderInsights(){
+  const statsArr = Object.keys(state.unitStats).map(uid=>{
+    const s = state.unitStats[uid];
+    const unit = UNITS.find(u=>u.id==uid);
+    const acc = s.total>0 ? Math.round((s.correct/s.total)*100) : 0;
+    return {unit, correct:s.correct, total:s.total, acc};
+  }).filter(x=>x.unit && x.total>0).sort((a,b)=>b.acc-a.acc);
+
+  const eligible = statsArr.filter(x=>x.total>=3);
+  const strong = eligible.slice(0,2);
+  const weak = eligible.slice(-2).reverse().filter(x=>!strong.includes(x));
+  const totalCorrect = statsArr.reduce((s,x)=>s+x.correct,0);
+  const totalAnswered = statsArr.reduce((s,x)=>s+x.total,0);
+  const overallAcc = totalAnswered>0 ? Math.round((totalCorrect/totalAnswered)*100) : 0;
+
+  let body;
+  if(statsArr.length === 0){
+    body = `<div class="insight-empty">Complete a few exercises and your strong points + focus areas will show up here ✨</div>`;
+  } else {
+    const strongHtml = strong.length ? strong.map(x=>insightRow(x,'strong')).join('') : `<div class="insight-empty-sm">Keep going — not enough data yet.</div>`;
+    const weakHtml = weak.length ? weak.map(x=>insightRow(x,'weak')).join('') : `<div class="insight-empty-sm">No clear focus areas yet — nice work!</div>`;
+    const allHtml = statsArr.map(x=>insightRow(x,'neutral')).join('');
+    body = `
+      <div class="insight-overall">
+        <div class="insight-overall-num">${overallAcc}%</div>
+        <div class="insight-overall-lab">Overall accuracy across ${totalAnswered} answers</div>
+      </div>
+      <div class="section-title">💪 Strong Areas</div>
+      <div class="insight-list">${strongHtml}</div>
+      <div class="section-title">🎯 Focus Areas</div>
+      <div class="insight-list">${weakHtml}</div>
+      <div class="section-title">All Topics</div>
+      <div class="insight-list">${allHtml}</div>
+    `;
+  }
+
+  app.innerHTML = `
+  <div class="screen active">
+    <div class="topbar">
+      <div class="stat-pill streak">${icon('flame','stat-icon')}${state.streak}</div>
+      <div class="stat-pill xp">${icon('bolt','stat-icon')}${state.xp} XP</div>
+      <div class="stat-pill hearts">${icon('heart','stat-icon')}${state.hearts}/${state.heartsMax}</div>
+    </div>
+    <div class="path-header">
+      <div class="eyebrow">Know Yourself ✨</div>
+      <h1 class="section-h1">Insights</h1>
+    </div>
+    ${body}
+    <div class="bottom-nav">
+      <button class="nav-btn" onclick="navigate('home')">${icon('home')}<span>Path</span></button>
+      <button class="nav-btn" onclick="navigate('challenges')">${icon('trophy')}<span>Challenges</span></button>
+      <button class="nav-btn active">${icon('chartBar')}<span>Insights</span></button>
+      <button class="nav-btn" onclick="navigate('profile')">${icon('profile')}<span>Profile</span></button>
+    </div>
+  </div>`;
+  buildStarfield();
 }
 
 function resetProgress(){

@@ -101,6 +101,8 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 }
 .path-header h1{font-size:30px;color:#fff;}
 .path-header h1 .arabic{font-size:26px;color:var(--star-gold);margin-inline-end:8px;}
+.path-header h1.solo{font-size:42px;color:var(--star-gold);line-height:1.15;text-shadow:0 0 20px rgba(243,201,105,0.35);}
+.section-h1{font-size:27px;color:#fff;}
 .rank-line{margin-top:6px;font-size:13px;color:#C9C3E8;}
 .rank-line b{color:var(--teal-bright);}
 
@@ -170,10 +172,27 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 .close-btn:hover{background:rgba(255,255,255,0.08);}
 .progress-track{flex:1;height:12px;border-radius:100px;background:rgba(255,255,255,0.08);overflow:hidden;border:1px solid rgba(255,255,255,0.15);}
 .progress-fill{height:100%;background:linear-gradient(90deg, var(--teal-bright), var(--star-gold));border-radius:100px;transition:width .35s ease;}
-.hearts-mini{display:flex;gap:3px;flex:none;color:#FF9E7A;}
+.hearts-mini{display:flex;gap:4px;flex:none;color:#FF6B6B;}
+.heart-icon{width:19px;height:19px;filter:drop-shadow(0 0 4px rgba(255,107,107,0.55));transition:transform .2s ease;}
+.hearts-mini.heart-lost{animation:heartLostPulse .4s ease;}
+@keyframes heartLostPulse{
+  0%{transform:scale(1);}
+  30%{transform:scale(1.18);}
+  100%{transform:scale(1);}
+}
 
 .exercise-wrap{flex:1;display:flex;flex-direction:column;padding:10px 24px 24px;}
 .ex-kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--star-gold);margin-bottom:10px;}
+
+.ex-header-card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border:1px solid rgba(255,255,255,0.14);border-radius:18px;
+  padding:20px 20px 18px;margin-bottom:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.07);
+}
+.ex-header-card .ex-kicker{margin-bottom:12px;}
+.ex-header-card .ex-prompt{margin-bottom:0;}
+.ex-header-card .ex-sub{margin-top:8px;margin-bottom:0;}
 
 .teach-card{
   background:linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));
@@ -268,19 +287,32 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 }
 .nav-btn{flex:1;padding:12px 0 10px;display:flex;flex-direction:column;align-items:center;gap:4px;color:#8983B8;}
 .nav-btn.active{color:var(--teal-bright);}
-.nav-btn svg{width:22px;height:22px;}
-.nav-btn span{font-size:10px;font-weight:600;letter-spacing:0.3px;}
+.nav-btn svg{width:21px;height:21px;}
+.nav-btn span{font-size:9.5px;font-weight:600;letter-spacing:0.1px;white-space:nowrap;}
 
 /* ---------- PROFILE ---------- */
 .profile-header{padding:26px 24px 10px;text-align:center;}
 .profile-avatar{
-  width:88px;height:88px;border-radius:50%;margin:0 auto 12px;
-  background:radial-gradient(circle at 35% 30%, var(--star-gold-soft), var(--star-gold) 75%);
-  display:flex;align-items:center;justify-content:center;border:3px solid rgba(255,255,255,0.3);
-  box-shadow:0 0 30px rgba(243,201,105,0.4);
-  font-family:'Amiri',serif;font-size:34px;color:var(--night-1);
+  width:92px;height:92px;border-radius:50%;margin:0 auto 12px;
+  background:radial-gradient(circle at 35% 65%, rgba(63,224,200,0.18), rgba(255,255,255,0.05) 75%);
+  display:flex;align-items:center;justify-content:center;border:3px solid rgba(255,255,255,0.22);
+  box-shadow:0 0 30px rgba(63,224,200,0.25);
 }
+.profile-avatar svg{width:72px;height:72px;}
 .profile-header h2{font-size:22px;color:#fff;}
+.name-display-row{display:inline-flex;align-items:center;gap:8px;cursor:pointer;}
+.name-display-row .edit-pencil{width:15px;height:15px;color:#8983B8;}
+.name-edit-row{display:flex;align-items:center;gap:8px;justify-content:center;}
+.name-input{
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.25);border-radius:10px;
+  padding:8px 12px;color:#fff;font-size:18px;font-family:'Amiri',serif;width:180px;text-align:center;
+}
+.name-input:focus{outline:none;border-color:var(--teal-bright);}
+.name-save-btn{
+  width:34px;height:34px;border-radius:50%;background:var(--teal-bright);color:var(--night-1);
+  display:flex;align-items:center;justify-content:center;flex:none;
+}
+.name-save-btn svg{width:16px;height:16px;}
 .profile-header .rank-tag{
   display:inline-block;margin-top:6px;padding:4px 12px;border-radius:100px;
   background:rgba(63,224,200,0.15);color:var(--teal-bright);font-size:12px;font-weight:700;
@@ -302,7 +334,52 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 .reset-row{padding:10px 24px 30px;text-align:center;}
 .reset-link{font-size:12px;color:#8983B8;text-decoration:underline;}
 
-/* ---------- COMPANION (qalam & inkwell) ---------- */
+/* ---------- CHALLENGES ---------- */
+.challenge-list{padding:6px 24px 30px;display:flex;flex-direction:column;gap:14px;}
+.challenge-card{
+  display:flex;gap:14px;padding:16px;border-radius:16px;
+  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);
+  box-shadow:0 8px 20px rgba(0,0,0,0.22);
+}
+.challenge-card.done{border-color:rgba(243,201,105,0.5);background:rgba(243,201,105,0.08);}
+.challenge-icon{
+  width:44px;height:44px;flex:none;border-radius:12px;background:rgba(255,255,255,0.08);
+  display:flex;align-items:center;justify-content:center;color:var(--star-gold);
+}
+.challenge-icon svg{width:22px;height:22px;}
+.challenge-icon.done{background:var(--star-gold);color:var(--night-1);}
+.challenge-body{flex:1;min-width:0;}
+.challenge-title{color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;gap:6px;}
+.ch-check{width:15px;height:15px;color:var(--star-gold);}
+.challenge-desc{font-size:12.5px;color:#C9C3E8;margin:3px 0 10px;}
+.challenge-track{height:8px;border-radius:100px;background:rgba(255,255,255,0.1);overflow:hidden;}
+.challenge-fill{height:100%;background:linear-gradient(90deg, var(--teal-bright), var(--star-gold));border-radius:100px;transition:width .4s ease;}
+.challenge-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:#8983B8;margin-top:5px;text-align:right;}
+
+/* ---------- INSIGHTS ---------- */
+.insight-overall{
+  margin:6px 24px 20px;padding:22px;border-radius:18px;text-align:center;
+  background:linear-gradient(160deg, rgba(63,224,200,0.14), rgba(243,201,105,0.08));
+  border:1px solid rgba(255,255,255,0.15);
+}
+.insight-overall-num{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:700;color:var(--teal-bright);}
+.insight-overall-lab{font-size:12.5px;color:#C9C3E8;margin-top:4px;}
+.insight-list{padding:4px 24px 10px;display:flex;flex-direction:column;gap:10px;}
+.insight-row{
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);border-radius:14px;padding:12px 14px;
+}
+.insight-row-top{display:flex;justify-content:space-between;align-items:baseline;}
+.insight-row-title{color:#fff;font-size:13.5px;font-weight:600;}
+.insight-row-pct{font-family:'JetBrains Mono',monospace;color:var(--star-gold);font-size:14px;font-weight:700;}
+.insight-row-ar{font-size:13px;color:var(--star-gold-soft);opacity:0.8;margin-top:1px;margin-bottom:8px;}
+.insight-track{height:6px;border-radius:100px;background:rgba(255,255,255,0.1);overflow:hidden;}
+.insight-fill{height:100%;border-radius:100px;transition:width .4s ease;}
+.insight-empty, .insight-empty-sm{
+  color:#C9C3E8;font-size:13.5px;text-align:center;padding:20px 24px;line-height:1.6;
+}
+.insight-empty-sm{padding:12px 24px;font-size:12.5px;}
+
+/* ---------- COMPANION (astronaut on the moon) ---------- */
 .companion-row{display:flex;align-items:center;gap:12px;padding:2px 24px 16px;}
 .companion-box{
   width:56px;height:56px;flex:none;border-radius:16px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.16);
