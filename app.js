@@ -43,6 +43,32 @@ function buildStarfield(){
 
 /* ---------- COMPANION: astronaut riding a small ship — no facial features (blank visor only) ---------- */
 /* ---------- COMPANION: astronaut sitting on a crescent moon, legs swinging — no facial features (blank visor only) ---------- */
+/* ---------- PLATFORMER ASTRONAUT: standing/running pose, no facial features ---------- */
+function astronautRunSVG(){
+  const suitFill = '#F2EFE4';
+  return `<svg viewBox="0 0 30 42" class="astro-sprite">
+    <g class="run-leg-back" style="transform-origin:12px 26px;transform-box:view-box;">
+      <path d="M12 26 L8 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="7.6" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
+    </g>
+    <g class="run-leg-front" style="transform-origin:18px 26px;transform-box:view-box;">
+      <path d="M18 26 L22 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="22.4" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
+    </g>
+    <g class="run-arm-back" style="transform-origin:13px 20px;transform-box:view-box;">
+      <path d="M13 20 L9 25.5" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+    <g class="run-arm-front" style="transform-origin:17px 20px;transform-box:view-box;">
+      <path d="M17 20 L21.5 24.5" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+    <rect x="9.5" y="16.5" width="11" height="10.5" rx="4.6" fill="${suitFill}"/>
+    <circle cx="15" cy="21.2" r="1.6" fill="var(--star-gold)"/>
+    <circle cx="15" cy="8.6" r="6.4" fill="${suitFill}"/>
+    <circle cx="15" cy="8.6" r="4.9" fill="url(#visorGrad)"/>
+    <ellipse cx="12.9" cy="6.2" rx="1.5" ry="0.9" fill="#EAF7F4" opacity="0.7"/>
+  </svg>`;
+}
+
 function astronautSVG(state){
   const suitFill = state==='struggling' ? '#BDB9A8' : '#F2EFE4';
   const moonFill = state==='struggling' ? '#4A4568' : 'url(#moonGrad)';
@@ -509,12 +535,10 @@ function renderLesson(){
   if(ex.type === 'mcq'){
     bodyHtml = `
       <div class="ex-header-card">
-        <div class="ex-kicker">Multiple Choice · Question ${idx+1} of ${total}</div>
+        <div class="ex-kicker">Jump to the Answer · Question ${idx+1} of ${total}</div>
         <div class="ex-prompt">${ex.prompt}</div>
       </div>
-      <div class="options" id="optWrap">
-        ${ex.options.map((o,i)=>`<button class="opt-btn" data-i="${i}" onclick="selectMcq(${i})"><span>${o}</span></button>`).join('')}
-      </div>`;
+      ${renderPlatformerStage(ex)}`;
   } else if(ex.type === 'tap'){
     bodyHtml = `
       <div class="ex-header-card">
@@ -569,21 +593,129 @@ function beginExercises(){
 }
 window.beginExercises = beginExercises;
 
-function selectMcq(i){
+/* ---------- PLATFORMER MINIGAME: jump to the planet, bonk the block, reveal the answer ---------- */
+const PLATFORMER_LAYOUT = [
+  {left:9,  top:68, badge:'planet'},
+  {left:36, top:34, badge:'moon'},
+  {left:63, top:56, badge:'planet'},
+  {left:89, top:20, badge:'ufo'}
+];
+const BLOCK_TYPES = ['star','comet','star','comet'];
+
+function renderPlatformerStage(ex){
+  const planets = ex.options.map((o,i)=>{
+    const p = PLATFORMER_LAYOUT[i];
+    return `
+    <div class="stage-planet" id="planet${i}" style="left:${p.left}%;top:${p.top}%;" onclick="jumpTo(${i})">
+      <div class="stage-block" id="block${i}">
+        <div class="block-icon">${spaceBadgeSVG(BLOCK_TYPES[i], 34)}</div>
+        <div class="block-q">?</div>
+      </div>
+      <div class="planet-icon">${spaceBadgeSVG(p.badge, 44)}</div>
+      <div class="planet-label"><span class="ar">${o}</span></div>
+    </div>`;
+  }).join('');
+  return `
+  <div class="stage" id="stage">
+    <div class="stage-launchpad"></div>
+    <div class="stage-astro" id="stageAstro">${astronautRunSVG()}</div>
+    ${planets}
+  </div>`;
+}
+
+function jumpTo(i){
   if(lessonCtx.answered) return;
-  lessonCtx.answered = true;
-  lessonCtx.selected = i;
   const {unit, idx} = lessonCtx;
   const ex = unit.exercises[idx];
+  lessonCtx.answered = true;
+  lessonCtx.selected = i;
+
+  document.querySelectorAll('.stage-planet').forEach(el=>el.style.pointerEvents='none');
+
+  const stage = document.getElementById('stage');
+  const astro = document.getElementById('stageAstro');
+  const targetPlanet = document.getElementById('planet'+i);
+  const stageRect = stage.getBoundingClientRect();
+  const astroRect = astro.getBoundingClientRect();
+  const targetRect = targetPlanet.getBoundingClientRect();
+
+  const startX = astroRect.left - stageRect.left;
+  const startY = astroRect.top - stageRect.top;
+  const endX = (targetRect.left - stageRect.left) + (targetRect.width/2) - (astroRect.width/2);
+  const endY = (targetRect.top - stageRect.top) - astroRect.height*0.15;
+
+  astro.style.position = 'absolute';
+  astro.style.left = startX+'px';
+  astro.style.top = startY+'px';
+  astro.classList.add('jumping');
+
+  const duration = 520;
+  const arcHeight = 95;
+  const t0 = performance.now();
+  function frame(now){
+    const t = Math.min(1, (now-t0)/duration);
+    const x = startX + (endX-startX)*t;
+    const straightY = startY + (endY-startY)*t;
+    const arc = -4*arcHeight*t*(1-t);
+    astro.style.left = (x)+'px';
+    astro.style.top = (straightY+arc)+'px';
+    if(t < 1){
+      requestAnimationFrame(frame);
+    } else {
+      astro.classList.remove('jumping');
+      astro.classList.add('landed');
+      onLanded(i, ex);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+window.jumpTo = jumpTo;
+
+function onLanded(i, ex){
   const correct = i === ex.answer;
-  document.querySelectorAll('.opt-btn').forEach((btn,bi)=>{
-    btn.disabled = true;
-    if(bi === ex.answer) btn.classList.add('correct');
-    else if(bi === i && !correct) btn.classList.add('wrong');
+  const block = document.getElementById('block'+i);
+  block.classList.add('hit', correct ? 'correct' : 'wrong');
+  const qEl = block.querySelector('.block-q');
+  if(qEl) qEl.textContent = correct ? '✓' : '✕';
+
+  if(!correct){
+    const correctBlock = document.getElementById('block'+ex.answer);
+    if(correctBlock){
+      correctBlock.classList.add('hit','correct-reveal');
+      const cq = correctBlock.querySelector('.block-q');
+      if(cq) cq.textContent = '✓';
+    }
+  }
+  ex.options.forEach((_,j)=>{
+    if(j!==i && j!==ex.answer){
+      const p = document.getElementById('planet'+j);
+      if(p) p.classList.add('dim');
+    }
   });
+
+  if(correct) spawnParticles(block);
   handleAnswer(correct, ex.explanation);
 }
-window.selectMcq = selectMcq;
+
+function spawnParticles(el){
+  const stage = document.getElementById('stage');
+  const stageRect = stage.getBoundingClientRect();
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left - stageRect.left + rect.width/2;
+  const cy = rect.top - stageRect.top + rect.height/2;
+  for(let k=0;k<8;k++){
+    const p = document.createElement('div');
+    p.className = 'burst-particle';
+    const angle = (Math.PI*2/8)*k;
+    const dist = 36 + Math.random()*22;
+    p.style.left = cx+'px';
+    p.style.top = cy+'px';
+    p.style.setProperty('--dx', (Math.cos(angle)*dist).toFixed(1)+'px');
+    p.style.setProperty('--dy', (Math.sin(angle)*dist).toFixed(1)+'px');
+    stage.appendChild(p);
+    setTimeout(()=>p.remove(), 750);
+  }
+}
 
 function selectTap(i){
   if(lessonCtx.answered) return;
