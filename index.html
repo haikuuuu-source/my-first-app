@@ -207,24 +207,26 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 .stage-astro{
   position:absolute;left:2%;bottom:6%;width:30px;height:42px;z-index:20;
   filter:drop-shadow(0 3px 4px rgba(0,0,0,0.4));
-  transition:filter .2s;
+  transform-origin:50% 100%;
 }
-.stage-astro.jumping .astro-sprite{animation:none;}
-.stage-astro.jumping .run-leg-back{transform:rotate(22deg);}
-.stage-astro.jumping .run-leg-front{transform:rotate(-18deg);}
-.stage-astro.jumping .run-arm-back, .stage-astro.jumping .run-arm-front{transform:rotate(-30deg);}
-.astro-sprite{width:100%;height:100%;}
-.run-leg-back{animation:runLegBack .5s ease-in-out infinite;}
-.run-leg-front{animation:runLegFront .5s ease-in-out infinite;}
-.run-arm-back{animation:runLegFront .5s ease-in-out infinite;}
-.run-arm-front{animation:runLegBack .5s ease-in-out infinite;}
-@keyframes runLegBack{
-  0%,100%{transform:rotate(-16deg);}
-  50%{transform:rotate(16deg);}
+.stage-astro:not(.jumping):not(.launch-squash):not(.landing-squash) .astro-sprite{
+  animation:readyPulse 1.9s ease-in-out infinite;
 }
-@keyframes runLegFront{
-  0%,100%{transform:rotate(16deg);}
-  50%{transform:rotate(-16deg);}
+.astro-sprite{width:100%;height:100%;display:block;transform-origin:50% 50%;}
+@keyframes readyPulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.035);}
+}
+.stage-astro.launch-squash{animation:launchSquash .11s ease-in forwards;}
+@keyframes launchSquash{
+  0%{transform:scale(1,1);}
+  100%{transform:scale(1.22,0.72);}
+}
+.stage-astro.landing-squash{animation:landingSquash .26s ease-out;}
+@keyframes landingSquash{
+  0%{transform:scale(1.2,0.75);}
+  55%{transform:scale(0.9,1.12);}
+  100%{transform:scale(1,1);}
 }
 
 .stage-planet{
@@ -234,10 +236,10 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 .stage-planet.dim{opacity:0.3;}
 .planet-icon{width:44px;height:44px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.35));}
 .planet-label{
-  margin-top:4px;padding:4px 9px;border-radius:100px;background:rgba(21,18,51,0.75);
-  border:1px solid rgba(255,255,255,0.18);white-space:nowrap;max-width:88px;overflow:hidden;text-overflow:ellipsis;
+  margin-top:4px;padding:5px 8px;border-radius:12px;background:rgba(21,18,51,0.85);
+  border:1px solid rgba(255,255,255,0.18);white-space:normal;max-width:88px;text-align:center;line-height:1.3;
 }
-.planet-label .ar{font-family:'Amiri',serif;direction:rtl;font-size:13px;color:#fff;}
+.planet-label .ar{font-family:'Amiri',serif;direction:rtl;font-size:12.5px;color:#fff;display:block;}
 
 .stage-block{
   position:absolute;left:50%;top:-58px;transform:translateX(-50%);width:34px;height:34px;

@@ -42,30 +42,59 @@ function buildStarfield(){
 }
 
 /* ---------- COMPANION: astronaut riding a small ship — no facial features (blank visor only) ---------- */
-/* ---------- COMPANION: astronaut sitting on a crescent moon, legs swinging — no facial features (blank visor only) ---------- */
-/* ---------- PLATFORMER ASTRONAUT: standing/running pose, no facial features ---------- */
-function astronautRunSVG(){
+/* ---------- PLATFORMER ASTRONAUT: no facial features, body language only ---------- */
+function astronautReadySVG(){
+  // coiled, ready-to-spring crouch — static pose, no swinging limbs
   const suitFill = '#F2EFE4';
   return `<svg viewBox="0 0 30 42" class="astro-sprite">
-    <g class="run-leg-back" style="transform-origin:12px 26px;transform-box:view-box;">
-      <path d="M12 26 L8 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round"/>
-      <circle cx="7.6" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
-    </g>
-    <g class="run-leg-front" style="transform-origin:18px 26px;transform-box:view-box;">
-      <path d="M18 26 L22 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round"/>
-      <circle cx="22.4" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
-    </g>
-    <g class="run-arm-back" style="transform-origin:13px 20px;transform-box:view-box;">
-      <path d="M13 20 L9 25.5" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round"/>
-    </g>
-    <g class="run-arm-front" style="transform-origin:17px 20px;transform-box:view-box;">
-      <path d="M17 20 L21.5 24.5" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round"/>
-    </g>
-    <rect x="9.5" y="16.5" width="11" height="10.5" rx="4.6" fill="${suitFill}"/>
-    <circle cx="15" cy="21.2" r="1.6" fill="var(--star-gold)"/>
-    <circle cx="15" cy="8.6" r="6.4" fill="${suitFill}"/>
-    <circle cx="15" cy="8.6" r="4.9" fill="url(#visorGrad)"/>
-    <ellipse cx="12.9" cy="6.2" rx="1.5" ry="0.9" fill="#EAF7F4" opacity="0.7"/>
+    <path d="M11 25 L7 30.5 L9 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M19 25 L23 30.5 L21 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="9" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
+    <circle cx="21" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
+    <path d="M11.5 19.5 L7.5 17.5 L4.5 20.5" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M18.5 19.5 L22.5 17.5 L25.5 20.5" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <rect x="9.5" y="15.5" width="11" height="9.5" rx="4.4" fill="${suitFill}"/>
+    <circle cx="15" cy="20" r="1.6" fill="var(--star-gold)"/>
+    <circle cx="15" cy="8" r="6.4" fill="${suitFill}"/>
+    <circle cx="15" cy="8" r="4.9" fill="url(#visorGrad)"/>
+    <ellipse cx="12.9" cy="5.6" rx="1.5" ry="0.9" fill="#EAF7F4" opacity="0.7"/>
+  </svg>`;
+}
+function astronautCelebrateSVG(){
+  // landed correctly — arms raised in victory
+  const suitFill = '#F2EFE4';
+  return `<svg viewBox="0 0 30 42" class="astro-sprite">
+    <path d="M11.5 27 L8 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M18.5 27 L22 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="7.7" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
+    <circle cx="22.3" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
+    <path d="M12 19 L7 11 L5.5 6" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    <path d="M18 19 L23 11 L24.5 6" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    <circle cx="5.2" cy="5" r="1.6" fill="var(--star-gold)"/>
+    <circle cx="24.8" cy="5" r="1.6" fill="var(--star-gold)"/>
+    <rect x="9.5" y="17" width="11" height="10.5" rx="4.6" fill="${suitFill}"/>
+    <circle cx="15" cy="21.7" r="1.6" fill="var(--star-gold)"/>
+    <circle cx="15" cy="9" r="6.4" fill="${suitFill}"/>
+    <circle cx="15" cy="9" r="4.9" fill="url(#visorGrad)"/>
+    <ellipse cx="12.9" cy="6.6" rx="1.5" ry="0.9" fill="#EAF7F4" opacity="0.7"/>
+  </svg>`;
+}
+function astronautEncourageSVG(){
+  // landed wrong — a determined, motivating gesture, not defeat
+  const suitFill = '#F2EFE4';
+  return `<svg viewBox="0 0 30 42" class="astro-sprite">
+    <path d="M11.5 27 L8.5 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M18.5 27 L21.5 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="8.2" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
+    <circle cx="21.8" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
+    <path d="M12 20 L9.5 24 L11 27" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M18.5 19 L22.5 15 L20.5 9" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="20.5" cy="8" r="2.1" fill="var(--teal-bright)"/>
+    <rect x="9.5" y="17" width="11" height="10.5" rx="4.6" fill="${suitFill}"/>
+    <circle cx="15" cy="21.7" r="1.6" fill="var(--star-gold)"/>
+    <circle cx="15" cy="9" r="6.4" fill="${suitFill}"/>
+    <circle cx="15" cy="9" r="4.9" fill="url(#visorGrad)"/>
+    <ellipse cx="12.9" cy="6.6" rx="1.5" ry="0.9" fill="#EAF7F4" opacity="0.7"/>
   </svg>`;
 }
 
@@ -595,10 +624,10 @@ window.beginExercises = beginExercises;
 
 /* ---------- PLATFORMER MINIGAME: jump to the planet, bonk the block, reveal the answer ---------- */
 const PLATFORMER_LAYOUT = [
-  {left:9,  top:68, badge:'planet'},
-  {left:36, top:34, badge:'moon'},
-  {left:63, top:56, badge:'planet'},
-  {left:89, top:20, badge:'ufo'}
+  {left:15, top:68, badge:'planet'},
+  {left:39, top:34, badge:'moon'},
+  {left:62, top:56, badge:'planet'},
+  {left:85, top:20, badge:'ufo'}
 ];
 const BLOCK_TYPES = ['star','comet','star','comet'];
 
@@ -618,7 +647,7 @@ function renderPlatformerStage(ex){
   return `
   <div class="stage" id="stage">
     <div class="stage-launchpad"></div>
-    <div class="stage-astro" id="stageAstro">${astronautRunSVG()}</div>
+    <div class="stage-astro" id="stageAstro">${astronautReadySVG()}</div>
     ${planets}
   </div>`;
 }
@@ -634,6 +663,7 @@ function jumpTo(i){
 
   const stage = document.getElementById('stage');
   const astro = document.getElementById('stageAstro');
+  const sprite = astro.querySelector('.astro-sprite');
   const targetPlanet = document.getElementById('planet'+i);
   const stageRect = stage.getBoundingClientRect();
   const astroRect = astro.getBoundingClientRect();
@@ -643,36 +673,51 @@ function jumpTo(i){
   const startY = astroRect.top - stageRect.top;
   const endX = (targetRect.left - stageRect.left) + (targetRect.width/2) - (astroRect.width/2);
   const endY = (targetRect.top - stageRect.top) - astroRect.height*0.15;
+  const dist = Math.hypot(endX-startX, endY-startY);
+  const doSomersault = dist > 130;
 
   astro.style.position = 'absolute';
   astro.style.left = startX+'px';
   astro.style.top = startY+'px';
-  astro.classList.add('jumping');
 
-  const duration = 520;
-  const arcHeight = 95;
-  const t0 = performance.now();
-  function frame(now){
-    const t = Math.min(1, (now-t0)/duration);
-    const x = startX + (endX-startX)*t;
-    const straightY = startY + (endY-startY)*t;
-    const arc = -4*arcHeight*t*(1-t);
-    astro.style.left = (x)+'px';
-    astro.style.top = (straightY+arc)+'px';
-    if(t < 1){
-      requestAnimationFrame(frame);
-    } else {
-      astro.classList.remove('jumping');
-      astro.classList.add('landed');
-      onLanded(i, ex);
+  // catapult: brief coil/squash, THEN launch fast
+  astro.classList.add('launch-squash');
+  setTimeout(()=>{
+    astro.classList.remove('launch-squash');
+    astro.classList.add('jumping');
+    const duration = 460;
+    const arcHeight = 102;
+    const t0 = performance.now();
+    function frame(now){
+      const t = Math.min(1, (now-t0)/duration);
+      const x = startX + (endX-startX)*t;
+      const straightY = startY + (endY-startY)*t;
+      const arc = -4*arcHeight*t*(1-t);
+      astro.style.left = x+'px';
+      astro.style.top = (straightY+arc)+'px';
+      if(doSomersault && sprite){
+        sprite.style.transform = `rotate(${(360*t).toFixed(1)}deg)`;
+      }
+      if(t < 1){
+        requestAnimationFrame(frame);
+      } else {
+        astro.classList.remove('jumping');
+        if(sprite) sprite.style.transform = '';
+        astro.classList.add('landing-squash');
+        setTimeout(()=>astro.classList.remove('landing-squash'), 260);
+        onLanded(i, ex);
+      }
     }
-  }
-  requestAnimationFrame(frame);
+    requestAnimationFrame(frame);
+  }, 110);
 }
 window.jumpTo = jumpTo;
 
 function onLanded(i, ex){
   const correct = i === ex.answer;
+  const astro = document.getElementById('stageAstro');
+  astro.innerHTML = correct ? astronautCelebrateSVG() : astronautEncourageSVG();
+
   const block = document.getElementById('block'+i);
   block.classList.add('hit', correct ? 'correct' : 'wrong');
   const qEl = block.querySelector('.block-q');
@@ -811,29 +856,43 @@ function finishLesson(){
 }
 
 /* ============ RESULT SCREEN ============ */
-const CELEBRATIONS = [
+const CELEBRATIONS_GREAT = [
   "You just made the sky brighter! 🌙",
   "Look at you go!! ✨",
-  "That was beautiful to watch.",
   "You're on fire tonight!",
   "Another star, just like that ⭐"
+];
+const CELEBRATIONS_GOOD = [
+  "Solid work tonight — you're getting there!",
+  "Nice progress ✨ that's real momentum.",
+  "You're putting the pieces together well."
+];
+const CELEBRATIONS_ENCOURAGE = [
+  "Nahw takes practice — you did the hard part: showing up.",
+  "Every attempt makes the next one easier. Keep going.",
+  "That's a tough day — and you still finished it. That counts."
 ];
 function renderResult(){
   const {unit, mistakes, xpGained} = lessonCtx;
   const correct = unit.exercises.length - mistakes;
-  const headline = CELEBRATIONS[unit.id % CELEBRATIONS.length];
+  const ratio = correct / unit.exercises.length;
+  const pool = ratio >= 0.8 ? CELEBRATIONS_GREAT : (ratio >= 0.5 ? CELEBRATIONS_GOOD : CELEBRATIONS_ENCOURAGE);
+  const headline = pool[unit.id % pool.length];
+  const subtext = ratio >= 0.5
+    ? `Day ${unit.day} complete — ${unit.title} · ${unit.arTitle}`
+    : `Day ${unit.day} finished — ${unit.title}. Want to review it again before moving on?`;
   app.innerHTML = `
   <div class="screen active">
     <div class="result-wrap">
       <div class="result-rosette">${spaceBadgeSVG(badgeTypeForDay(unit.day), 140)}</div>
       <h1>${headline}</h1>
-      <p>Day ${unit.day} complete — ${unit.title} · ${unit.arTitle}</p>
+      <p>${subtext}</p>
       <div class="result-stats">
         <div class="rstat"><div class="num">+${xpGained}</div><div class="lab">XP earned</div></div>
         <div class="rstat"><div class="num">${correct}/${unit.exercises.length}</div><div class="lab">Correct</div></div>
         <div class="rstat"><div class="num">${state.streak}</div><div class="lab">Day streak</div></div>
       </div>
-      <button class="primary-btn" onclick="navigate('home')">Keep the magic going →</button>
+      <button class="primary-btn" onclick="navigate('home')">${ratio >= 0.5 ? 'Keep the magic going →' : 'Back to the path →'}</button>
     </div>
   </div>`;
   setTimeout(flushToasts, 500);
