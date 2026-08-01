@@ -1,117 +1,117 @@
-// Darb — original curriculum covering foundational Nahw (Arabic grammar) concepts.
-// Sequence follows the classical beginner order used across Arabic grammar primers
-// (Ism/Fi'l/Harf -> Mubtada/Khabar -> Fa'il -> Maf'ul bih -> Idafa -> Jarr -> Dama'ir -> Ishara/Mawsul -> Review).
-// All wording, examples and exercises below are written from scratch.
+// Darb — curriculum built directly from the uploaded "Nahw 10-Day Workbook" PDF.
+// Each day maps to that book's own sections/order, and every exercise is grounded
+// in a definition, rule, or worked example that appears explicitly in the PDF
+// (not in the ambiguous fill-in-the-blank worksheets, which have no answer key).
 
 const UNITS = [
 {
-  id:1, day:1, title:"The Three Word Types", arTitle:"اَلْكَلِمَة",
-  teach:"Every word in Arabic is one of three types: اِسْم (Ism) — a noun or name, like كِتَاب (book). فِعْل (Fi'l) — a verb, an action, like كَتَبَ (he wrote). حَرْف (Harf) — a particle with no meaning on its own, like فِي (in). Spotting which type a word is comes before anything else in Nahw.",
+  id:1, day:1, title:"The Three Kinds of Words", arTitle:"اَلْكَلِمَة",
+  teach:"There are three kinds of words in Arabic. اِسْم (Ism): the name of a person, place, thing, idea, adjective, adverb — and more. فِعْل (Fi'l): a word that has a tense — past, present, or future. حَرْف (Harf): a word that makes no sense unless another word comes after it.",
   exercises:[
-    {type:'mcq', prompt:"What type of word is «كِتَابٌ» (book)?", options:["Ism (noun)","Fi'l (verb)","Harf (particle)","None of these"], answer:0, explanation:"كِتَابٌ names a thing — it's an Ism. Nouns are the words that name people, places, and objects."},
-    {type:'mcq', prompt:"What type of word is «كَتَبَ» (he wrote)?", options:["Ism (noun)","Fi'l (verb)","Harf (particle)","None of these"], answer:1, explanation:"كَتَبَ describes an action that happened — that makes it a Fi'l (verb)."},
-    {type:'mcq', prompt:"What type of word is «فِي» (in)?", options:["Ism (noun)","Fi'l (verb)","Harf (particle)","None of these"], answer:2, explanation:"فِي has no meaning by itself — it only makes sense connecting other words. That's the mark of a Harf."},
-    {type:'tap', prompt:"Tap the Harf (particle) in this sentence.", sub:"الوَلَدُ فِي البَيْتِ — The boy is in the house.", words:["الوَلَدُ","فِي","البَيْتِ"], answer:1, explanation:"فِي is the Harf here — it links الوَلَدُ (the boy) to البَيْتِ (the house) without carrying meaning on its own."},
-    {type:'mcq', prompt:"What type of word is «يَكْتُبُ» (he writes / is writing)?", options:["Ism (noun)","Fi'l (verb)","Harf (particle)","None of these"], answer:1, explanation:"يَكْتُبُ is still describing an action — just happening now instead of in the past. Still a Fi'l."}
+    {type:'mcq', prompt:"Which type of word is \"table\"?", options:["Ism (noun)","Fi'l (verb)","Harf (particle)","None of these"], answer:0, explanation:"\"Table\" names a thing — that makes it an Ism."},
+    {type:'mcq', prompt:"Which type of word is \"jumps\"?", options:["Ism (noun)","Fi'l (verb)","Harf (particle)","None of these"], answer:1, explanation:"\"Jumps\" carries a tense (present) — an action word, a Fi'l."},
+    {type:'mcq', prompt:"Which type of word is \"in\"?", options:["Ism (noun)","Fi'l (verb)","Harf (particle)","None of these"], answer:2, explanation:"\"In\" makes no sense on its own until another word follows it — that's the mark of a Harf."},
+    {type:'mcq', prompt:"Which type of word is \"Makkah\"?", options:["Ism (noun)","Fi'l (verb)","Harf (particle)","None of these"], answer:0, explanation:"Makkah names a place — an Ism (a proper noun, but still an Ism)."},
+    {type:'mcq', prompt:"Which type of word is \"slept\"?", options:["Ism (noun)","Fi'l (verb)","Harf (particle)","None of these"], answer:1, explanation:"\"Slept\" carries a past tense — a Fi'l."}
   ]
 },
 {
-  id:2, day:2, title:"Signs of the Noun", arTitle:"عَلَامَاتُ الِاسْم",
-  teach:"You can often tell an Ism apart from a Fi'l or Harf by its signs: it can carry اَلْـ (al-, 'the'), it can carry تَنْوِين (tanwin, a doubled ending sound), it can come after a حَرْف جَرّ (preposition), and it can be called out to with يَا (O...). If a word shows any of these, it's an Ism.",
+  id:2, day:2, title:"Three Forms of Status", arTitle:"حَالَاتُ الْإِعْرَاب",
+  teach:"Every ism carries one of three forms of status. رَفْع (Raf) — the subject, the doer of the act. نَصْب (Nasb) — the object, a detail of the act. جَرّ (Jarr) — the word that comes right after \"of\". Example: \"A teacher entered the classroom\" — teacher is Raf, classroom is Nasb. \"A student of his was sleeping soundly\" — student is Raf, his is Jarr, soundly is Nasb.",
   exercises:[
-    {type:'mcq', prompt:"Which of these is a sign that a word is an Ism?", options:["It ends with تَنْوِين","It starts with سَـ for the future","It ends with ـتْ for past tense","It means 'and'"], answer:0, explanation:"Tanwin (the extra ـٌ ـٍ ـً sound) only ever attaches to nouns — it's a reliable Ism-marker."},
-    {type:'mcq', prompt:"«الكِتَابُ» carries اَلْـ (al-). What does that tell you?", options:["It's a Harf","It's a Fi'l","It's an Ism","It's a complete sentence"], answer:2, explanation:"Only nouns take اَلْـ. Seeing it attached instantly tells you the word is an Ism."},
-    {type:'tap', prompt:"Tap the word that shows the sign of nidā' (being called).", sub:"يَا وَلَدُ اِذْهَبْ — O boy, go!", words:["يَا","وَلَدُ","اِذْهَبْ"], answer:0, explanation:"يَا is the calling particle — whatever follows it (وَلَدُ) is being addressed directly, which is a noun-only pattern."},
-    {type:'mcq', prompt:"In «مِنَ البَيْتِ» (from the house), البَيْتِ comes right after a preposition. What sign does this give it?", options:["It becomes a Fi'l","It shows the noun is majrūr (after a preposition)","It becomes a Harf","It shows no sign"], answer:1, explanation:"Only an Ism can follow a preposition like مِنْ (from) and take the majrūr ending — another reliable Ism sign."},
-    {type:'mcq', prompt:"Which of the following could NOT be an Ism sign?", options:["Tanwin","Coming after يَا","Carrying اَلْـ","Ending in the past-tense تْ"], answer:3, explanation:"Ending in ـتْ (like كَتَبَتْ, 'she wrote') is a verb marker, not a noun sign."}
+    {type:'mcq', prompt:"In \"A teacher entered the classroom,\" which word is Raf — the doer of the act?", options:["teacher","entered","classroom","the"], answer:0, explanation:"Teacher is the one doing the entering — the Raf."},
+    {type:'mcq', prompt:"In \"The teacher threw a pencil,\" what status is \"a pencil\"?", options:["Raf","Nasb","Jarr"], answer:1, explanation:"\"A pencil\" is the detail of the act — what got thrown — so it's Nasb."},
+    {type:'mcq', prompt:"In \"A student of his was sleeping soundly,\" what status is \"his\"?", options:["Raf","Nasb","Jarr"], answer:2, explanation:"\"His\" comes right after \"of\" — that's the sign of Jarr."},
+    {type:'mcq', prompt:"In \"The teacher's student woke up suddenly,\" what status is \"student\" (the one waking up)?", options:["Raf","Nasb","Jarr"], answer:0, explanation:"\"Student\" is the doer of the waking-up — Raf."},
+    {type:'mcq', prompt:"Which form of status marks the word that comes right after \"of\"?", options:["Raf","Nasb","Jarr"], answer:2, explanation:"Jarr is the status for the word after \"of\" — like a Mudaf Ilayh."}
   ]
 },
 {
-  id:3, day:3, title:"The Nominal Sentence: Mubtada & Khabar", arTitle:"اَلْمُبْتَدَأ وَالْخَبَر",
-  teach:"A sentence that starts with a noun is called a جُمْلَة اِسْمِيَّة. It has two core parts: اَلْمُبْتَدَأ (Mubtada) — the subject you're talking about, and اَلْخَبَر (Khabar) — what you're saying about it. Both are مَرْفُوع (marfū') — they end in a damma sound. Example: البَيْتُ جَمِيلٌ (The house is beautiful) — البَيْتُ is the Mubtada, جَمِيلٌ is the Khabar.",
+  id:3, day:3, title:"How to Tell Status", arTitle:"عَلَامَاتُ الْإِعْرَاب",
+  teach:"Each status has its own ending sound. Raf: damma (ـُ / ـٌ) on a singular ism. Nasb: fatha (ـَ / ـً) on a singular ism. Jarr: kasra (ـِ / ـٍ) on a singular ism. Watch مُسْلِمٌ (a Muslim) change: مُسْلِمٌ is Raf, مُسْلِمًا is Nasb, مُسْلِمٍ is Jarr — same word, three different endings, three different jobs.",
   exercises:[
-    {type:'mcq', prompt:"In «البَيْتُ جَمِيلٌ» (the house is beautiful), what is البَيْتُ?", options:["Khabar","Mubtada","Harf","Fi'l"], answer:1, explanation:"البَيْتُ is what the sentence is about — the Mubtada, the topic."},
-    {type:'mcq', prompt:"In the same sentence, what is جَمِيلٌ?", options:["Khabar","Mubtada","Harf","Fi'l"], answer:0, explanation:"جَمِيلٌ tells you something about the house — it's the Khabar, the comment."},
-    {type:'tap', prompt:"Tap the Khabar in this sentence.", sub:"الطَّالِبُ مُجْتَهِدٌ — The student is diligent.", words:["الطَّالِبُ","مُجْتَهِدٌ"], answer:1, explanation:"الطَّالِبُ is the Mubtada (topic); مُجْتَهِدٌ describes it, so it's the Khabar."},
-    {type:'mcq', prompt:"What case (i'rāb) are the Mubtada and Khabar normally in?", options:["Nasb (fatha)","Jarr (kasra)","Raf' (damma)","No case at all"], answer:2, explanation:"Both Mubtada and Khabar are marfū' — they take a damma ending, unless something changes the sentence."},
-    {type:'mcq', prompt:"Which of these correctly completes «المُعَلِّمُ ___» as a Khabar?", options:["نَشِيطًا","نَشِيطٍ","نَشِيطٌ","نَشِيطَ"], answer:2, explanation:"The Khabar needs a damma ending (نَشِيطٌ) to match its marfū' case — the other endings belong to different cases entirely."}
+    {type:'mcq', prompt:"Which ending sound marks Raf on a singular ism?", options:["Damma (ـُ)","Fatha (ـَ)","Kasra (ـِ)","Sukun"], answer:0, explanation:"Damma is the Raf ending — the default sign for the doer of the act."},
+    {type:'mcq', prompt:"Which ending sound marks Nasb on a singular ism?", options:["Damma (ـُ)","Fatha (ـَ)","Kasra (ـِ)","Sukun"], answer:1, explanation:"Fatha marks Nasb — the object/detail of the act."},
+    {type:'mcq', prompt:"Which ending sound marks Jarr on a singular ism?", options:["Damma (ـُ)","Fatha (ـَ)","Kasra (ـِ)","Sukun"], answer:2, explanation:"Kasra marks Jarr — the word after \"of\" or a preposition."},
+    {type:'mcq', prompt:"«مُسْلِمٌ» (a Muslim, Raf) becomes what in Nasb?", options:["مُسْلِمٌ","مُسْلِمًا","مُسْلِمٍ","مُسْلِمُونَ"], answer:1, explanation:"Swap the damma for a fatha: مُسْلِمًا is the Nasb form."},
+    {type:'tap', prompt:"Tap the word that is in Jarr status.", sub:"مُسْلِمٌ (Raf) — مُسْلِمًا (Nasb) — مُسْلِمٍ (Jarr)", words:["مُسْلِمٌ","مُسْلِمًا","مُسْلِمٍ"], answer:2, explanation:"مُسْلِمٍ carries the kasra — the sign of Jarr."}
   ]
 },
 {
-  id:4, day:4, title:"The Verbal Sentence: Fi'l & Fa'il", arTitle:"اَلْفِعْل وَالْفَاعِل",
-  teach:"A sentence that starts with a verb is a جُمْلَة فِعْلِيَّة. اَلْفَاعِل (Fa'il) is the one doing the action — and it is always مَرْفُوع (marfū'), ending in damma, no matter what. Example: كَتَبَ الوَلَدُ (The boy wrote) — كَتَبَ is the Fi'l, الوَلَدُ is the Fa'il.",
+  id:4, day:4, title:"Light vs. Heavy", arTitle:"اَلْخِفَّةُ وَالثِّقَل",
+  teach:"Normally an ism should be heavy. An ism is made light by removing the extra \"n\" sound — either by dropping the tanween (the doubled ending) or dropping an extra نْ. Note: اَلْـ doesn't take tanween, but an ism carrying اَلْـ still isn't considered light.",
   exercises:[
-    {type:'mcq', prompt:"In «كَتَبَ الوَلَدُ» (the boy wrote), what is كَتَبَ?", options:["Fa'il","Fi'l","Khabar","Harf"], answer:1, explanation:"كَتَبَ is the action word — the Fi'l."},
-    {type:'mcq', prompt:"In the same sentence, what is الوَلَدُ?", options:["Fa'il","Fi'l","Khabar","Harf"], answer:0, explanation:"الوَلَدُ is the one who did the writing — the Fa'il."},
-    {type:'tap', prompt:"Tap the Fa'il in this sentence.", sub:"ذَهَبَ المُعَلِّمُ — The teacher went.", words:["ذَهَبَ","المُعَلِّمُ"], answer:1, explanation:"ذَهَبَ is the Fi'l (the going); المُعَلِّمُ is who went — the Fa'il."},
-    {type:'mcq', prompt:"What case is the Fa'il always in?", options:["Nasb","Jarr","Raf'","It has no fixed case"], answer:2, explanation:"No matter the sentence, the Fa'il is always marfū' — this is a fixed rule in Nahw."},
-    {type:'mcq', prompt:"In «جَاءَ الطَّالِبُ» (the student came), what sound marks الطَّالِبُ as marfū'?", options:["Fatha","Kasra","Damma","Sukun"], answer:2, explanation:"The damma ending (ـُ) is the standard sign of raf' on a singular noun."}
+    {type:'mcq', prompt:"What makes an ism \"light\"?", options:["Removing the extra 'n' sound (tanween or an extra نْ)","Adding tanween","Adding اَلْـ","Making it plural"], answer:0, explanation:"Light = the extra 'n' sound is gone, either the tanween or a final نْ."},
+    {type:'mcq', prompt:"Does an ism carrying اَلْـ count as \"light\"?", options:["Yes, اَلْـ makes it light","No — اَلْـ just doesn't take tanween, that's different from being light","Only in Jarr","Only in Raf"], answer:1, explanation:"اَلْـ blocks tanween, but that alone doesn't make the ism light — the two rules are separate."},
+    {type:'mcq', prompt:"«مُسْلِمٌ» is heavy (Raf, with tanween). What's its light form?", options:["مُسْلِمُ","مُسْلِمٌ","مُسْلِمًا","مُسْلِمِينَ"], answer:0, explanation:"Drop the tanween's extra 'n' sound: مُسْلِمُ is the light Raf form."},
+    {type:'mcq', prompt:"«مُسْلِمًا» is heavy (Nasb). What's its light form?", options:["مُسْلِمَ","مُسْلِمَا","مُسْلِمٍ","مُسْلِمُونَ"], answer:1, explanation:"Drop the tanween: مُسْلِمَا is the light Nasb form."},
+    {type:'mcq', prompt:"Which of these directly makes an ism light?", options:["Dropping the tanween","Adding an extra نْ","Adding tanween","Doubling a letter"], answer:0, explanation:"Dropping tanween removes the extra 'n' sound — that's what makes an ism light."}
   ]
 },
 {
-  id:5, day:5, title:"The Object: Maf'ul Bih", arTitle:"اَلْمَفْعُولُ بِهِ",
-  teach:"Many sentences add a third piece after Fi'l + Fa'il: اَلْمَفْعُولُ بِهِ (Maf'ul Bih), the thing the action happens to. Unlike the Fa'il, it is مَنْصُوب (mansūb) — it ends in a fatha. Example: كَتَبَ الوَلَدُ الدَّرْسَ (The boy wrote the lesson) — الدَّرْسَ is the Maf'ul Bih.",
+  id:5, day:5, title:"Flexibility", arTitle:"اَلتَّصْرِيف",
+  teach:"Isms fall into three flexibility categories. Fully flexible: can be heavy or light, and can show all three statuses — most isms work this way. Non-flexible: only one form, looking the same in every status (words ending in alif like مُوسَى, and ism mawsul words like الَّذِي). Partly flexible: can never be heavy and can't take a kasra — one form for Raf, and a second shared form for Nasb and Jarr (common with non-Arab or longer proper names).",
   exercises:[
-    {type:'mcq', prompt:"In «كَتَبَ الوَلَدُ الدَّرْسَ», what is الدَّرْسَ?", options:["Fa'il","Mubtada","Maf'ul Bih","Harf"], answer:2, explanation:"الدَّرْسَ is what got written — the thing the action landed on, i.e. the Maf'ul Bih."},
-    {type:'mcq', prompt:"What case is the Maf'ul Bih in?", options:["Raf' (damma)","Nasb (fatha)","Jarr (kasra)","No case"], answer:1, explanation:"The Maf'ul Bih is mansūb — it takes a fatha ending, distinguishing it from the marfū' Fa'il."},
-    {type:'tap', prompt:"Tap the Maf'ul Bih in this sentence.", sub:"فَتَحَ الوَلَدُ البَابَ — The boy opened the door.", words:["فَتَحَ","الوَلَدُ","البَابَ"], answer:2, explanation:"البَابَ is what got opened — the Maf'ul Bih, ending in fatha."},
-    {type:'mcq', prompt:"What sound marks الدَّرْسَ as mansūb?", options:["Damma","Kasra","Fatha","Sukun"], answer:2, explanation:"Fatha (ـَ) is the standard sign of nasb on a singular noun."},
-    {type:'mcq', prompt:"Which correctly completes «قَرَأَ الطَّالِبُ ___» as a Maf'ul Bih?", options:["الكِتَابُ","الكِتَابِ","الكِتَابَ","الكِتَابٌ"], answer:2, explanation:"الكِتَابَ carries the fatha ending required for a Maf'ul Bih — the mansūb case."}
+    {type:'mcq', prompt:"A word that can be heavy or light, and can show Raf, Nasb, and Jarr, is...", options:["Fully flexible","Non-flexible","Partly flexible","Not an ism"], answer:0, explanation:"That's the definition of fully flexible — most isms fall in this category."},
+    {type:'mcq', prompt:"Which of these is a sign that a word is non-flexible?", options:["It ends in alif, like مُوسَى","It has tanween","It carries اَلْـ","It's a verb"], answer:0, explanation:"Words ending in alif (like مُوسَى) are non-flexible — they never change shape across statuses."},
+    {type:'mcq', prompt:"A partly flexible word...", options:["Can never be heavy and can't take a kasra","Is always heavy","Can only appear in Raf","Is always a verb"], answer:0, explanation:"Partly flexible words are capped — no heavy form, no kasra ending."},
+    {type:'mcq', prompt:"«بَاكِسْتَانُ» (a non-Arab place name, over 3 letters) is...", options:["Fully flexible","Non-flexible","Partly flexible","Not an ism"], answer:2, explanation:"Non-Arab place names longer than 3 letters are partly flexible."},
+    {type:'mcq', prompt:"«عَدَنٌ» (Aden — a place name with only 3 letters) is an exception, and is...", options:["Fully flexible","Non-flexible","Partly flexible","Not an ism"], answer:0, explanation:"The 3-letter exception flips it back to fully flexible."}
   ]
 },
 {
-  id:6, day:6, title:"The Possessive: Idafa", arTitle:"اَلْإِضَافَة",
-  teach:"To say 'the boy's book' in Arabic, you join two nouns: كِتَابُ الوَلَدِ. The first noun, اَلْمُضَاف (Mudaf), never takes اَلْـ or tanwin. The second, اَلْمُضَافُ إِلَيْه (Mudaf Ilayh), is always مَجْرُور (majrūr) — it ends in kasra.",
+  id:6, day:6, title:"Number & Gender", arTitle:"اَلْعَدَدُ وَالْجِنْس",
+  teach:"An ism can be singular, a pair (مُثَنَّى), or a plural (جَمْع). A broken plural (جَمْع تَكْسِير) doesn't use regular plural endings — it must be memorized. Human broken plurals (like رُسُلٌ, messengers) are treated as \"she\" or \"they\"; non-human broken plurals (like كُتُبٌ, books) are always treated as \"she\". Gender: an ism is masculine by default. It's feminine if it's really feminine (like بَقَرَةٌ, a cow), or \"fake feminine\" — non-human plurals, proper place names, paired body parts, and a handful the Arabs simply treat as feminine.",
   exercises:[
-    {type:'mcq', prompt:"In «كِتَابُ الوَلَدِ» (the boy's book), what is كِتَابُ?", options:["Mudaf Ilayh","Mudaf","Fa'il","Harf"], answer:1, explanation:"كِتَابُ is the first noun in the pair — the Mudaf. Notice it has no اَلْـ."},
-    {type:'mcq', prompt:"What is الوَلَدِ in that same phrase?", options:["Mudaf Ilayh","Mudaf","Khabar","Harf"], answer:0, explanation:"الوَلَدِ is the possessor — the Mudaf Ilayh, marked with a kasra."},
-    {type:'mcq', prompt:"What case is the Mudaf Ilayh always in?", options:["Raf'","Nasb","Jarr","No fixed case"], answer:2, explanation:"The Mudaf Ilayh is always majrūr, no matter what role the whole phrase plays in the sentence."},
-    {type:'tap', prompt:"Tap the Mudaf Ilayh in this phrase.", sub:"بَابُ المَسْجِدِ مَفْتُوحٌ — The mosque's door is open.", words:["بَابُ","المَسْجِدِ","مَفْتُوحٌ"], answer:1, explanation:"المَسْجِدِ is the possessor with a kasra ending — the Mudaf Ilayh. بَابُ is the Mudaf, and مَفْتُوحٌ is the Khabar of the whole phrase."},
-    {type:'mcq', prompt:"Which of these can the Mudaf (first noun) NEVER carry?", options:["A damma ending","اَلْـ (al-)","A kasra ending","A short vowel"], answer:1, explanation:"The Mudaf is defined by being attached to what follows — it never takes its own اَلْـ."}
+    {type:'mcq', prompt:"«رُسُلٌ» (messengers) is a human broken plural. How is it treated?", options:["As 'he'","As 'she' or 'they'","As a Fi'l","It has no gender"], answer:1, explanation:"Human broken plurals are treated as 'she' or as what they really are, 'they'."},
+    {type:'mcq', prompt:"«كُتُبٌ» (books) is a non-human broken plural. How is it always treated?", options:["As 'he'","As 'she'","As 'they'","It has no gender"], answer:1, explanation:"ALL non-human plurals — broken or not — are treated as 'she'."},
+    {type:'mcq', prompt:"«بَقَرَةٌ» (a cow) is feminine because...", options:["It's a real feminine — an actual female","It's a fake feminine","It's a broken plural","It ends in اَلْـ"], answer:0, explanation:"بَقَرَةٌ names an actual female — real feminine, the simplest case."},
+    {type:'mcq', prompt:"Which of these is a \"fake feminine\" category?", options:["Non-human broken plurals","Real female nouns","Masculine plurals","Attached pronouns"], answer:0, explanation:"Non-human broken plurals are grammatically feminine even though nothing about them is literally female — that's 'fake feminine'."},
+    {type:'mcq', prompt:"What is the default gender of an ism, if nothing marks it otherwise?", options:["Feminine","Masculine","Neither","Both"], answer:1, explanation:"Masculine is the default — feminine has to be signaled, one way or another."}
   ]
 },
 {
-  id:7, day:7, title:"Prepositions & the Majrur Noun", arTitle:"حَرْفُ الْجَرّ وَالْمَجْرُور",
-  teach:"حُرُوفُ الْجَرّ (prepositions) like فِي (in), مِنْ (from), إِلَى (to), and عَلَى (on) always pull the noun after them into the مَجْرُور case — a kasra ending. This pairing, harf jarr + majrūr noun, always travels together.",
+  id:7, day:7, title:"Common vs. Proper & Pronouns", arTitle:"اَلْمَعْرِفَة وَالضَّمَائِر",
+  teach:"Common isms are the default. An ism becomes proper in several ways: it carries اَلْـ, it's a proper name, it's the one being called (يَا...), it's a pronoun, it's a pointer word like هَذَا, or it's an ism mawsul like الَّذِي. Independent pronouns stand alone — هُوَ (he), هِيَ (she), أَنْتَ (you), أَنَا (I), نَحْنُ (we) — while attached pronouns fuse onto another word, like ـهُ in كِتَابُهُ (his book).",
   exercises:[
-    {type:'mcq', prompt:"In «فِي البَيْتِ» (in the house), what is فِي?", options:["Ism","Fi'l","Harf Jarr","Khabar"], answer:2, explanation:"فِي is a preposition — a Harf Jarr, meaning 'in'."},
-    {type:'mcq', prompt:"After a Harf Jarr, what case does the following noun take?", options:["Raf'","Nasb","Jarr","It stays uninflected"], answer:2, explanation:"Any noun directly after a preposition becomes majrūr — that's the whole point of a Harf Jarr."},
-    {type:'tap', prompt:"Tap the majrūr noun in this sentence.", sub:"ذَهَبَ الوَلَدُ إِلَى المَدْرَسَةِ — The boy went to the school.", words:["ذَهَبَ","الوَلَدُ","إِلَى","المَدْرَسَةِ"], answer:3, explanation:"المَدْرَسَةِ follows the preposition إِلَى (to), so it takes the majrūr kasra ending."},
-    {type:'mcq', prompt:"What sound usually marks a singular noun as majrūr?", options:["Damma","Fatha","Kasra","Sukun"], answer:2, explanation:"Kasra (ـِ) is the standard majrūr ending."},
-    {type:'mcq', prompt:"Which correctly completes «خَرَجَ الوَلَدُ ___» meaning 'the boy left the house'?", options:["مِنَ البَيْتُ","مِنَ البَيْتَ","مِنَ البَيْتِ","مِنَ بَيْتٌ"], answer:2, explanation:"مِنَ البَيْتِ correctly pairs the preposition مِنْ with a majrūr (kasra-ending) noun."}
+    {type:'mcq', prompt:"Which of these is one of the ways an ism becomes proper?", options:["It carries اَلْـ","It's plural","It's light","It's a Harf"], answer:0, explanation:"Carrying اَلْـ is one of the classic signs that makes an ism proper (definite)."},
+    {type:'mcq', prompt:"«هُوَ» means...", options:["I","We","He","You"], answer:2, explanation:"هُوَ is the independent pronoun for 'he'."},
+    {type:'mcq', prompt:"«أَنَا» means...", options:["He","I","They","You"], answer:1, explanation:"أَنَا is the independent pronoun for 'I'."},
+    {type:'mcq', prompt:"In «كِتَابُهُ» (his book), what is ـهُ?", options:["An independent pronoun","An attached pronoun fused onto the noun","A Harf of Jarr","A Fi'l"], answer:1, explanation:"ـهُ fuses directly onto كِتَاب — that's an attached pronoun."},
+    {type:'mcq', prompt:"«نَحْنُ» means...", options:["I","He","We","You (plural)"], answer:2, explanation:"نَحْنُ is the independent pronoun for 'we'."}
   ]
 },
 {
-  id:8, day:8, title:"Pronouns: Attached & Detached", arTitle:"اَلضَّمَائِر",
-  teach:"Arabic pronouns come in two forms. اَلضَّمِيرُ الْمُنْفَصِل (detached) stand alone, like هُوَ (he) or أَنْتَ (you). اَلضَّمِيرُ الْمُتَّصِل (attached) fuse onto another word, like ـهُ in كِتَابُهُ (his book) or ـي in قَلَمِي (my pen).",
+  id:8, day:8, title:"Idhafah & Mowsoof-Sifah", arTitle:"اَلْإِضَافَةُ وَالصِّفَة",
+  teach:"The Idhafah links two isms as \"X of Y\": the مُضَاف (first word) must be light with no اَلْـ; the مُضَاف إِلَيْهِ (second word) must be in Jarr status. Example: إِمَامُ الْمَسْجِدِ — \"Imam of the masjid\". A Mowsoof (the noun being described) is followed by its Sifah (adjective), which matches it in all 4 properties — status, number, gender, and type. Example: قَوْلًا ثَقِيلًا — \"a heavy word\" — ثَقِيلًا matches قَوْلًا exactly.",
   exercises:[
-    {type:'mcq', prompt:"In «كِتَابُهُ» (his book), what kind of pronoun is ـهُ?", options:["Detached (munfasil)","Attached (muttasil)","Not a pronoun","A preposition"], answer:1, explanation:"ـهُ is fused directly onto كِتَاب — that makes it an attached (muttasil) pronoun."},
-    {type:'mcq', prompt:"In «هُوَ طَالِبٌ» (he is a student), what kind of pronoun is هُوَ?", options:["Detached (munfasil)","Attached (muttasil)","Not a pronoun","A verb"], answer:0, explanation:"هُوَ stands completely on its own as a separate word — a detached (munfasil) pronoun."},
-    {type:'tap', prompt:"Tap the word that contains an attached pronoun.", sub:"قَلَمِي عَلَى الطَّاوِلَةِ — My pen is on the table.", words:["قَلَمِي","عَلَى","الطَّاوِلَةِ"], answer:0, explanation:"قَلَمِي = قَلَم + ـي ('my') — the ـي is an attached pronoun fused onto the noun."},
-    {type:'mcq', prompt:"Which word means 'you' (masculine singular, detached)?", options:["أَنَا","هُوَ","أَنْتَ","هِيَ"], answer:2, explanation:"أَنْتَ is the detached second-person masculine singular pronoun, 'you'."},
-    {type:'mcq', prompt:"In «بَيْتُكَ جَمِيلٌ» (your house is beautiful), who does ـكَ refer to?", options:["Me","You (masc. singular)","Him","Them"], answer:1, explanation:"ـكَ is the attached pronoun for 'you' (masculine singular), fused onto بَيْت."}
+    {type:'mcq', prompt:"In an Idhafah, the first word (مُضَاف) must be...", options:["Light, with no اَلْـ","Heavy, with اَلْـ","In Nasb","A verb"], answer:0, explanation:"The مُضَاف is always light and never carries اَلْـ."},
+    {type:'mcq', prompt:"In an Idhafah, what status must the second word (مُضَاف إِلَيْهِ) be in?", options:["Raf","Nasb","Jarr","Any status"], answer:2, explanation:"The مُضَاف إِلَيْهِ is always Jarr — that's the whole point of the construction."},
+    {type:'mcq', prompt:"«إِمَامُ الْمَسْجِدِ» means...", options:["Imam of the masjid","The masjid's book","A heavy imam","The imam prayed"], answer:0, explanation:"A direct Idhafah: 'Imam of the masjid'."},
+    {type:'mcq', prompt:"A Sifah (adjective) must match its Mowsoof (the noun it describes) in...", options:["Only meaning","Its 4 properties: status, number, gender, and type","Only status","Nothing — it's independent"], answer:1, explanation:"A Sifah must agree with its Mowsoof across all four properties."},
+    {type:'mcq', prompt:"«قَوْلًا ثَقِيلًا» means...", options:["A light word","A heavy word","A beautiful word","A short word"], answer:1, explanation:"ثَقِيلًا means 'heavy' — describing قَوْلًا, 'a word'."}
   ]
 },
 {
-  id:9, day:9, title:"Demonstratives & Relatives", arTitle:"اِسْمُ الْإِشَارَة وَالْمَوْصُول",
-  teach:"اِسْمُ الْإِشَارَة (demonstrative) points at something: هَذَا (this, masc.), هَذِهِ (this, fem.), ذَلِكَ (that). اِسْمُ الْمَوْصُول (relative pronoun) connects a noun to a description: الَّذِي (who/that, masc.), الَّتِي (who/that, fem.).",
+  id:9, day:9, title:"Harf of Jarr, Harf of Nasb & Pointing Words", arTitle:"حُرُوفُ الْجَرِّ وَالنَّصْب",
+  teach:"A Harf of Jarr makes its ism Jarr — examples: بِ (with), لِ (for/have), مِنْ (from), فِي (in), عَلَى (on), إِلَى (to). A Harf of Nasb makes its ism Nasb — examples: إِنَّ (certainly), أَنَّ (that), لٰكِنَّ (however), لَعَلَّ (so that/maybe). Pointing words (اِسْمُ الْإِشَارَة) show near or far — هَذَا (this, masc.) and ذَلِكَ (that, masc.) are the most common. A pointer followed immediately by اَلْـ forms a fragment (هَذَا الْبَيْتُ, \"this house\"); without اَلْـ right after, it forms a full sentence (هَذَا بَيْتٌ, \"this is a house\").",
   exercises:[
-    {type:'mcq', prompt:"«هَذَا كِتَابٌ» — what does هَذَا point to?", options:["A feminine singular thing","A masculine singular thing","Something far away","A group of things"], answer:1, explanation:"هَذَا is the demonstrative for something near and masculine singular."},
-    {type:'mcq', prompt:"«هَذِهِ مَدْرَسَةٌ» — what is هَذِهِ used for?", options:["Masculine singular","Feminine singular","Plural","Distant objects"], answer:1, explanation:"هَذِهِ is the feminine singular near-demonstrative, matching مَدْرَسَة (school), a feminine word."},
-    {type:'tap', prompt:"Tap the isim mawsul (relative pronoun) in this sentence.", sub:"الطَّالِبُ الَّذِي نَجَحَ مُجْتَهِدٌ — The student who succeeded is diligent.", words:["الطَّالِبُ","الَّذِي","نَجَحَ","مُجْتَهِدٌ"], answer:1, explanation:"الَّذِي connects الطَّالِبُ to the description that follows (نَجَحَ) — it's the relative pronoun."},
-    {type:'mcq', prompt:"Which word means 'that' (far away, masculine)?", options:["هَذَا","هَذِهِ","ذَلِكَ","الَّتِي"], answer:2, explanation:"ذَلِكَ is the far demonstrative, masculine — 'that'."},
-    {type:'mcq', prompt:"What is the feminine form of الَّذِي?", options:["هَذِهِ","ذَلِكَ","الَّتِي","هِيَ"], answer:2, explanation:"الَّتِي is the feminine relative pronoun, matching feminine nouns the way الَّذِي matches masculine ones."}
+    {type:'mcq', prompt:"«بِ» (a Harf of Jarr) roughly means...", options:["with / by / at","he wrote","the house","and"], answer:0, explanation:"بِ covers 'with, by, at' — a very common Harf of Jarr."},
+    {type:'mcq', prompt:"«إِنَّ» (a Harf of Nasb) means...", options:["certainly / for sure","will not","after","above"], answer:0, explanation:"إِنَّ emphasizes certainty — 'certainly' or 'for sure'."},
+    {type:'mcq', prompt:"«هَذَا» followed immediately by اَلْـ (like هَذَا الْبَيْتُ) forms a...", options:["Sentence","Fragment","Question","Harf"], answer:1, explanation:"Pointer + اَلْـ right after it = a fragment, like 'this house' rather than a full statement."},
+    {type:'mcq', prompt:"«هَذَا بَيْتٌ» (this is a house) — since اَلْـ doesn't follow هَذَا right away, this is a...", options:["Fragment","Sentence","Neither"], answer:1, explanation:"Without اَلْـ right after the pointer, it becomes a complete sentence."},
+    {type:'mcq', prompt:"What status does a Harf of Jarr give the ism that follows it?", options:["Raf","Nasb","Jarr","It stays a Fi'l"], answer:2, explanation:"That's the entire job of a Harf of Jarr — it puts its ism in Jarr status."}
   ]
 },
 {
-  id:10, day:10, title:"Review: The Three Cases", arTitle:"مُرَاجَعَة: حَالَاتُ الْإِعْرَاب",
-  teach:"You've now met the three core cases of Nahw. رَفْع (Raf', damma) marks Mubtada, Khabar, and Fa'il. نَصْب (Nasb, fatha) marks Maf'ul Bih. جَرّ (Jarr, kasra) marks a noun after a preposition or as a Mudaf Ilayh. Everything you've learned over these ten days comes back to spotting which of these three a word is in.",
+  id:10, day:10, title:"Sentences, Tense & Forbidding", arTitle:"مُرَاجَعَة شَامِلَة",
+  teach:"A Jumlah Ismiyyah (nominal sentence) needs an invisible \"IS\" — you'll find it after an independent pronoun (أَنَا مُسْلِمٌ, \"I am a Muslim\"), after a pointer word not followed by اَلْـ, or after a Harf of Nasb and its ism. نَصَرَ (\"he helped\") is Fi'l Madi, the past tense. يَنْصُرُ (\"he helps\") is Fi'l Mudari', the present tense. To forbid, put لَا before the lightest 2nd-person present tense: تَذْهَبُ (\"you go\") becomes لَا تَذْهَبْ (\"don't go!\").",
   exercises:[
-    {type:'mcq', prompt:"«الشَّمْسُ مُشْرِقَةٌ» (the sun is shining) — what is مُشْرِقَةٌ?", options:["Mubtada","Khabar","Maf'ul Bih","Mudaf Ilayh"], answer:1, explanation:"مُشْرِقَةٌ describes الشَّمْسُ — it's the Khabar, marfū'."},
-    {type:'mcq', prompt:"«أَكَلَ الوَلَدُ التُّفَّاحَةَ» (the boy ate the apple) — what is التُّفَّاحَةَ?", options:["Fa'il","Maf'ul Bih","Mudaf","Khabar"], answer:1, explanation:"التُّفَّاحَةَ is what got eaten — the Maf'ul Bih, mansūb with a fatha."},
-    {type:'tap', prompt:"Tap the Fa'il in this sentence.", sub:"سَافَرَ أَبِي إِلَى مِصْرَ — My father traveled to Egypt.", words:["سَافَرَ","أَبِي","إِلَى","مِصْرَ"], answer:1, explanation:"أَبِي (my father) is who did the traveling — the Fa'il, marfū'."},
-    {type:'mcq', prompt:"A word ending in kasra is in which case?", options:["Raf'","Nasb","Jarr","None"], answer:2, explanation:"Kasra is the sign of Jarr — used after prepositions and for the Mudaf Ilayh."},
-    {type:'mcq', prompt:"Mubtada and Fa'il share which case?", options:["Nasb","Jarr","Raf'","They share no case"], answer:2, explanation:"Both are always marfū' (damma) — one of the most important patterns to remember in Nahw."}
+    {type:'mcq', prompt:"«أَنَا مُسْلِمٌ» means...", options:["I am a Muslim","He is a Muslim","We are Muslims","You are a Muslim"], answer:0, explanation:"أَنَا (I) + مُسْلِمٌ (a Muslim), with an invisible \"is\" linking them."},
+    {type:'mcq', prompt:"«نَصَرَ» (he helped) is in which tense?", options:["Past (Madi)","Present (Mudari')","A command","None"], answer:0, explanation:"نَصَرَ is the Fi'l Madi form — the past tense."},
+    {type:'mcq', prompt:"«يَنْصُرُ» (he helps) is in which tense?", options:["Past (Madi)","Present (Mudari')","A command","None"], answer:1, explanation:"يَنْصُرُ is the Fi'l Mudari' form — the present tense."},
+    {type:'mcq', prompt:"To forbid someone from going, «تَذْهَبُ» (you go) becomes...", options:["لَا تَذْهَبْ","تَذْهَبُ","اِذْهَبْ","لَنْ تَذْهَبَ"], answer:0, explanation:"لَا + the lightest 2nd-person present tense = \"don't go!\""},
+    {type:'tap', prompt:"Tap the Fi'l (verb) in this sentence.", sub:"نَصَرَ الرَّجُلُ — The man helped.", words:["نَصَرَ","الرَّجُلُ"], answer:0, explanation:"نَصَرَ is the action word — the Fi'l; الرَّجُلُ (the man) is who did it."}
   ]
 }
 ];
@@ -132,128 +132,9 @@ const RANKS = [
   {min:280, title:"Ustādh", ar:"أُسْتَاذ"}
 ];
 
-// Study Materials: a read-only, hand-curated library separate from the 10-day
-// path. Each entry's `questions` array uses the same {mcq|tap} exercise shape
-// as UNITS above. There is no in-app upload — send Claude a PDF and it will
-// extract the text, write questions from it, and append an entry here.
-// Example shape:
-// { id:'m1', title:"Some PDF Title", description:"12 questions", questions:[ ... ] }
-//
-// The set below is generated from the uploaded "Nahw — 10 Day" workbook
-// (Dream Worldwide), covering: Ism/Fi'l/Harf & the four properties of an Ism,
-// i'rab (raf'/nasb/jarr) recognition, light vs. heavy & flexibility, idhafah,
-// mowsoof+sifah, huruf al-jarr & huruf al-nasb, pronouns/pointing
-// words/jumlah ismiyyah, and past/present tense verbs & commands.
-const MATERIALS = [
-{
-  id:'ism_fil_harf', title:"The Three Kinds of Words",
-  description:"Ism, Fi'l & Harf, and the four properties of an Ism — 8 questions",
-  questions:[
-    {type:'mcq', prompt:"According to the workbook, what is a حَرْف؟", options:["A word with a tense (past, present, or future)","A word that makes no sense unless another word comes after it","The name of a person, place, thing, or idea","A word that always ends in tanwīn"], answer:1, explanation:"A Harf carries no meaning by itself — it only makes sense connecting to another word, like فِي or مِنْ."},
-    {type:'mcq', prompt:"Which definition describes an اِسْم؟", options:["A word that has a tense","The name of a person, place, thing, idea, adjective, adverb, and more","A word that needs another word after it to make sense","An action that already happened"], answer:1, explanation:"Ism is the broadest category — names, adjectives, and adverbs are all isms, not just physical objects."},
-    {type:'mcq', prompt:"«جُلُوس» (sitting) is an abstract idea, not a physical object. What kind of word is it?", options:["Fi'l","Harf","Ism","None of these"], answer:2, explanation:"The workbook's definition of Ism explicitly includes ideas — not just persons, places, and things."},
-    {type:'tap', prompt:"Tap the word that functions as a Harf in this classification.", sub:"table · in · jumps", words:["table","in","jumps"], answer:1, explanation:"'in' carries no meaning without something to attach to — the Harf role. 'table' is an Ism (a thing) and 'jumps' is a Fi'l (a tensed action)."},
-    {type:'mcq', prompt:"How many properties does every Ism have, according to the workbook?", options:["Two","Three","Four","Five"], answer:2, explanation:"Every Ism has four properties: Status, Number, Gender, and Type."},
-    {type:'mcq', prompt:"Which of these is NOT one of the four properties of an Ism?", options:["Status (i'rāb)","Number","Tense","Gender"], answer:2, explanation:"Tense belongs to the Fi'l, not the Ism — the four Ism properties are Status/Number/Gender/Type."},
-    {type:'mcq', prompt:"«فِي» is best classified as which kind of word?", options:["Ism","Fi'l","Harf","It could be any of the three"], answer:2, explanation:"فِي needs another word to make sense — the defining trait of a Harf."},
-    {type:'mcq', prompt:"«ذَهَبَ» (he went) is which kind of word?", options:["Ism","Fi'l","Harf","None of these"], answer:1, explanation:"ذَهَبَ carries a past tense — a Fi'l."}
-  ]
-},
-{
-  id:'iraab_status', title:"I'rāb: The Three Forms of Status",
-  description:"Raf', Nasb & Jarr, and how to recognize each ending — 8 questions",
-  questions:[
-    {type:'mcq', prompt:"Which status marks the doer of the act (the subject)?", options:["Nasb","Jarr","Raf'","None of these"], answer:2, explanation:"Raf' (رَفْع) marks the subject/doer — the workbook calls this 'مَرْفُوْع'."},
-    {type:'mcq', prompt:"Which status marks the detail of the act (the object)?", options:["Raf'","Nasb","Jarr","Sifah"], answer:1, explanation:"Nasb (نَصْب) marks the object — 'مَنْصُوْب'."},
-    {type:'mcq', prompt:"Which status marks the word that comes after 'of' (the possessive)?", options:["Raf'","Nasb","Jarr","Idhafah"], answer:2, explanation:"Jarr (جَرّ) marks the possessive word — 'مَجْرُوْر'."},
-    {type:'mcq', prompt:"For a singular Ism, what is the standard Raf' ending?", options:["A kasra sound (i/in)","A fatha sound (a/an)","A damma sound (u/un)","A sukūn"], answer:2, explanation:"Singular Raf' is marked by damma or dammatayn (u/un)."},
-    {type:'mcq', prompt:"For a singular Ism, what is the standard Nasb ending?", options:["A fatha sound (a/an)","A damma sound (u/un)","A kasra sound (i/in)","No sound at all"], answer:0, explanation:"Singular Nasb is marked by fatha or fathatayn (a/an)."},
-    {type:'mcq', prompt:"For a pair (muthannā), what's true about the Nasb and Jarr endings?", options:["They're completely different from each other","They're identical to each other (ay/ayni)","They're both identical to Raf'","Pairs have no ending at all"], answer:1, explanation:"In the pair and the plural, Nasb and Jarr share the same ending — only the singular form separates Nasb from Jarr."},
-    {type:'tap', prompt:"In «قَالَ مُسْلِمٌ» (a Muslim said), tap the word carrying the Raf' ending.", sub:"قَالَ مُسْلِمٌ — A Muslim said.", words:["قَالَ","مُسْلِمٌ"], answer:1, explanation:"مُسْلِمٌ ends with the dammatayn Raf' ending because it's the doer of the saying."},
-    {type:'mcq', prompt:"A word ending in kasra or kasratayn is in which status?", options:["Raf'","Nasb","Jarr","Sifah"], answer:2, explanation:"Kasra/kasratayn (i/in) is the recognition sign of Jarr."}
-  ]
-},
-{
-  id:'light_heavy_flex', title:"Light vs. Heavy & Flexibility",
-  description:"Making an Ism light, and the three categories of flexibility — 8 questions",
-  questions:[
-    {type:'mcq', prompt:"By default, how should a normal Ism be treated?", options:["Light","Heavy","Neither light nor heavy","It depends on gender"], answer:1, explanation:"The workbook states: normally an Ism should be heavy."},
-    {type:'mcq', prompt:"What makes an Ism 'light'?", options:["Adding a second tanwīn","Removing the extra 'n' sound — the tanwīn, or the extra ن","Adding اَلْـ to the front","Doubling the last letter"], answer:1, explanation:"An Ism is lightened by removing the double-accent tanwīn, or by removing the extra ن at the end."},
-    {type:'mcq', prompt:"True or false: an Ism with اَلْـ attached is considered light.", options:["True — اَلْـ makes a word light","False — اَلْـ doesn't like tanwīn, but the word still isn't considered light","True, but only for feminine nouns","False — اَلْـ can never attach to a light word"], answer:1, explanation:"The workbook's note: 'اَلْـ doesn't like tanwīn, but an ism with اَلْـ isn't considered light.'"},
-    {type:'mcq', prompt:"How many categories of flexibility are there?", options:["Two","Three","Four","Five"], answer:1, explanation:"Fully flexible, Non-flexible, and Partly flexible."},
-    {type:'mcq', prompt:"A fully flexible Ism...", options:["Can only ever be heavy","Can be heavy or light, and can show all three statuses","Never shows Jarr","Only exists in the plural"], answer:1, explanation:"Most isms are fully flexible: they can be heavy or light and show raf', nasb, and jarr."},
-    {type:'mcq', prompt:"Which of these marks a non-flexible Ism?", options:["It changes its ending in every status","It's a proper name of a place","It looks the same in all three statuses — e.g. words ending in alif like مُوْسَى","It must always carry tanwīn"], answer:2, explanation:"Non-flexible words have only one form and look identical no matter the status — e.g. alif-ending words and the ism mawsūl/pointer words."},
-    {type:'mcq', prompt:"A partly flexible Ism...", options:["Can be heavy and can take a kasrah ending","Cannot be heavy and cannot take a kasrah ending — it has one form for Raf' and a shared form for Nasb & Jarr","Has three completely different forms, one per status","Is always a pronoun"], answer:1, explanation:"Partly flexible words can't be heavy or take a kasrah — Raf' gets one ending, Nasb and Jarr share another."},
-    {type:'mcq', prompt:"Which of these is normally partly flexible?", options:["A 3-letter Arab place name like عَدَنْ","A common noun like كِتَاب","A non-Arab proper name like إِبْرَاهِيْم","An attached pronoun"], answer:2, explanation:"Non-Arab proper names are partly flexible — except when only 3 letters long, like نُوْح, which stays fully flexible."}
-  ]
-},
-{
-  id:'idhafah', title:"Idhāfah: The Possessive Construction",
-  description:"Rules for Mudāf & Mudāf Ilayh, plus the Special Mudhafs — 8 questions",
-  questions:[
-    {type:'mcq', prompt:"In an Idhāfah, what status must the second word (Mudāf Ilayh) always be in?", options:["Raf'","Nasb","Jarr","Whatever status fits the sentence"], answer:2, explanation:"The Mudāf Ilayh is always Jarr, regardless of what role the whole phrase plays."},
-    {type:'mcq', prompt:"Which of these can the Mudāf (the first word) NEVER carry?", options:["A damma ending","اَلْـ (al-) or tanwīn","A short vowel","A kasra ending"], answer:1, explanation:"The Mudāf must be light and can never carry اَلْـ."},
-    {type:'mcq', prompt:"In «كِتَابُ الوَلَدِ» (the boy's book), what is كِتَابُ؟", options:["The Mudāf Ilayh","The Mudāf","The Sifah","The Harf Jarr"], answer:1, explanation:"كِتَابُ is the first word, with no اَلْـ — the Mudāf."},
-    {type:'mcq', prompt:"Whose four properties (including 'type') get dictated by the Mudāf Ilayh?", options:["The Sifah's","The Mudāf's","The Fa'il's","The Harf's"], answer:1, explanation:"The Mudāf's last property, type, is dictated by whatever the Mudāf Ilayh is."},
-    {type:'mcq', prompt:"Both the Mudāf and the Mudāf Ilayh must be...", options:["Verbs","Prepositions","Isms","Pronouns only"], answer:2, explanation:"Idhāfah is strictly an Ism + Ism construction."},
-    {type:'mcq', prompt:"Special Mudhafs like تَحْتَ (below), فَوْقَ (above), and بَيْنَ (between) are, by default, in which status?", options:["Raf'","Nasb","Jarr","They have no fixed status"], answer:1, explanation:"These Special Mudhafs are Nasb by default."},
-    {type:'mcq', prompt:"Which special Mudhaf can appear in Raf', Nasb, OR Jarr — unlike تَحْتَ and فَوْقَ؟", options:["قَبْلَ (before)","كُلّ (each/all/every)","خَلْفَ (behind)","مَعَ (with)"], answer:1, explanation:"كُلّ, بَعْض, غَيْر, and أَيّ are the special mudhafs that flex between all three statuses."},
-    {type:'mcq', prompt:"«تَحْتَ الْأَرْضِ» means 'under the earth'. What kind of Idhāfah is this?", options:["'Of' translation","Pronoun attached to an Ism","A Special Mudhaf","Not an Idhāfah at all"], answer:2, explanation:"تَحْتَ is one of the Special Mudhafs — it usually doesn't carry an 'of' meaning."}
-  ]
-},
-{
-  id:'mowsoof_sifah', title:"Mowsoof + Sifah: Noun & Adjective",
-  description:"Agreement rules between a described noun and its adjective — 7 questions",
-  questions:[
-    {type:'mcq', prompt:"How many of the Mowsoof's four properties must the Sifah match?", options:["One","Two","Three","All four"], answer:3, explanation:"The Sifah must match Status, Number, Gender, and Type — all four properties."},
-    {type:'mcq', prompt:"Where must the Sifah appear relative to the Mowsoof?", options:["Before it","Fused directly onto it","After it","Anywhere in the sentence"], answer:2, explanation:"The Sifah always follows the Mowsoof."},
-    {type:'mcq', prompt:"Can there be more than one Sifah describing a single Mowsoof?", options:["No, only ever one","Yes, there may be more than one","Only in the plural","Only if the Mowsoof is a pronoun"], answer:1, explanation:"The workbook explicitly notes the Sifah 'may be more than one.'"},
-    {type:'mcq', prompt:"Which of these can NEVER function as a Mowsoof?", options:["A common noun","A pronoun, pointer word, or ism mowsool","A proper name","A light Ism"], answer:1, explanation:"The Mowsoof is never a pronoun, pointer word (ism ishārah), or relative pronoun (ism mowsool)."},
-    {type:'mcq', prompt:"Which of these can NEVER function as a Sifah?", options:["An adjective ending in tanwīn","A proper name, pronoun, or pointer word","A word matching the Mowsoof's gender","A word after the Mowsoof"], answer:1, explanation:"The Sifah is never a proper name, pronoun, or pointer word."},
-    {type:'mcq', prompt:"«نَارٌ حَامِيَةٌ» means 'an intensely hot fire'. What is حَامِيَةٌ doing here?", options:["It's the Mudāf Ilayh","It's the Sifah, describing نَارٌ (the Mowsoof)","It's a Harf Jarr","It's the Fa'il"], answer:1, explanation:"حَامِيَةٌ matches نَارٌ's status, number, gender, and type — a textbook Sifah."},
-    {type:'mcq', prompt:"Why does a non-human plural noun (broken or not) take a feminine singular Sifah?", options:["Because plurals are always masculine","Because non-human plurals are grammatically treated as 'she'","It's a random exception with no rule","Only human plurals ever take adjectives"], answer:1, explanation:"The workbook's rule: ALL non-human plurals — broken or not — are treated as 'she' grammatically."}
-  ]
-},
-{
-  id:'huruf_jarr_nasb', title:"Ḥurūf al-Jarr & Ḥurūf al-Nasb",
-  description:"Prepositions that cause Jarr, and particles that cause Nasb — 8 questions",
-  questions:[
-    {type:'mcq', prompt:"What does a Harf of Jarr do to the Ism that follows it?", options:["Makes it Raf'","Makes it Nasb","Makes it Jarr","Turns it into a Fi'l"], answer:2, explanation:"That's the defining job of a Harf of Jarr — it's called 'جَارّ' because it makes its Ism 'مَجْرُوْر.'"},
-    {type:'mcq', prompt:"Which of these is a Harf of Jarr meaning 'from / because of'?", options:["إِلَى","مِنْ","عَلَى","إِنَّ"], answer:1, explanation:"مِنْ means 'from/because of' and makes its Ism majrūr."},
-    {type:'mcq', prompt:"Which of these is a Harf of Jarr, NOT a Harf of Nasb?", options:["إِنَّ","أَنَّ","فِي","لَعَلَّ"], answer:2, explanation:"فِي ('in/about') is a preposition (Harf of Jarr); the other three are particles of Nasb."},
-    {type:'mcq', prompt:"What does a Harf of Nasb do to its Ism?", options:["Makes it Jarr","Makes it Raf'","Makes it Nasb","Nothing — it only affects verbs"], answer:2, explanation:"A Harf of Nasb pushes its Ism into the Nasb status."},
-    {type:'mcq', prompt:"Which Harf of Nasb means 'as though / as if'?", options:["إِنَّ","كَأَنَّ","لَيْتَ","لَكِنَّ"], answer:1, explanation:"كَأَنَّ means 'as though/as if' — used for comparison."},
-    {type:'mcq', prompt:"Unlike Harf of Jarr, Harf of Nasb can...", options:["Never attach to a pronoun","Tolerate a long-distance relationship with its Ism","Only be used with plurals","Only appear at the start of a sentence"], answer:1, explanation:"The workbook lists this as a key difference: Harf of Nasb can tolerate a long-distance relationship; Harf of Jarr cannot."},
-    {type:'mcq', prompt:"The nasb form of أَنَا when attached to a Harf of Nasb is...", options:["هُ","نِيْ / يْ","كَ","هَا"], answer:1, explanation:"أَنَا becomes نِيْ or يْ when attached — e.g. إِنِّي / إِنَّنِيْ."},
-    {type:'tap', prompt:"Tap the Harf of Jarr in this phrase.", sub:"بِالْمُؤْمِنِيْنَ — with the believers", words:["بِ","الْمُؤْمِنِيْنَ"], answer:0, explanation:"بِ ('with/by/at') is the Harf of Jarr; الْمُؤْمِنِيْنَ is the Ism it makes majrūr."}
-  ]
-},
-{
-  id:'pronouns_pointers_jumlah', title:"Pronouns, Pointing Words & Jumlah Ismiyyah",
-  description:"Attached vs. detached pronouns, ism ishārah, and finding the invisible 'is' — 8 questions",
-  questions:[
-    {type:'mcq', prompt:"An independent (detached) pronoun is always in which status?", options:["Nasb","Jarr","Raf'","It has no fixed status"], answer:2, explanation:"Independent pronouns like هُوَ, أَنْتَ, and أَنَا are always Raf'."},
-    {type:'mcq', prompt:"An attached pronoun is Nasb in which two cases?", options:["Attached to an Ism, or attached to a Harf of Jarr","Attached to a Fi'l, or attached to a Harf of Nasb","Attached to a pointer word, or attached to a Sifah","It's always Nasb, with no exceptions"], answer:1, explanation:"Attached pronouns become the detail (Nasb) when fused onto a verb or a Harf of Nasb."},
-    {type:'mcq', prompt:"An attached pronoun is Jarr in which two cases?", options:["Attached to a Fi'l, or attached to a Harf of Nasb","Attached to an Ism (Idhāfah), or attached to a Harf of Jarr","Attached to a Mowsoof, or attached to a Sifah","Never — attached pronouns can't be Jarr"], answer:1, explanation:"Attached pronouns become Jarr when fused onto an Ism (making an Idhāfah) or onto a Harf of Jarr."},
-    {type:'mcq', prompt:"To make a fragment (not a full sentence) with a pointer word, the pointer must be followed immediately by...", options:["A pronoun","اَلْـ (al-)","A Harf of Jarr","Another pointer word"], answer:1, explanation:"Pointer + اَلْـ noun = fragment, e.g. هَذَا الْبَيْتُ ('this house'). Without اَلْـ, it forms a full sentence."},
-    {type:'mcq', prompt:"«هَذَا بَيْتٌ» (this is a house) is a sentence, not a fragment. Why?", options:["Because هَذَا has اَلْـ after it","Because بَيْتٌ has no tanwīn","Because the pointer هَذَا is NOT immediately followed by اَلْـ","Because it starts with a Fi'l"], answer:2, explanation:"بَيْتٌ has no اَلْـ, so هَذَا + بَيْتٌ forms a complete Mubtada + Khabar sentence."},
-    {type:'mcq', prompt:"Which of these signals an 'invisible IS' — i.e. a Jumlah Ismiyyah?", options:["An independent pronoun followed by another word","A Harf of Jarr followed by an Ism","Two Fi'ls in a row","A Sifah followed by its Mowsoof"], answer:0, explanation:"Independent pronouns, pointer words without اَلْـ, Harf of Nasb + Ism, proper-then-common, and a break in the chain are all signs of an invisible 'is'."},
-    {type:'mcq', prompt:"«الرَّجُلُ فِي الدَّارِ» (the man is in the house) — why is 'is' invisible here?", options:["Because الرَّجُلُ is a Fi'l","Because there's a break in the expected chain — an Ism followed directly by a Harf-Jarr phrase implies 'is'","Because فِي is a pronoun","There is no invisible 'is' in this sentence"], answer:1, explanation:"This is the 'break in the chain' pattern from the workbook — الرَّجُلُ is the Mubtada, فِي الدَّارِ is the Khabar."},
-    {type:'mcq', prompt:"Which pointer word means 'that' (far, feminine singular)?", options:["هَذِهِ","ذَلِكَ","تِلْكَ","هَؤُلَاءِ"], answer:2, explanation:"تِلْكَ is the far, feminine-singular pointer word — matching ذَلِكَ for masculine."}
-  ]
-},
-{
-  id:'verbs_past_present_commands', title:"Verbs: Past, Present & Commands",
-  description:"Past-tense conjugation, present-tense letters, and building commands — 8 questions",
-  questions:[
-    {type:'mcq', prompt:"Every present-tense (mudāri') verb begins with one of four letters. Which set is correct?", options:["ب ت ث ن","أ ن ي ت","س ل ك م","ه و ي ا"], answer:1, explanation:"The mnemonic is نَأْتِي — every mudāri' verb starts with أ, ن, ي, or ت."},
-    {type:'mcq', prompt:"To make a present-tense verb 'light' (mansūb), what happens if it ends in a damma?", options:["It changes to a kasra","It changes to a fatha","It's removed entirely","Nothing changes"], answer:1, explanation:"A trailing damma becomes a fatha when lightening a present-tense verb."},
-    {type:'mcq', prompt:"To make a present-tense verb 'lightest' (majzūm), what happens if it ends in a damma?", options:["It changes to a fatha","It changes to a sukūn","It's doubled","It becomes a kasra"], answer:1, explanation:"For the lightest form, a trailing damma becomes a sukūn instead of a fatha."},
-    {type:'mcq', prompt:"Which two present-tense forms NEVER change when made light or lightest?", options:["هُوَ and أَنَا","أَنْتُنَّ and هُنَّ","نَحْنُ and أَنْتَ","هِيَ and هُمْ"], answer:1, explanation:"The أَنْتُنَّ and هُنَّ forms already end in ن as part of the word itself, so they stay the same."},
-    {type:'mcq', prompt:"Which Harf makes the present tense 'light' and means 'will not'?", options:["لَمْ","لَنْ","إِنْ","لِ"], answer:1, explanation:"لَنْ ('will not') is one of the light-causing harfs, alongside أَنْ, كَيْ, إِذَنْ, and حَتَّى."},
-    {type:'mcq', prompt:"Which Harf makes the present tense 'lightest' and means 'did not' (pushing the meaning to the past)?", options:["لَنْ","كَيْ","لَمْ","حَتَّى"], answer:2, explanation:"لَمْ only attaches to the present tense, but pushes its meaning into the past — 'did not'."},
-    {type:'mcq', prompt:"To forbid someone from doing something, what's the formula?", options:["لَا + normal present tense","لَا + lightest present tense (2nd person)","لَنْ + past tense","اِفْعَلْ + لَا"], answer:1, explanation:"Forbidding = لَا + the lightest 2nd-person present tense, e.g. لَا تَذْهَبْ ('don't go')."},
-    {type:'mcq', prompt:"When building a command from the lightest 2nd-person present tense, what's the very next step after that?", options:["Add a helper alif no matter what","Remove the first ت","Change the last letter to damma","Add لَا to the front"], answer:1, explanation:"After starting from the lightest 2nd-person form, remove the first ت — then add a helper alif only if the remaining word can't be read on its own."}
-  ]
-}
-];
+// Study Materials: a read-only, optional-extra library separate from the 10-day
+// path (which is now itself built from the uploaded PDF — see UNITS above).
+// Kept empty for now. Each entry's `questions` array uses the same {mcq|tap}
+// exercise shape as UNITS. There is no in-app upload — send Claude a PDF and
+// it will extract the text, write questions from it, and append an entry here.
+const MATERIALS = [];

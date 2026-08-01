@@ -170,10 +170,10 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 .lesson-top{display:flex;align-items:center;gap:12px;padding:16px 18px;}
 .close-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#C9C3E8;flex:none;}
 .close-btn:hover{background:rgba(255,255,255,0.08);}
-.progress-track{flex:1;height:12px;border-radius:100px;background:rgba(255,255,255,0.08);overflow:hidden;border:1px solid rgba(255,255,255,0.15);}
+.progress-track{flex:1;height:12px;border-radius:100px;background:rgba(255,255,255,0.08);overflow:hidden;border:1px solid rgba(255,255,255,0.15);min-width:0;}
 .progress-fill{height:100%;background:linear-gradient(90deg, var(--teal-bright), var(--star-gold));border-radius:100px;transition:width .35s ease;}
-.hearts-mini{display:flex;gap:4px;flex:none;color:#FF6B6B;}
-.heart-icon{width:19px;height:19px;filter:drop-shadow(0 0 4px rgba(255,107,107,0.55));transition:transform .2s ease;}
+.hearts-mini{display:flex;gap:3px;flex:none;color:#FF6B6B;}
+.heart-icon{width:17px;height:17px;filter:drop-shadow(0 0 4px rgba(255,107,107,0.55));transition:transform .2s ease;}
 .hearts-mini.heart-lost{animation:heartLostPulse .4s ease;}
 @keyframes heartLostPulse{
   0%{transform:scale(1);}
@@ -196,7 +196,7 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 
 /* ---------- PLATFORMER MINIGAME ---------- */
 .stage{
-  position:relative;width:100%;height:290px;margin-bottom:4px;
+  position:relative;width:100%;height:310px;margin-bottom:10px;
   background:radial-gradient(ellipse 90% 60% at 50% 100%, rgba(63,224,200,0.08), transparent 70%);
   border:1px solid rgba(255,255,255,0.1);border-radius:20px;overflow:hidden;
 }
@@ -205,7 +205,7 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
   background:linear-gradient(90deg, var(--teal-bright), transparent);opacity:0.5;
 }
 .stage-astro{
-  position:absolute;left:2%;bottom:6%;width:30px;height:42px;z-index:20;
+  position:absolute;left:4%;bottom:calc(8% + 8px);width:30px;height:42px;z-index:20;
   filter:drop-shadow(0 3px 4px rgba(0,0,0,0.4));
   transform-origin:50% 100%;
 }
@@ -236,10 +236,10 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 .stage-planet.dim{opacity:0.3;}
 .planet-icon{width:44px;height:44px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.35));}
 .planet-label{
-  margin-top:4px;padding:5px 8px;border-radius:12px;background:rgba(21,18,51,0.85);
-  border:1px solid rgba(255,255,255,0.18);white-space:normal;max-width:88px;text-align:center;line-height:1.3;
+  margin-top:4px;padding:4px 7px;border-radius:12px;background:rgba(21,18,51,0.85);
+  border:1px solid rgba(255,255,255,0.18);white-space:normal;max-width:72px;text-align:center;line-height:1.25;
 }
-.planet-label .ar{font-family:'Amiri',serif;direction:rtl;font-size:12.5px;color:#fff;display:block;}
+.planet-label .ar{font-family:'Amiri',serif;direction:rtl;font-size:11.5px;color:#fff;display:block;}
 
 .stage-block{
   position:absolute;left:50%;top:-58px;transform:translateX(-50%);width:34px;height:34px;
@@ -482,7 +482,7 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none
 }
 
 /* ---------- MANUSCRIPT TILE PROGRESS ---------- */
-.tile-row{display:flex;gap:6px;flex:1;align-items:center;}
+.tile-row{display:flex;gap:6px;flex:1;align-items:center;min-width:0;}
 .tile{
   width:20px;height:20px;flex:1;max-width:26px;border-radius:5px;
   transform:rotate(45deg);

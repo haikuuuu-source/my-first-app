@@ -699,10 +699,10 @@ window.beginExercises = beginExercises;
 
 /* ---------- PLATFORMER MINIGAME: jump to the planet, bonk the block, reveal the answer ---------- */
 const PLATFORMER_LAYOUT = [
-  {left:15, top:68, badge:'planet'},
-  {left:39, top:34, badge:'moon'},
-  {left:62, top:56, badge:'planet'},
-  {left:85, top:20, badge:'ufo'}
+  {left:28, top:60, badge:'planet'},
+  {left:50, top:32, badge:'moon'},
+  {left:72, top:54, badge:'planet'},
+  {left:88, top:18, badge:'ufo'}
 ];
 const BLOCK_TYPES = ['star','comet','star','comet'];
 
