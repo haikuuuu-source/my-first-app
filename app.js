@@ -14,9 +14,27 @@ const ICONS = {
   trophy:`<path d="M6 4h12v2a6 6 0 0 1-6 6 6 6 0 0 1-6-6V4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M6 5H3.5A2.5 2.5 0 0 0 6 9.5M18 5h2.5A2.5 2.5 0 0 1 18 9.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 12v3.5M9.3 16.5h5.4l.9 3.5H8.4l.9-3.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>`,
   chartBar:`<rect x="4" y="12" width="4" height="8" rx="1" fill="currentColor"/><rect x="10" y="6.5" width="4" height="13.5" rx="1" fill="currentColor"/><rect x="16" y="3" width="4" height="17" rx="1" fill="currentColor"/>`,
   pencil:`<path d="M4 20l1-4.2L15.5 5.3l3.2 3.2L8.2 19 4 20Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M13.6 6.9l3.2 3.2" stroke="currentColor" stroke-width="1.6"/>`,
-  check:`<path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`
+  check:`<path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`,
+  book:`<path d="M4 5.5C4 4.7 4.7 4 5.5 4H11a2 2 0 0 1 2 2v13.5S11 18 8 18s-4 1.5-4 1.5V5.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M20 5.5C20 4.7 19.3 4 18.5 4H13a2 2 0 0 0-2 2v13.5S13 18 16 18s4 1.5 4 1.5V5.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>`,
+  upload:`<path d="M12 16V4M12 4 7 9M12 4l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`,
+  key:`<circle cx="8" cy="15" r="3.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 12.6 19 4M15.5 8.5 18 6M18.5 11.5 21 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>`,
+  trash:`<path d="M5 7h14M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-9 0 1 13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l1-13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`
 };
 function icon(name, cls){ return `<svg class="${cls||''}" viewBox="0 0 24 24">${ICONS[name]}</svg>`; }
+
+/* ---------- SHARED BOTTOM NAV (5 tabs) ---------- */
+function bottomNav(active){
+  const tabs = [
+    ['home','home','Path'],
+    ['materials','book','Study'],
+    ['challenges','trophy','Challenges'],
+    ['insights','chartBar','Insights'],
+    ['profile','profile','Profile']
+  ];
+  return `<div class="bottom-nav">${tabs.map(([r,ic,label])=>
+    `<button class="nav-btn${active===r?' active':''}" ${active===r?'':`onclick="navigate('${r}')"`}>${icon(ic)}<span>${label}</span></button>`
+  ).join('')}</div>`;
+}
 
 /* ---------- STARFIELD BACKGROUND ---------- */
 function buildStarfield(){
@@ -368,7 +386,8 @@ function defaultState(){
     unitStats:{},          // {unitId: {correct:0, total:0}} — powers Insights
     perfectRunCount:0,     // consecutive perfect (0-mistake) lessons — powers a Challenge
     lastLessonDate:null,
-    lessonsToday:0         // lessons finished on lastLessonDate — powers a Challenge
+    lessonsToday:0,        // lessons finished on lastLessonDate — powers a Challenge
+    materialCompletions:{} // {materialUnitId: {mistakes, at}} — study-material quiz results
   };
 }
 function loadState(){
@@ -456,6 +475,200 @@ function render(){
   else if(route === 'profile') renderProfile();
   else if(route === 'challenges') renderChallenges();
   else if(route === 'insights') renderInsights();
+  else if(route === 'materials') renderMaterials();
+}
+
+/* ============ STUDY MATERIALS ============
+   Upload a PDF -> extract its text (pdf.js, client-side) -> send it to
+   Claude to auto-generate a quiz in the same {mcq|tap} shape used by UNITS.
+
+   NOTE ON SHARING: this currently persists to *this browser's* localStorage
+   only, so materials are not yet visible across devices/users. To make the
+   library truly shared, swap loadMaterials()/saveMaterials() below for reads/
+   writes against a backend (e.g. Supabase) — nothing else here needs to change,
+   since the rest of the app just calls those two functions. */
+const MATERIALS_KEY = 'darb_materials_v1';
+const API_KEY_STORAGE = 'darb_anthropic_key_v1';
+
+function loadMaterials(){
+  try{
+    const raw = localStorage.getItem(MATERIALS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function saveMaterials(){
+  try{ localStorage.setItem(MATERIALS_KEY, JSON.stringify(materials)); }catch(e){}
+}
+function getApiKey(){ return localStorage.getItem(API_KEY_STORAGE) || ''; }
+function setApiKey(k){ localStorage.setItem(API_KEY_STORAGE, (k||'').trim()); }
+
+let materials = loadMaterials();
+
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function extractPdfText(file){
+  if(!window.pdfjsLib) throw new Error('PDF reader failed to load. Check your connection and try again.');
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
+  let text = '';
+  const maxPages = Math.min(pdf.numPages, 60);
+  for(let p=1; p<=maxPages; p++){
+    const page = await pdf.getPage(p);
+    const content = await page.getTextContent();
+    text += content.items.map(it=>it.str).join(' ') + '\n';
+  }
+  return text.trim();
+}
+
+async function generateQuestionsFromText(text, apiKey){
+  const trimmed = text.slice(0, 15000);
+  const sys = `You write short quiz questions for an Arabic grammar (Nahw) learning app, based on study material text the user provides. Return ONLY valid JSON — no prose, no markdown fences, no code block. The JSON must be an array of 6 to 10 question objects, each one of these two shapes:
+{"type":"mcq","prompt":"...","options":["...","...","...","..."],"answer":0,"explanation":"..."}
+{"type":"tap","prompt":"...","sub":"a full sentence to tap a word within","words":["w1","w2","w3"],"answer":0,"explanation":"..."}
+"answer" is a 0-based index into "options" or "words". Base every question strictly on the provided text — don't invent facts not in it. Mix mcq and tap types, prefer mcq. Keep prompts concise. Preserve any Arabic script exactly as written in the source.`;
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body: JSON.stringify({
+      model:'claude-sonnet-5',
+      max_tokens: 3000,
+      system: sys,
+      messages:[{role:'user', content:`Study material text:\n\n${trimmed}`}]
+    })
+  });
+  if(!res.ok){
+    const errBody = await res.text().catch(()=> '');
+    let msg = `API error ${res.status}`;
+    try{ msg = JSON.parse(errBody).error.message || msg; }catch(e){}
+    throw new Error(msg);
+  }
+  const data = await res.json();
+  const textOut = (data.content||[]).map(b=>b.text||'').join('').trim();
+  const cleaned = textOut.replace(/^```json\s*|^```\s*|```\s*$/g,'').trim();
+  let parsed;
+  try{ parsed = JSON.parse(cleaned); }catch(e){ throw new Error('Could not read the questions the AI returned — try again.'); }
+  if(!Array.isArray(parsed) || parsed.length===0) throw new Error('No questions were generated from this PDF.');
+  return parsed;
+}
+
+async function handlePdfUpload(fileInput){
+  const file = fileInput.files[0];
+  fileInput.value = '';
+  if(!file) return;
+  const apiKey = getApiKey();
+  if(!apiKey){ promptApiKey(); if(!getApiKey()) return; }
+
+  const id = 'm' + Date.now();
+  const material = {id, title: file.name.replace(/\.pdf$/i,''), addedAt: todayStr(), status:'reading', questions:[], errorMsg:null};
+  materials.unshift(material);
+  saveMaterials();
+  navigate('materials');
+
+  try{
+    const text = await extractPdfText(file);
+    if(!text || text.length < 40) throw new Error('Could not read text from this PDF — it may be a scanned image without a text layer.');
+    material.status = 'generating';
+    saveMaterials(); render();
+    const questions = await generateQuestionsFromText(text, getApiKey());
+    material.questions = questions;
+    material.status = 'ready';
+  }catch(e){
+    material.status = 'error';
+    material.errorMsg = (e && e.message) ? e.message : 'Something went wrong reading this PDF.';
+  }
+  saveMaterials();
+  render();
+}
+window.handlePdfUpload = handlePdfUpload;
+
+function promptApiKey(){
+  const cur = getApiKey();
+  const val = prompt("Paste your Anthropic API key. It's stored only in this browser (localStorage) and used only to generate quiz questions from your PDFs:", cur);
+  if(val === null) return;
+  setApiKey(val);
+  render();
+}
+window.promptApiKey = promptApiKey;
+
+function removeMaterial(id){
+  if(!confirm('Remove this study material and its questions?')) return;
+  materials = materials.filter(m=>m.id!==id);
+  saveMaterials();
+  render();
+}
+window.removeMaterial = removeMaterial;
+
+function startMaterialQuiz(id){
+  const m = materials.find(x=>x.id===id);
+  if(!m || !m.questions || !m.questions.length) return;
+  const unit = {
+    id: 'mat_'+m.id,
+    day: 1,
+    title: m.title,
+    arTitle: 'مَوَادّ دِرَاسِيَّة',
+    teach: `Auto-generated questions from your PDF "${m.title}".`,
+    exercises: m.questions
+  };
+  navigate('lesson', {unit, showingTeach:true, idx:0, mistakes:0});
+}
+window.startMaterialQuiz = startMaterialQuiz;
+
+function materialCard(m){
+  const count = (m.questions||[]).length;
+  let body;
+  if(m.status==='reading'){
+    body = `<div class="challenge-desc">Reading PDF…</div>`;
+  } else if(m.status==='generating'){
+    body = `<div class="challenge-desc">Generating questions with AI…</div>`;
+  } else if(m.status==='error'){
+    body = `<div class="challenge-desc" style="color:#FF9E7A;">${escapeHtml(m.errorMsg)}</div>
+      <button class="reset-link" onclick="removeMaterial('${m.id}')">Remove</button>`;
+  } else {
+    body = `<div class="challenge-desc">${count} question${count===1?'':'s'} · added ${m.addedAt}</div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:6px;">
+        <button class="primary-btn" style="flex:1;padding:10px;" onclick="startMaterialQuiz('${m.id}')">Start Quiz</button>
+        <button class="close-btn" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);width:36px;height:36px;" onclick="removeMaterial('${m.id}')">${icon('trash')}</button>
+      </div>`;
+  }
+  return `<div class="challenge-card">
+    <div class="challenge-icon">${icon('book')}</div>
+    <div class="challenge-body">
+      <div class="challenge-title">${escapeHtml(m.title)}</div>
+      ${body}
+    </div>
+  </div>`;
+}
+
+function renderMaterials(){
+  const apiKey = getApiKey();
+  const cards = materials.length
+    ? materials.map(materialCard).join('')
+    : `<div class="insight-empty">No study materials yet. Upload a PDF and Darb will turn it into a quiz for everyone using the app ✨</div>`;
+  app.innerHTML = `
+  <div class="screen active">
+    <div class="path-header">
+      <div class="eyebrow">STUDY MATERIALS</div>
+      <h1 class="section-h1">Your Library <span class="arabic" style="font-size:20px;">مَوَادّ</span></h1>
+      <p class="rank-line">Upload a PDF — Darb reads it and builds a quiz from it automatically.</p>
+    </div>
+    <div style="padding:0 24px 10px;display:flex;gap:10px;">
+      <label class="primary-btn" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
+        ${icon('upload')}<span>Add PDF</span>
+        <input type="file" accept="application/pdf" style="display:none;" onchange="handlePdfUpload(this)">
+      </label>
+      <button class="close-btn" style="width:48px;height:48px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:14px;" onclick="promptApiKey()" title="Set Anthropic API key">${icon('key')}</button>
+    </div>
+    ${!apiKey ? `<div class="insight-empty-sm" style="text-align:left;padding:0 24px 14px;">No Anthropic API key set — tap the key icon above to add one. It's stored only in this browser and used to generate questions from your PDFs.</div>` : ''}
+    <div class="challenge-list">${cards}</div>
+    ${bottomNav('materials')}
+  </div>`;
 }
 
 /* ============ HOME / PATH SCREEN ============ */
@@ -500,12 +713,7 @@ function renderHome(){
       <div class="trail-svg-line"></div>
       ${stations}
     </div>
-    <div class="bottom-nav">
-      <button class="nav-btn active">${icon('home')}<span>Path</span></button>
-      <button class="nav-btn" onclick="navigate('challenges')">${icon('trophy')}<span>Challenges</span></button>
-      <button class="nav-btn" onclick="navigate('insights')">${icon('chartBar')}<span>Insights</span></button>
-      <button class="nav-btn" onclick="navigate('profile')">${icon('profile')}<span>Profile</span></button>
-    </div>
+    ${bottomNav('home')}
   </div>`;
   buildStarfield();
 }
@@ -531,12 +739,15 @@ function regenCheck(){
 function renderLesson(){
   const {unit} = lessonCtx;
 
+  const isMaterial = typeof unit.id === 'string';
+  const backRoute = isMaterial ? 'materials' : 'home';
+
   if(lessonCtx.showingTeach){
     const badgeType = badgeTypeForDay(unit.day);
     app.innerHTML = `
     <div class="screen active">
       <div class="lesson-top">
-        <button class="close-btn" onclick="navigate('home')">${icon('close')}</button>
+        <button class="close-btn" onclick="navigate('${backRoute}')">${icon('close')}</button>
         ${tileRow(unit.exercises.length, 0)}
         <div class="hearts-mini">${heartsRow()}</div>
       </div>
@@ -584,7 +795,7 @@ function renderLesson(){
   app.innerHTML = `
   <div class="screen active">
     <div class="lesson-top">
-      <button class="close-btn" onclick="if(confirm('Leave this lesson? Progress on this lesson will be lost.')) navigate('home')">${icon('close')}</button>
+      <button class="close-btn" onclick="if(confirm('Leave this lesson? Progress on this lesson will be lost.')) navigate('${backRoute}')">${icon('close')}</button>
       ${tileRow(total, idx)}
       <div class="hearts-mini">${heartsRow()}</div>
     </div>
@@ -827,6 +1038,25 @@ window.nextExercise = nextExercise;
 
 function finishLesson(){
   const {unit, mistakes} = lessonCtx;
+
+  // Study-material quizzes use string ids ('mat_...') and are tracked separately
+  // so they never touch UNITS-based progress (completedUnits / finisher achievement).
+  if(typeof unit.id === 'string'){
+    checkStreak();
+    state.perfectRunCount = (mistakes === 0) ? (state.perfectRunCount + 1) : 0;
+    const today = todayStr();
+    if(state.lastLessonDate === today){ state.lessonsToday += 1; }
+    else { state.lastLessonDate = today; state.lessonsToday = 1; }
+    if(!state.materialCompletions) state.materialCompletions = {};
+    state.materialCompletions[unit.id] = {mistakes, at: today};
+    saveState();
+    if(mistakes === 0) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='perfect'));
+    if(state.streak >= 3) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='streak3'));
+    if(state.streak >= 7) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='streak7'));
+    navigate('result', {unit, mistakes, xpGained: (unit.exercises.length - mistakes) * 10});
+    return;
+  }
+
   const wasAlreadyDone = !!state.completedUnits[unit.id];
   state.completedUnits[unit.id] = {mistakes};
   checkStreak();
@@ -874,13 +1104,18 @@ const CELEBRATIONS_ENCOURAGE = [
 ];
 function renderResult(){
   const {unit, mistakes, xpGained} = lessonCtx;
+  const isMaterial = typeof unit.id === 'string';
   const correct = unit.exercises.length - mistakes;
   const ratio = correct / unit.exercises.length;
   const pool = ratio >= 0.8 ? CELEBRATIONS_GREAT : (ratio >= 0.5 ? CELEBRATIONS_GOOD : CELEBRATIONS_ENCOURAGE);
-  const headline = pool[unit.id % pool.length];
-  const subtext = ratio >= 0.5
-    ? `Day ${unit.day} complete — ${unit.title} · ${unit.arTitle}`
-    : `Day ${unit.day} finished — ${unit.title}. Want to review it again before moving on?`;
+  const headline = pool[(isMaterial ? correct : unit.id) % pool.length];
+  const subtext = isMaterial
+    ? (ratio >= 0.5 ? `Study quiz complete — ${unit.title}` : `Study quiz finished — ${unit.title}. Want to try it again?`)
+    : (ratio >= 0.5 ? `Day ${unit.day} complete — ${unit.title} · ${unit.arTitle}` : `Day ${unit.day} finished — ${unit.title}. Want to review it again before moving on?`);
+  const backRoute = isMaterial ? 'materials' : 'home';
+  const backLabel = isMaterial
+    ? (ratio >= 0.5 ? 'Back to Study Materials →' : 'Back to Study Materials →')
+    : (ratio >= 0.5 ? 'Keep the magic going →' : 'Back to the path →');
   app.innerHTML = `
   <div class="screen active">
     <div class="result-wrap">
@@ -892,7 +1127,7 @@ function renderResult(){
         <div class="rstat"><div class="num">${correct}/${unit.exercises.length}</div><div class="lab">Correct</div></div>
         <div class="rstat"><div class="num">${state.streak}</div><div class="lab">Day streak</div></div>
       </div>
-      <button class="primary-btn" onclick="navigate('home')">${ratio >= 0.5 ? 'Keep the magic going →' : 'Back to the path →'}</button>
+      <button class="primary-btn" onclick="navigate('${backRoute}')">${backLabel}</button>
     </div>
   </div>`;
   setTimeout(flushToasts, 500);
@@ -940,12 +1175,7 @@ function renderProfile(){
     <div class="section-title">Achievements</div>
     <div class="badge-grid">${badges}</div>
     <div class="reset-row"><button class="reset-link" onclick="resetProgress()">Reset all progress</button></div>
-    <div class="bottom-nav">
-      <button class="nav-btn" onclick="navigate('home')">${icon('home')}<span>Path</span></button>
-      <button class="nav-btn" onclick="navigate('challenges')">${icon('trophy')}<span>Challenges</span></button>
-      <button class="nav-btn" onclick="navigate('insights')">${icon('chartBar')}<span>Insights</span></button>
-      <button class="nav-btn active">${icon('profile')}<span>Profile</span></button>
-    </div>
+    ${bottomNav('profile')}
   </div>`;
   if(profileEditing){
     const inp = document.getElementById('nameInput');
@@ -1001,12 +1231,7 @@ function renderChallenges(){
       <h1 class="section-h1">Challenges</h1>
     </div>
     <div class="challenge-list">${cards}</div>
-    <div class="bottom-nav">
-      <button class="nav-btn" onclick="navigate('home')">${icon('home')}<span>Path</span></button>
-      <button class="nav-btn active">${icon('trophy')}<span>Challenges</span></button>
-      <button class="nav-btn" onclick="navigate('insights')">${icon('chartBar')}<span>Insights</span></button>
-      <button class="nav-btn" onclick="navigate('profile')">${icon('profile')}<span>Profile</span></button>
-    </div>
+    ${bottomNav('challenges')}
   </div>`;
   buildStarfield();
 }
@@ -1071,12 +1296,7 @@ function renderInsights(){
       <h1 class="section-h1">Insights</h1>
     </div>
     ${body}
-    <div class="bottom-nav">
-      <button class="nav-btn" onclick="navigate('home')">${icon('home')}<span>Path</span></button>
-      <button class="nav-btn" onclick="navigate('challenges')">${icon('trophy')}<span>Challenges</span></button>
-      <button class="nav-btn active">${icon('chartBar')}<span>Insights</span></button>
-      <button class="nav-btn" onclick="navigate('profile')">${icon('profile')}<span>Profile</span></button>
-    </div>
+    ${bottomNav('insights')}
   </div>`;
   buildStarfield();
 }
