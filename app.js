@@ -479,141 +479,26 @@ function render(){
 }
 
 /* ============ STUDY MATERIALS ============
-   Upload a PDF -> extract its text (pdf.js, client-side) -> send it to
-   Claude to auto-generate a quiz in the same {mcq|tap} shape used by UNITS.
-
-   NOTE ON SHARING: this currently persists to *this browser's* localStorage
-   only, so materials are not yet visible across devices/users. To make the
-   library truly shared, swap loadMaterials()/saveMaterials() below for reads/
-   writes against a backend (e.g. Supabase) — nothing else here needs to change,
-   since the rest of the app just calls those two functions. */
-const MATERIALS_KEY = 'darb_materials_v1';
-const API_KEY_STORAGE = 'darb_anthropic_key_v1';
-
-function loadMaterials(){
-  try{
-    const raw = localStorage.getItem(MATERIALS_KEY);
-    return raw ? JSON.parse(raw) : [];
-  }catch(e){ return []; }
-}
-function saveMaterials(){
-  try{ localStorage.setItem(MATERIALS_KEY, JSON.stringify(materials)); }catch(e){}
-}
-function getApiKey(){ return localStorage.getItem(API_KEY_STORAGE) || ''; }
-function setApiKey(k){ localStorage.setItem(API_KEY_STORAGE, (k||'').trim()); }
-
-let materials = loadMaterials();
+   Read-only library. Materials (title + auto-generated quiz questions) live
+   as static data in the MATERIALS array in data.js — the same way UNITS does.
+   There is no in-app upload: to add a new PDF, send it to Claude and it will
+   extract the text, generate questions, and add an entry to MATERIALS for you.
+   Visitors can only browse this list and take the quizzes — nothing here
+   writes anything, so there's nothing for a visitor to add or change. */
 
 function escapeHtml(s){
   return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-async function extractPdfText(file){
-  if(!window.pdfjsLib) throw new Error('PDF reader failed to load. Check your connection and try again.');
-  const buf = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
-  let text = '';
-  const maxPages = Math.min(pdf.numPages, 60);
-  for(let p=1; p<=maxPages; p++){
-    const page = await pdf.getPage(p);
-    const content = await page.getTextContent();
-    text += content.items.map(it=>it.str).join(' ') + '\n';
-  }
-  return text.trim();
-}
-
-async function generateQuestionsFromText(text, apiKey){
-  const trimmed = text.slice(0, 15000);
-  const sys = `You write short quiz questions for an Arabic grammar (Nahw) learning app, based on study material text the user provides. Return ONLY valid JSON — no prose, no markdown fences, no code block. The JSON must be an array of 6 to 10 question objects, each one of these two shapes:
-{"type":"mcq","prompt":"...","options":["...","...","...","..."],"answer":0,"explanation":"..."}
-{"type":"tap","prompt":"...","sub":"a full sentence to tap a word within","words":["w1","w2","w3"],"answer":0,"explanation":"..."}
-"answer" is a 0-based index into "options" or "words". Base every question strictly on the provided text — don't invent facts not in it. Mix mcq and tap types, prefer mcq. Keep prompts concise. Preserve any Arabic script exactly as written in the source.`;
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
-    },
-    body: JSON.stringify({
-      model:'claude-sonnet-5',
-      max_tokens: 3000,
-      system: sys,
-      messages:[{role:'user', content:`Study material text:\n\n${trimmed}`}]
-    })
-  });
-  if(!res.ok){
-    const errBody = await res.text().catch(()=> '');
-    let msg = `API error ${res.status}`;
-    try{ msg = JSON.parse(errBody).error.message || msg; }catch(e){}
-    throw new Error(msg);
-  }
-  const data = await res.json();
-  const textOut = (data.content||[]).map(b=>b.text||'').join('').trim();
-  const cleaned = textOut.replace(/^```json\s*|^```\s*|```\s*$/g,'').trim();
-  let parsed;
-  try{ parsed = JSON.parse(cleaned); }catch(e){ throw new Error('Could not read the questions the AI returned — try again.'); }
-  if(!Array.isArray(parsed) || parsed.length===0) throw new Error('No questions were generated from this PDF.');
-  return parsed;
-}
-
-async function handlePdfUpload(fileInput){
-  const file = fileInput.files[0];
-  fileInput.value = '';
-  if(!file) return;
-  const apiKey = getApiKey();
-  if(!apiKey){ promptApiKey(); if(!getApiKey()) return; }
-
-  const id = 'm' + Date.now();
-  const material = {id, title: file.name.replace(/\.pdf$/i,''), addedAt: todayStr(), status:'reading', questions:[], errorMsg:null};
-  materials.unshift(material);
-  saveMaterials();
-  navigate('materials');
-
-  try{
-    const text = await extractPdfText(file);
-    if(!text || text.length < 40) throw new Error('Could not read text from this PDF — it may be a scanned image without a text layer.');
-    material.status = 'generating';
-    saveMaterials(); render();
-    const questions = await generateQuestionsFromText(text, getApiKey());
-    material.questions = questions;
-    material.status = 'ready';
-  }catch(e){
-    material.status = 'error';
-    material.errorMsg = (e && e.message) ? e.message : 'Something went wrong reading this PDF.';
-  }
-  saveMaterials();
-  render();
-}
-window.handlePdfUpload = handlePdfUpload;
-
-function promptApiKey(){
-  const cur = getApiKey();
-  const val = prompt("Paste your Anthropic API key. It's stored only in this browser (localStorage) and used only to generate quiz questions from your PDFs:", cur);
-  if(val === null) return;
-  setApiKey(val);
-  render();
-}
-window.promptApiKey = promptApiKey;
-
-function removeMaterial(id){
-  if(!confirm('Remove this study material and its questions?')) return;
-  materials = materials.filter(m=>m.id!==id);
-  saveMaterials();
-  render();
-}
-window.removeMaterial = removeMaterial;
-
 function startMaterialQuiz(id){
-  const m = materials.find(x=>x.id===id);
+  const m = MATERIALS.find(x=>x.id===id);
   if(!m || !m.questions || !m.questions.length) return;
   const unit = {
     id: 'mat_'+m.id,
     day: 1,
     title: m.title,
     arTitle: 'مَوَادّ دِرَاسِيَّة',
-    teach: `Auto-generated questions from your PDF "${m.title}".`,
+    teach: m.description || `Questions based on "${m.title}".`,
     exercises: m.questions
   };
   navigate('lesson', {unit, showingTeach:true, idx:0, mistakes:0});
@@ -622,50 +507,29 @@ window.startMaterialQuiz = startMaterialQuiz;
 
 function materialCard(m){
   const count = (m.questions||[]).length;
-  let body;
-  if(m.status==='reading'){
-    body = `<div class="challenge-desc">Reading PDF…</div>`;
-  } else if(m.status==='generating'){
-    body = `<div class="challenge-desc">Generating questions with AI…</div>`;
-  } else if(m.status==='error'){
-    body = `<div class="challenge-desc" style="color:#FF9E7A;">${escapeHtml(m.errorMsg)}</div>
-      <button class="reset-link" onclick="removeMaterial('${m.id}')">Remove</button>`;
-  } else {
-    body = `<div class="challenge-desc">${count} question${count===1?'':'s'} · added ${m.addedAt}</div>
-      <div style="display:flex;gap:10px;align-items:center;margin-top:6px;">
-        <button class="primary-btn" style="flex:1;padding:10px;" onclick="startMaterialQuiz('${m.id}')">Start Quiz</button>
-        <button class="close-btn" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);width:36px;height:36px;" onclick="removeMaterial('${m.id}')">${icon('trash')}</button>
-      </div>`;
-  }
   return `<div class="challenge-card">
     <div class="challenge-icon">${icon('book')}</div>
     <div class="challenge-body">
       <div class="challenge-title">${escapeHtml(m.title)}</div>
-      ${body}
+      <div class="challenge-desc">${escapeHtml(m.description || `${count} question${count===1?'':'s'}`)}</div>
+      <div style="margin-top:6px;">
+        <button class="primary-btn" style="width:100%;padding:10px;" onclick="startMaterialQuiz('${m.id}')">Start Quiz</button>
+      </div>
     </div>
   </div>`;
 }
 
 function renderMaterials(){
-  const apiKey = getApiKey();
-  const cards = materials.length
-    ? materials.map(materialCard).join('')
-    : `<div class="insight-empty">No study materials yet. Upload a PDF and Darb will turn it into a quiz for everyone using the app ✨</div>`;
+  const cards = (typeof MATERIALS !== 'undefined' && MATERIALS.length)
+    ? MATERIALS.map(materialCard).join('')
+    : `<div class="insight-empty">No study materials yet — check back soon ✨</div>`;
   app.innerHTML = `
   <div class="screen active">
     <div class="path-header">
       <div class="eyebrow">STUDY MATERIALS</div>
       <h1 class="section-h1">Your Library <span class="arabic" style="font-size:20px;">مَوَادّ</span></h1>
-      <p class="rank-line">Upload a PDF — Darb reads it and builds a quiz from it automatically.</p>
+      <p class="rank-line">Extra quizzes built from study materials.</p>
     </div>
-    <div style="padding:0 24px 10px;display:flex;gap:10px;">
-      <label class="primary-btn" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
-        ${icon('upload')}<span>Add PDF</span>
-        <input type="file" accept="application/pdf" style="display:none;" onchange="handlePdfUpload(this)">
-      </label>
-      <button class="close-btn" style="width:48px;height:48px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:14px;" onclick="promptApiKey()" title="Set Anthropic API key">${icon('key')}</button>
-    </div>
-    ${!apiKey ? `<div class="insight-empty-sm" style="text-align:left;padding:0 24px 14px;">No Anthropic API key set — tap the key icon above to add one. It's stored only in this browser and used to generate questions from your PDFs.</div>` : ''}
     <div class="challenge-list">${cards}</div>
     ${bottomNav('materials')}
   </div>`;

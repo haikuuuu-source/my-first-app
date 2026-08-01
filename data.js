@@ -131,3 +131,11 @@ const RANKS = [
   {min:150, title:"Mutaqaddim", ar:"مُتَقَدِّم"},
   {min:280, title:"Ustādh", ar:"أُسْتَاذ"}
 ];
+
+// Study Materials: a read-only, hand-curated library separate from the 10-day
+// path. Each entry's `questions` array uses the same {mcq|tap} exercise shape
+// as UNITS above. There is no in-app upload — send Claude a PDF and it will
+// extract the text, write questions from it, and append an entry here.
+// Example shape:
+// { id:'m1', title:"Some PDF Title", description:"12 questions", questions:[ ... ] }
+const MATERIALS = [];
