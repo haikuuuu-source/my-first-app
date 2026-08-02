@@ -25,11 +25,11 @@ function icon(name, cls){ return `<svg class="${cls||''}" viewBox="0 0 24 24">${
 /* ---------- SHARED BOTTOM NAV (5 tabs) ---------- */
 function bottomNav(active){
   const tabs = [
-    ['home','home','Path'],
-    ['materials','book','Study'],
-    ['challenges','trophy','Challenges'],
-    ['insights','chartBar','Insights'],
-    ['profile','profile','Profile']
+    ['home','home', t('nav_path')],
+    ['materials','book', t('nav_study')],
+    ['challenges','trophy', t('nav_challenges')],
+    ['insights','chartBar', t('nav_insights')],
+    ['profile','profile', t('nav_profile')]
   ];
   return `<div class="bottom-nav">${tabs.map(([r,ic,label])=>
     `<button class="nav-btn${active===r?' active':''}" ${active===r?'':`onclick="navigate('${r}')"`}>${icon(ic)}<span>${label}</span></button>`
@@ -62,20 +62,23 @@ function buildStarfield(){
 /* ---------- COMPANION: astronaut riding a small ship — no facial features (blank visor only) ---------- */
 /* ---------- PLATFORMER ASTRONAUT: no facial features, body language only ---------- */
 function astronautReadySVG(){
-  // coiled, ready-to-spring crouch — static pose, no swinging limbs
+  // standing tall, one hand to the chin in thought — the idle/ready pose
   const suitFill = '#F2EFE4';
   return `<svg viewBox="0 0 30 42" class="astro-sprite">
-    <path d="M11 25 L7 30.5 L9 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-    <path d="M19 25 L23 30.5 L21 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-    <circle cx="9" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
-    <circle cx="21" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
-    <path d="M11.5 19.5 L7.5 17.5 L4.5 20.5" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-    <path d="M18.5 19.5 L22.5 17.5 L25.5 20.5" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M12 25 L11 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M18 25 L19 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="11" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
+    <circle cx="19" cy="38.6" r="1.8" fill="var(--teal-bright)"/>
+    <path d="M11 19.5 L8.5 23.5 L8.5 28.5" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M19 19.5 L22.5 15.5 L19.3 11.8" stroke="${suitFill}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="19.3" cy="11.8" r="1.7" fill="${suitFill}"/>
     <rect x="9.5" y="15.5" width="11" height="9.5" rx="4.4" fill="${suitFill}"/>
     <circle cx="15" cy="20" r="1.6" fill="var(--star-gold)"/>
-    <circle cx="15" cy="8" r="6.4" fill="${suitFill}"/>
-    <circle cx="15" cy="8" r="4.9" fill="url(#visorGrad)"/>
-    <ellipse cx="12.9" cy="5.6" rx="1.5" ry="0.9" fill="#EAF7F4" opacity="0.7"/>
+    <g transform="rotate(-7 15 8)">
+      <circle cx="15" cy="8" r="6.4" fill="${suitFill}"/>
+      <circle cx="15" cy="8" r="4.9" fill="url(#visorGrad)"/>
+      <ellipse cx="12.9" cy="5.6" rx="1.5" ry="0.9" fill="#EAF7F4" opacity="0.7"/>
+    </g>
   </svg>`;
 }
 function astronautCelebrateSVG(){
@@ -222,9 +225,9 @@ function companionState(){
 }
 function companionNote(){
   const s = companionState();
-  if(s === 'struggling') return "Your astronaut's taking it slow tonight — that's okay! Even the brightest stars dim sometimes. One more try? 💫";
-  if(s === 'thriving') return "<b>You're on a roll!</b> Your astronaut is kicking their feet with excitement ✨";
-  return "Your astronaut is perched on the moon, legs swinging — ready when you are.";
+  if(s === 'struggling') return t('companion_struggling');
+  if(s === 'thriving') return t('companion_thriving');
+  return t('companion_idle');
 }
 function renderCompanion(){
   const s = companionState();
@@ -387,7 +390,8 @@ function defaultState(){
     perfectRunCount:0,     // consecutive perfect (0-mistake) lessons — powers a Challenge
     lastLessonDate:null,
     lessonsToday:0,        // lessons finished on lastLessonDate — powers a Challenge
-    materialCompletions:{} // {materialUnitId: {mistakes, at}} — study-material quiz results
+    materialCompletions:{}, // {materialUnitId: {mistakes, at}} — study-material quiz results
+    lang:'en'               // 'en' | 'ur' (Roman Urdu) — set via Profile > Settings
   };
 }
 function loadState(){
@@ -402,6 +406,120 @@ function saveState(){
   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
 }
 let state = loadState();
+
+/* ============ I18N: English / Roman Urdu ============ */
+const STRINGS = {
+  en:{
+    nav_path:"Path", nav_study:"Study", nav_challenges:"Challenges", nav_insights:"Insights", nav_profile:"Profile",
+    home_eyebrow:"Your 10-Night Journey ✨",
+    day_label:"Day", complete_suffix:" · Complete",
+    stars_earned:"✨ all 5 stars earned", ship_docked:"Your ship is docked here", locked:"Locked",
+    out_of_hearts_alert:"You're out of hearts — they refill over time. Come back soon!",
+    leave_lesson_confirm:"Leave this lesson? Progress on this lesson will be lost.",
+    lets_light_up:"Let's light this up ✨ (5 stars)",
+    mcq_kicker:"Jump to the Answer · Question", tap_kicker:"Tap the Word · Question", of_label:"of",
+    correct_label:"Correct", not_quite_label:"Not quite", continue_btn:"Continue",
+    out_of_hearts_note:"Out of hearts — you can still finish this lesson, hearts just won't go lower.",
+    study_quiz_complete:"Study quiz complete — ", study_quiz_finished:"Study quiz finished — {t}. Want to try it again?",
+    day_complete:"Day {d} complete — {t} · {a}", day_finished:"Day {d} finished — {t}. Want to review it again before moving on?",
+    back_to_study:"Back to Study Materials →", keep_magic_going:"Keep the magic going →", back_to_path:"Back to the path →",
+    xp_earned_label:"XP earned", correct_stat_label:"Correct", day_streak_label:"Day streak",
+    set_your_name:"Set your name", achievements_title:"Achievements", days_done_label:"Days done",
+    total_xp_label:"Total XP", streak_label:"Streak", reset_progress_btn:"Reset all progress",
+    reset_confirm:"This will erase all XP, streaks, and completed days. Continue?",
+    settings_title:"Settings", language_label:"Language", lang_en:"English", lang_ur:"Roman Urdu",
+    challenges_eyebrow:"Keep Pushing ✨", challenges_title:"Challenges",
+    ch_streak_title:"Streak Keeper", ch_streak_desc:"Reach a 7-day streak",
+    ch_flawless_title:"Flawless Run", ch_flawless_desc:"Finish 3 lessons in a row with zero mistakes",
+    ch_double_title:"Double Session", ch_double_desc:"Complete 2 lessons in a single day",
+    ch_full_title:"Full Constellation", ch_full_desc:"Complete all 10 days of the path",
+    insights_eyebrow:"Know Yourself ✨", insights_title:"Insights",
+    insights_empty:"Complete a few exercises and your strong points + focus areas will show up here ✨",
+    insights_strong_empty:"Keep going — not enough data yet.", insights_weak_empty:"No clear focus areas yet — nice work!",
+    insights_overall_lab:"Overall accuracy across {n} answers",
+    insights_strong:"💪 Strong Areas", insights_weak:"🎯 Focus Areas", insights_all:"All Topics",
+    materials_eyebrow:"STUDY MATERIALS", materials_title:"Your Library",
+    materials_sub:"Extra quizzes built from study materials.",
+    materials_empty:"No study materials yet — check back soon ✨", start_quiz_btn:"Start Quiz",
+    companion_struggling:"Your astronaut's taking it slow tonight — that's okay! Even the brightest stars dim sometimes. One more try? 💫",
+    companion_thriving:"<b>You're on a roll!</b> Your astronaut is kicking their feet with excitement ✨",
+    companion_idle:"Your astronaut is perched on the moon, legs swinging — ready when you are.",
+    toast_star:"✨ YOU EARNED A STAR"
+  },
+  ur:{
+    nav_path:"Raasta", nav_study:"Mutala", nav_challenges:"Challenge", nav_insights:"Jaiza", nav_profile:"Profile",
+    home_eyebrow:"Aapka 10 Raaton Ka Safar ✨",
+    day_label:"Din", complete_suffix:" · Mukammal",
+    stars_earned:"✨ tamam 5 sitare hasil", ship_docked:"Aapka jahaz yahan khara hai", locked:"Band",
+    out_of_hearts_alert:"Aapke dil khatam ho gaye — waqt ke sath wapas aa jate hain. Jald wapas aayein!",
+    leave_lesson_confirm:"Yeh sabaq chhod dein? Is sabaq ki progress zaya ho jayegi.",
+    lets_light_up:"Chaliye shuru karte hain ✨ (5 sitare)",
+    mcq_kicker:"Jawab tak pohanchein · Sawal", tap_kicker:"Lafz par tap karein · Sawal", of_label:"mein se",
+    correct_label:"Sahih", not_quite_label:"Bilkul nahi", continue_btn:"Jari Rakhein",
+    out_of_hearts_note:"Dil khatam — aap phir bhi yeh sabaq mukammal kar sakte hain, dil bas kam nahi hongay.",
+    study_quiz_complete:"Study quiz mukammal — ", study_quiz_finished:"Study quiz khatam — {t}. Dobara koshish karna chahenge?",
+    day_complete:"Din {d} mukammal — {t}", day_finished:"Din {d} khatam — {t}. Aage barhne se pehle dobara dekhna chahenge?",
+    back_to_study:"Study Materials par wapas →", keep_magic_going:"Jadoo jaari rakhein →", back_to_path:"Raaste par wapas →",
+    xp_earned_label:"XP hasil", correct_stat_label:"Sahih", day_streak_label:"Din ka streak",
+    set_your_name:"Apna naam likhein", achievements_title:"Kamyabiyan", days_done_label:"Din mukammal",
+    total_xp_label:"Kul XP", streak_label:"Streak", reset_progress_btn:"Sari progress reset karein",
+    reset_confirm:"Isse sara XP, streaks, aur mukammal din mit jayenge. Jari rakhein?",
+    settings_title:"Settings", language_label:"Zaban", lang_en:"English", lang_ur:"Roman Urdu",
+    challenges_eyebrow:"Koshish Jari Rakhein ✨", challenges_title:"Challenges",
+    ch_streak_title:"Streak Rakhne Wala", ch_streak_desc:"7 din ka streak hasil karein",
+    ch_flawless_title:"Be-aib Daur", ch_flawless_desc:"Lagataar 3 sabaq bina ghalti ke mukammal karein",
+    ch_double_title:"Do Sabaq", ch_double_desc:"Ek din mein 2 sabaq mukammal karein",
+    ch_full_title:"Poora Kahkashan", ch_full_desc:"Raaste ke sare 10 din mukammal karein",
+    insights_eyebrow:"Khud Ko Jaanein ✨", insights_title:"Jaiza",
+    insights_empty:"Kuch exercises mukammal karein aur aapki mazboot aur kamzor jaghain yahan nazar aayengi ✨",
+    insights_strong_empty:"Jari rakhein — abhi kaafi data nahi hai.", insights_weak_empty:"Abhi koi khaas kamzor jagah nahi — shabash!",
+    insights_overall_lab:"{n} jawabon mein kul sahih dar",
+    insights_strong:"💪 Mazboot Jaghain", insights_weak:"🎯 Tawajju Talab Jaghain", insights_all:"Tamam Mozuaat",
+    materials_eyebrow:"STUDY MATERIALS", materials_title:"Aapki Library",
+    materials_sub:"Study materials se bane extra quiz.",
+    materials_empty:"Abhi koi study material nahi — jald dekhein ✨", start_quiz_btn:"Quiz Shuru Karein",
+    companion_struggling:"Aapka astronaut aaj ki raat aahista chal raha hai — koi baat nahi! Sab se roshan sitare bhi kabhi mand parte hain. Ek aur koshish? 💫",
+    companion_thriving:"<b>Aap kamaal kar rahe hain!</b> Aapka astronaut josh se pair hila raha hai ✨",
+    companion_idle:"Aapka astronaut chand par baitha hai, pair hila raha hai — jab aap tayyar hon.",
+    toast_star:"✨ AAPKO EK SITARA MILA"
+  }
+};
+function t(key){
+  const d = STRINGS[state.lang] || STRINGS.en;
+  return (d[key] !== undefined) ? d[key] : STRINGS.en[key];
+}
+function setLang(l){
+  state.lang = (l==='ur') ? 'ur' : 'en';
+  saveState();
+  render();
+}
+window.setLang = setLang;
+
+// Returns a copy of a unit/material with its title/teach/exercise text swapped
+// to Roman Urdu when that's the active language and a `ur` translation exists.
+// Called once, when a lesson starts, so the whole lesson stays consistent even
+// if the language is changed again mid-lesson.
+function localizeUnit(u){
+  if(state.lang !== 'ur' || !u || !u.ur) return u;
+  return Object.assign({}, u, {
+    title: u.ur.title || u.title,
+    teach: u.ur.teach || u.teach,
+    exercises: u.exercises.map((ex,i)=>{
+      const ue = (u.ur.exercises && u.ur.exercises[i]) || {};
+      return Object.assign({}, ex, {
+        prompt: ue.prompt || ex.prompt,
+        options: ue.options || ex.options,
+        explanation: ue.explanation || ex.explanation,
+        sub: ue.sub || ex.sub
+      });
+    })
+  });
+}
+function localizeAchievement(a){
+  if(!a) return a;
+  if(state.lang === 'ur' && a.ur) return Object.assign({}, a, {title:a.ur.title||a.title, body:a.ur.body||a.body});
+  return a;
+}
 
 function todayStr(){ return new Date().toISOString().slice(0,10); }
 function checkStreak(){
@@ -443,10 +561,10 @@ function queueAchievement(ach){
 }
 function flushToasts(){
   if(toastQueue.length === 0) return;
-  const ach = toastQueue.shift();
+  const ach = localizeAchievement(toastQueue.shift());
   const toast = document.getElementById('toast');
   document.getElementById('toastIcon').innerHTML = ICONS[ach.icon] || ICONS.star;
-  document.getElementById('toastTitle').textContent = "✨ YOU EARNED A STAR";
+  document.getElementById('toastTitle').textContent = t('toast_star');
   document.getElementById('toastBody').textContent = ach.title + " — " + ach.body;
   toast.classList.add('show');
   setTimeout(()=>{
@@ -493,14 +611,15 @@ function escapeHtml(s){
 function startMaterialQuiz(id){
   const m = MATERIALS.find(x=>x.id===id);
   if(!m || !m.questions || !m.questions.length) return;
-  const unit = {
+  const unit = localizeUnit({
     id: 'mat_'+m.id,
     day: 1,
     title: m.title,
     arTitle: 'مَوَادّ دِرَاسِيَّة',
     teach: m.description || `Questions based on "${m.title}".`,
-    exercises: m.questions
-  };
+    exercises: m.questions,
+    ur: m.ur
+  });
   navigate('lesson', {unit, showingTeach:true, idx:0, mistakes:0});
 }
 window.startMaterialQuiz = startMaterialQuiz;
@@ -513,7 +632,7 @@ function materialCard(m){
       <div class="challenge-title">${escapeHtml(m.title)}</div>
       <div class="challenge-desc">${escapeHtml(m.description || `${count} question${count===1?'':'s'}`)}</div>
       <div style="margin-top:6px;">
-        <button class="primary-btn" style="width:100%;padding:10px;" onclick="startMaterialQuiz('${m.id}')">Start Quiz</button>
+        <button class="primary-btn" style="width:100%;padding:10px;" onclick="startMaterialQuiz('${m.id}')">${t('start_quiz_btn')}</button>
       </div>
     </div>
   </div>`;
@@ -522,13 +641,13 @@ function materialCard(m){
 function renderMaterials(){
   const cards = (typeof MATERIALS !== 'undefined' && MATERIALS.length)
     ? MATERIALS.map(materialCard).join('')
-    : `<div class="insight-empty">No study materials yet — check back soon ✨</div>`;
+    : `<div class="insight-empty">${t('materials_empty')}</div>`;
   app.innerHTML = `
   <div class="screen active">
     <div class="path-header">
-      <div class="eyebrow">STUDY MATERIALS</div>
-      <h1 class="section-h1">Your Library <span class="arabic" style="font-size:20px;">مَوَادّ</span></h1>
-      <p class="rank-line">Extra quizzes built from study materials.</p>
+      <div class="eyebrow">${t('materials_eyebrow')}</div>
+      <h1 class="section-h1">${t('materials_title')} <span class="arabic" style="font-size:20px;">مَوَادّ</span></h1>
+      <p class="rank-line">${t('materials_sub')}</p>
     </div>
     <div class="challenge-list">${cards}</div>
     ${bottomNav('materials')}
@@ -539,6 +658,7 @@ function renderMaterials(){
 function renderHome(){
   const rank = currentRank();
   const stations = UNITS.map(u => {
+    const lu = localizeUnit(u);
     const done = !!state.completedUnits[u.id];
     const unlocked = isUnitUnlocked(u.id);
     const isCurrent = !done && unlocked;
@@ -550,13 +670,13 @@ function renderHome(){
     return `
     <div class="station">
       <div class="station-node ${cls}">
-        <button ${unlocked ? `onclick="startUnit(${u.id})"` : 'disabled'} aria-label="Day ${u.day}">${inner}</button>
+        <button ${unlocked ? `onclick="startUnit(${u.id})"` : 'disabled'} aria-label="${t('day_label')} ${u.day}">${inner}</button>
       </div>
       <div class="station-card">
-        <div class="day-label">Day ${u.day}${done ? ' · Complete' : ''}</div>
-        <h3>${u.title}</h3>
+        <div class="day-label">${t('day_label')} ${u.day}${done ? t('complete_suffix') : ''}</div>
+        <h3>${lu.title}</h3>
         <div class="ar-title arabic">${u.arTitle}</div>
-        <div class="prog">${done ? '✨ all 5 stars earned' : (unlocked ? "Your ship is docked here" : 'Locked')}</div>
+        <div class="prog">${done ? t('stars_earned') : (unlocked ? t('ship_docked') : t('locked'))}</div>
       </div>
     </div>`;
   }).join('');
@@ -569,7 +689,7 @@ function renderHome(){
       <div class="stat-pill hearts">${icon('heart','stat-icon')}${state.hearts}/${state.heartsMax}</div>
     </div>
     <div class="path-header">
-      <div class="eyebrow">Your 10-Night Journey ✨</div>
+      <div class="eyebrow">${t('home_eyebrow')}</div>
       <h1 class="arabic solo">دَرْب</h1>
     </div>
     ${renderCompanion()}
@@ -584,8 +704,8 @@ function renderHome(){
 
 function startUnit(unitId){
   if(!isUnitUnlocked(unitId)) return;
-  if(state.hearts <= 0){ regenCheck(); if(state.hearts<=0){ alert("You're out of hearts — they refill over time. Come back soon!"); return; } }
-  const unit = UNITS.find(u=>u.id===unitId);
+  if(state.hearts <= 0){ regenCheck(); if(state.hearts<=0){ alert(t('out_of_hearts_alert')); return; } }
+  const unit = localizeUnit(UNITS.find(u=>u.id===unitId));
   navigate('lesson', {unit, idx:-1, mistakes:0, showingTeach:true, selected:null, answered:false, tapPicked:null});
 }
 window.startUnit = startUnit;
@@ -618,14 +738,14 @@ function renderLesson(){
       <div class="exercise-wrap">
         <div class="teach-card">
           <div class="teach-badge">${spaceBadgeSVG(badgeType, 76)}</div>
-          <div class="ex-kicker" style="text-align:center;">Day ${unit.day}</div>
+          <div class="ex-kicker" style="text-align:center;">${t('day_label')} ${unit.day}</div>
           <h2 class="teach-title">${unit.title}</h2>
           <div class="teach-ar arabic">${unit.arTitle}</div>
           <p class="teach-desc">${unit.teach}</p>
         </div>
       </div>
       <div class="footer-bar">
-        <button class="primary-btn" onclick="beginExercises()">Let's light this up ✨ (5 stars)</button>
+        <button class="primary-btn" onclick="beginExercises()">${t('lets_light_up')}</button>
       </div>
     </div>`;
     return;
@@ -639,14 +759,14 @@ function renderLesson(){
   if(ex.type === 'mcq'){
     bodyHtml = `
       <div class="ex-header-card">
-        <div class="ex-kicker">Jump to the Answer · Question ${idx+1} of ${total}</div>
+        <div class="ex-kicker">${t('mcq_kicker')} ${idx+1} ${t('of_label')} ${total}</div>
         <div class="ex-prompt">${ex.prompt}</div>
       </div>
       ${renderPlatformerStage(ex)}`;
   } else if(ex.type === 'tap'){
     bodyHtml = `
       <div class="ex-header-card">
-        <div class="ex-kicker">Tap the Word · Question ${idx+1} of ${total}</div>
+        <div class="ex-kicker">${t('tap_kicker')} ${idx+1} ${t('of_label')} ${total}</div>
         <div class="ex-prompt">${ex.prompt}</div>
         <div class="ex-sub">${ex.sub}</div>
       </div>
@@ -659,7 +779,7 @@ function renderLesson(){
   app.innerHTML = `
   <div class="screen active">
     <div class="lesson-top">
-      <button class="close-btn" onclick="if(confirm('Leave this lesson? Progress on this lesson will be lost.')) navigate('${backRoute}')">${icon('close')}</button>
+      <button class="close-btn" onclick="if(confirm('${t('leave_lesson_confirm')}')) navigate('${backRoute}')">${icon('close')}</button>
       ${tileRow(total, idx)}
       <div class="hearts-mini">${heartsRow()}</div>
     </div>
@@ -869,10 +989,10 @@ function handleAnswer(correct, explanation){
   }
   footer.innerHTML = `
     <div class="explain-box ${correct?'correct':'wrong'}">
-      <b>${correct ? "Correct" : "Not quite"}</b>
+      <b>${correct ? t('correct_label') : t('not_quite_label')}</b>
       ${explanation}
     </div>
-    <button class="primary-btn ${correct?'':'gold'}" onclick="nextExercise()">Continue</button>
+    <button class="primary-btn ${correct?'':'gold'}" onclick="nextExercise()">${t('continue_btn')}</button>
   `;
   // update hearts display live
   document.querySelector('.hearts-mini').innerHTML = heartsRow();
@@ -882,7 +1002,7 @@ function handleAnswer(correct, explanation){
   }
 
   if(state.hearts <= 0 && !correct){
-    footer.innerHTML += `<p style="text-align:center;font-size:12px;color:var(--ink-soft);margin-top:10px;">Out of hearts — you can still finish this lesson, hearts just won't go lower.</p>`;
+    footer.innerHTML += `<p style="text-align:center;font-size:12px;color:var(--ink-soft);margin-top:10px;">${t('out_of_hearts_note')}</p>`;
   }
 }
 
@@ -966,20 +1086,38 @@ const CELEBRATIONS_ENCOURAGE = [
   "Every attempt makes the next one easier. Keep going.",
   "That's a tough day — and you still finished it. That counts."
 ];
+const CELEBRATIONS_GREAT_UR = [
+  "Aapne aasman aur roshan kar diya! 🌙",
+  "Zabardast! Aap kamaal kar rahe hain!! ✨",
+  "Aaj raat aap chaaye hue hain!",
+  "Bas aise hi, ek aur sitara ⭐"
+];
+const CELEBRATIONS_GOOD_UR = [
+  "Aaj achi mehnat ki — aap manzil ke qareeb hain!",
+  "Achi pragati ✨ yeh asal momentum hai.",
+  "Aap tukdon ko bohat achay se jor rahe hain."
+];
+const CELEBRATIONS_ENCOURAGE_UR = [
+  "Nahw ke liye mashq chahiye — mushkil hissa aapne kar liya: aana aur koshish karna.",
+  "Har koshish agli ko asaan banati hai. Jari rakhein.",
+  "Aaj mushkil din tha — aur phir bhi aapne mukammal kiya. Yeh maayne rakhta hai."
+];
 function renderResult(){
   const {unit, mistakes, xpGained} = lessonCtx;
   const isMaterial = typeof unit.id === 'string';
   const correct = unit.exercises.length - mistakes;
   const ratio = correct / unit.exercises.length;
-  const pool = ratio >= 0.8 ? CELEBRATIONS_GREAT : (ratio >= 0.5 ? CELEBRATIONS_GOOD : CELEBRATIONS_ENCOURAGE);
+  const great = state.lang==='ur' ? CELEBRATIONS_GREAT_UR : CELEBRATIONS_GREAT;
+  const good = state.lang==='ur' ? CELEBRATIONS_GOOD_UR : CELEBRATIONS_GOOD;
+  const encourage = state.lang==='ur' ? CELEBRATIONS_ENCOURAGE_UR : CELEBRATIONS_ENCOURAGE;
+  const pool = ratio >= 0.8 ? great : (ratio >= 0.5 ? good : encourage);
   const headline = pool[(isMaterial ? correct : unit.id) % pool.length];
   const subtext = isMaterial
-    ? (ratio >= 0.5 ? `Study quiz complete — ${unit.title}` : `Study quiz finished — ${unit.title}. Want to try it again?`)
-    : (ratio >= 0.5 ? `Day ${unit.day} complete — ${unit.title} · ${unit.arTitle}` : `Day ${unit.day} finished — ${unit.title}. Want to review it again before moving on?`);
+    ? (ratio >= 0.5 ? (t('study_quiz_complete') + unit.title) : t('study_quiz_finished').replace('{t}', unit.title))
+    : (ratio >= 0.5 ? t('day_complete').replace('{d}',unit.day).replace('{t}',unit.title).replace('{a}',unit.arTitle)
+                     : t('day_finished').replace('{d}',unit.day).replace('{t}',unit.title));
   const backRoute = isMaterial ? 'materials' : 'home';
-  const backLabel = isMaterial
-    ? (ratio >= 0.5 ? 'Back to Study Materials →' : 'Back to Study Materials →')
-    : (ratio >= 0.5 ? 'Keep the magic going →' : 'Back to the path →');
+  const backLabel = isMaterial ? t('back_to_study') : (ratio >= 0.5 ? t('keep_magic_going') : t('back_to_path'));
   app.innerHTML = `
   <div class="screen active">
     <div class="result-wrap">
@@ -987,9 +1125,9 @@ function renderResult(){
       <h1>${headline}</h1>
       <p>${subtext}</p>
       <div class="result-stats">
-        <div class="rstat"><div class="num">+${xpGained}</div><div class="lab">XP earned</div></div>
-        <div class="rstat"><div class="num">${correct}/${unit.exercises.length}</div><div class="lab">Correct</div></div>
-        <div class="rstat"><div class="num">${state.streak}</div><div class="lab">Day streak</div></div>
+        <div class="rstat"><div class="num">+${xpGained}</div><div class="lab">${t('xp_earned_label')}</div></div>
+        <div class="rstat"><div class="num">${correct}/${unit.exercises.length}</div><div class="lab">${t('correct_stat_label')}</div></div>
+        <div class="rstat"><div class="num">${state.streak}</div><div class="lab">${t('day_streak_label')}</div></div>
       </div>
       <button class="primary-btn" onclick="navigate('${backRoute}')">${backLabel}</button>
     </div>
@@ -1002,20 +1140,21 @@ function renderProfile(){
   const rank = currentRank();
   const completedCount = Object.keys(state.completedUnits).length;
   const badges = ACHIEVEMENTS.map(a=>{
+    const la = localizeAchievement(a);
     const unlocked = state.unlockedAchievements.includes(a.id);
     return `<div class="badge ${unlocked?'':'locked'}">
       <svg class="bi" viewBox="0 0 24 24" style="color:${unlocked?'var(--gold)':'var(--ink-soft)'}">${ICONS[a.icon]}</svg>
-      <div class="bt">${a.title}</div>
+      <div class="bt">${la.title}</div>
     </div>`;
   }).join('');
 
   const nameBlock = profileEditing
     ? `<div class="name-edit-row">
-        <input id="nameInput" class="name-input" maxlength="24" placeholder="Your name" value="${(state.profileName||'').replace(/"/g,'')}" />
+        <input id="nameInput" class="name-input" maxlength="24" placeholder="${t('set_your_name')}" value="${(state.profileName||'').replace(/"/g,'')}" />
         <button class="name-save-btn" onclick="saveProfileName()">${icon('check')}</button>
        </div>`
     : `<div class="name-display-row" onclick="startEditProfile()">
-        <h2>${state.profileName ? state.profileName : 'Set your name'}</h2>
+        <h2>${state.profileName ? state.profileName : t('set_your_name')}</h2>
         ${icon('pencil','edit-pencil')}
        </div>`;
 
@@ -1032,13 +1171,21 @@ function renderProfile(){
       <div class="rank-tag">${rank.title} · <span class="arabic">${rank.ar}</span></div>
     </div>
     <div class="grid-stats">
-      <div class="gcard"><div class="num">${completedCount}/10</div><div class="lab">Days done</div></div>
-      <div class="gcard"><div class="num">${state.xp}</div><div class="lab">Total XP</div></div>
-      <div class="gcard"><div class="num">${state.streak}</div><div class="lab">Streak</div></div>
+      <div class="gcard"><div class="num">${completedCount}/10</div><div class="lab">${t('days_done_label')}</div></div>
+      <div class="gcard"><div class="num">${state.xp}</div><div class="lab">${t('total_xp_label')}</div></div>
+      <div class="gcard"><div class="num">${state.streak}</div><div class="lab">${t('streak_label')}</div></div>
     </div>
-    <div class="section-title">Achievements</div>
+    <div class="section-title">${t('settings_title')}</div>
+    <div class="settings-row">
+      <div class="settings-row-label">${t('language_label')}</div>
+      <div class="lang-toggle">
+        <button class="lang-btn ${state.lang==='en'?'active':''}" onclick="setLang('en')">${t('lang_en')}</button>
+        <button class="lang-btn ${state.lang==='ur'?'active':''}" onclick="setLang('ur')">${t('lang_ur')}</button>
+      </div>
+    </div>
+    <div class="section-title">${t('achievements_title')}</div>
     <div class="badge-grid">${badges}</div>
-    <div class="reset-row"><button class="reset-link" onclick="resetProgress()">Reset all progress</button></div>
+    <div class="reset-row"><button class="reset-link" onclick="resetProgress()">${t('reset_progress_btn')}</button></div>
     ${bottomNav('profile')}
   </div>`;
   if(profileEditing){
@@ -1064,10 +1211,10 @@ function renderChallenges(){
   const completedCount = Object.keys(state.completedUnits).length;
   const lessonsTodayCount = (state.lastLessonDate === todayStr()) ? state.lessonsToday : 0;
   const challenges = [
-    {icon:'flame', title:'Streak Keeper', desc:'Reach a 7-day streak', progress:Math.min(state.streak,7), goal:7},
-    {icon:'gem', title:'Flawless Run', desc:'Finish 3 lessons in a row with zero mistakes', progress:Math.min(state.perfectRunCount,3), goal:3},
-    {icon:'bolt', title:'Double Session', desc:'Complete 2 lessons in a single day', progress:Math.min(lessonsTodayCount,2), goal:2},
-    {icon:'crown', title:'Full Constellation', desc:'Complete all 10 days of the path', progress:completedCount, goal:10}
+    {icon:'flame', title:t('ch_streak_title'), desc:t('ch_streak_desc'), progress:Math.min(state.streak,7), goal:7},
+    {icon:'gem', title:t('ch_flawless_title'), desc:t('ch_flawless_desc'), progress:Math.min(state.perfectRunCount,3), goal:3},
+    {icon:'bolt', title:t('ch_double_title'), desc:t('ch_double_desc'), progress:Math.min(lessonsTodayCount,2), goal:2},
+    {icon:'crown', title:t('ch_full_title'), desc:t('ch_full_desc'), progress:completedCount, goal:10}
   ];
   const cards = challenges.map(c=>{
     const pct = Math.round((c.progress/c.goal)*100);
@@ -1091,8 +1238,8 @@ function renderChallenges(){
       <div class="stat-pill hearts">${icon('heart','stat-icon')}${state.hearts}/${state.heartsMax}</div>
     </div>
     <div class="path-header">
-      <div class="eyebrow">Keep Pushing ✨</div>
-      <h1 class="section-h1">Challenges</h1>
+      <div class="eyebrow">${t('challenges_eyebrow')}</div>
+      <h1 class="section-h1">${t('challenges_title')}</h1>
     </div>
     <div class="challenge-list">${cards}</div>
     ${bottomNav('challenges')}
@@ -1103,9 +1250,10 @@ function renderChallenges(){
 /* ============ INSIGHTS SCREEN ============ */
 function insightRow(x, kind){
   const barColor = kind==='strong' ? 'var(--teal-bright)' : (kind==='weak' ? 'var(--bloom)' : 'var(--star-gold)');
+  const lu = localizeUnit(x.unit);
   return `<div class="insight-row">
     <div class="insight-row-top">
-      <span class="insight-row-title">Day ${x.unit.day} · ${x.unit.title}</span>
+      <span class="insight-row-title">${t('day_label')} ${x.unit.day} · ${lu.title}</span>
       <span class="insight-row-pct">${x.acc}%</span>
     </div>
     <div class="insight-row-ar arabic">${x.unit.arTitle}</div>
@@ -1129,21 +1277,21 @@ function renderInsights(){
 
   let body;
   if(statsArr.length === 0){
-    body = `<div class="insight-empty">Complete a few exercises and your strong points + focus areas will show up here ✨</div>`;
+    body = `<div class="insight-empty">${t('insights_empty')}</div>`;
   } else {
-    const strongHtml = strong.length ? strong.map(x=>insightRow(x,'strong')).join('') : `<div class="insight-empty-sm">Keep going — not enough data yet.</div>`;
-    const weakHtml = weak.length ? weak.map(x=>insightRow(x,'weak')).join('') : `<div class="insight-empty-sm">No clear focus areas yet — nice work!</div>`;
+    const strongHtml = strong.length ? strong.map(x=>insightRow(x,'strong')).join('') : `<div class="insight-empty-sm">${t('insights_strong_empty')}</div>`;
+    const weakHtml = weak.length ? weak.map(x=>insightRow(x,'weak')).join('') : `<div class="insight-empty-sm">${t('insights_weak_empty')}</div>`;
     const allHtml = statsArr.map(x=>insightRow(x,'neutral')).join('');
     body = `
       <div class="insight-overall">
         <div class="insight-overall-num">${overallAcc}%</div>
-        <div class="insight-overall-lab">Overall accuracy across ${totalAnswered} answers</div>
+        <div class="insight-overall-lab">${t('insights_overall_lab').replace('{n}',totalAnswered)}</div>
       </div>
-      <div class="section-title">💪 Strong Areas</div>
+      <div class="section-title">${t('insights_strong')}</div>
       <div class="insight-list">${strongHtml}</div>
-      <div class="section-title">🎯 Focus Areas</div>
+      <div class="section-title">${t('insights_weak')}</div>
       <div class="insight-list">${weakHtml}</div>
-      <div class="section-title">All Topics</div>
+      <div class="section-title">${t('insights_all')}</div>
       <div class="insight-list">${allHtml}</div>
     `;
   }
@@ -1156,8 +1304,8 @@ function renderInsights(){
       <div class="stat-pill hearts">${icon('heart','stat-icon')}${state.hearts}/${state.heartsMax}</div>
     </div>
     <div class="path-header">
-      <div class="eyebrow">Know Yourself ✨</div>
-      <h1 class="section-h1">Insights</h1>
+      <div class="eyebrow">${t('insights_eyebrow')}</div>
+      <h1 class="section-h1">${t('insights_title')}</h1>
     </div>
     ${body}
     ${bottomNav('insights')}
@@ -1166,7 +1314,7 @@ function renderInsights(){
 }
 
 function resetProgress(){
-  if(!confirm("This will erase all XP, streaks, and completed days. Continue?")) return;
+  if(!confirm(t('reset_confirm'))) return;
   state = defaultState();
   saveState();
   navigate('home');
