@@ -24,11 +24,11 @@ const UNITS = [
     title:"Alfaz Ki Teen Qismein",
     teach:"Arabic mein alfaz ki teen qismein hoti hain. Ism: kisi shaks, jagah, cheez, khayal, sifat, zarf — aur bohat kuch ka naam. Fi'l: aisa lafz jiska zamana ho — mazi, haal, ya mustaqbil. Harf: aisa lafz jo tab tak kuch matlab nahi rakhta jab tak koi aur lafz uske baad na aaye.",
     exercises:[
-      {prompt:"\"table\" kis qisam ka lafz hai?", options:["Ism (naam)","Fi'l (fe'l)","Harf","In mein se koi nahi"], explanation:"\"Table\" kisi cheez ka naam hai — is liye yeh Ism hai."},
-      {prompt:"\"jumps\" kis qisam ka lafz hai?", options:["Ism (naam)","Fi'l (fe'l)","Harf","In mein se koi nahi"], explanation:"\"Jumps\" ek zamana (haal) rakhta hai — yeh amal ka lafz hai, Fi'l."},
-      {prompt:"\"in\" kis qisam ka lafz hai?", options:["Ism (naam)","Fi'l (fe'l)","Harf","In mein se koi nahi"], explanation:"\"In\" akela koi matlab nahi rakhta jab tak koi aur lafz uske baad na aaye — yehi Harf ki nishani hai."},
+      {prompt:"\"Mez\" kis qisam ka lafz hai?", options:["Ism (naam)","Fi'l (fe'l)","Harf","In mein se koi nahi"], explanation:"\"Mez\" kisi cheez ka naam hai — is liye yeh Ism hai."},
+      {prompt:"\"Kudta hai\" kis qisam ka lafz hai?", options:["Ism (naam)","Fi'l (fe'l)","Harf","In mein se koi nahi"], explanation:"\"Kudta hai\" ek zamana (haal) rakhta hai — yeh amal ka lafz hai, Fi'l."},
+      {prompt:"\"Mein\" kis qisam ka lafz hai?", options:["Ism (naam)","Fi'l (fe'l)","Harf","In mein se koi nahi"], explanation:"\"Mein\" akela koi matlab nahi rakhta jab tak koi aur lafz uske sath na ho — yehi Harf ki nishani hai."},
       {prompt:"\"Makkah\" kis qisam ka lafz hai?", options:["Ism (naam)","Fi'l (fe'l)","Harf","In mein se koi nahi"], explanation:"Makkah ek jagah ka naam hai — Ism (khaas ism, lekin phir bhi Ism)."},
-      {prompt:"\"slept\" kis qisam ka lafz hai?", options:["Ism (naam)","Fi'l (fe'l)","Harf","In mein se koi nahi"], explanation:"\"Slept\" mazi (guzashta zamana) rakhta hai — Fi'l."}
+      {prompt:"\"Soya\" kis qisam ka lafz hai?", options:["Ism (naam)","Fi'l (fe'l)","Harf","In mein se koi nahi"], explanation:"\"Soya\" guzashta zamana (mazi) zahir karta hai — Fi'l."}
     ]
   }
 },
@@ -46,10 +46,10 @@ const UNITS = [
     title:"I'rab Ki Teen Halatein",
     teach:"Har ism teen halaton (status) mein se ek rakhta hai. Raf' — fa'il, amal karne wala. Nasb — maf'ul, amal ki tafseel. Jarr — woh lafz jo \"ka/ki/ke\" (of) ke foran baad aaye. Misal: \"Ustad classroom mein dakhil hua\" — ustad Raf' hai, classroom Nasb hai. \"Uska shagird gehri neend so raha tha\" — shagird Raf' hai, uska Jarr hai, gehri Nasb hai.",
     exercises:[
-      {prompt:"\"A teacher entered the classroom\" mein, kaunsa lafz Raf' hai — amal karne wala?", options:["teacher","entered","classroom","a"], explanation:"Teacher hi dakhil hone wala hai — Raf'."},
-      {prompt:"\"The teacher threw a pencil\" mein, \"a pencil\" ki halat kya hai?", options:["Raf'","Nasb","Jarr"], explanation:"\"A pencil\" amal ki tafseel hai — jo phenka gaya — is liye yeh Nasb hai."},
-      {prompt:"\"A student of his was sleeping soundly\" mein, \"his\" ki halat kya hai?", options:["Raf'","Nasb","Jarr"], explanation:"\"His\" \"of\" ke foran baad aata hai — yehi Jarr ki nishani hai."},
-      {prompt:"\"The teacher's student woke up suddenly\" mein, \"student\" (jagne wala) ki halat kya hai?", options:["Raf'","Nasb","Jarr"], explanation:"\"Student\" jagne ka amal karne wala hai — Raf'."},
+      {prompt:"\"Ek ustad classroom mein dakhil hua\" mein, kaunsa lafz Raf' hai — amal karne wala?", options:["ustad","dakhil hua","classroom","ek"], explanation:"Ustad hi dakhil hone wala hai — Raf'."},
+      {prompt:"\"Ustad ne pencil phenki\" mein, \"pencil\" ki halat kya hai?", options:["Raf'","Nasb","Jarr"], explanation:"\"Pencil\" amal ki tafseel hai — jo phenka gaya — is liye yeh Nasb hai."},
+      {prompt:"\"Uska shagird gehri neend so raha tha\" mein, \"uska\" ki halat kya hai?", options:["Raf'","Nasb","Jarr"], explanation:"\"Uska\" malkiyat zahir karta hai, jaise \"ka/ki/ke\" — yehi Jarr ki nishani hai."},
+      {prompt:"\"Ustad ke shagird achanak jaag gaya\" mein, \"shagird\" (jagne wala) ki halat kya hai?", options:["Raf'","Nasb","Jarr"], explanation:"\"Shagird\" jagne ka amal karne wala hai — Raf'."},
       {prompt:"Kaunsi halat us lafz ko milti hai jo \"of\" ke foran baad aata hai?", options:["Raf'","Nasb","Jarr"], explanation:"Jarr woh halat hai jo \"of\" ke baad wale lafz ko milti hai — jaise Mudaf Ilayh."}
     ]
   }
@@ -236,9 +236,14 @@ const ACHIEVEMENTS = [
   {id:'first_lesson', title:"First Steps", body:"Complete your first lesson", icon:'star', ur:{title:"Pehla Qadam", body:"Apna pehla sabaq mukammal karein"}},
   {id:'streak3', title:"Three-Day Flame", body:"Reach a 3-day streak", icon:'flame', ur:{title:"Teen Din Ka Shola", body:"3 din ka streak hasil karein"}},
   {id:'streak7', title:"Week of 'Ilm", body:"Reach a 7-day streak", icon:'flame', ur:{title:"Ek Hafta Ilm", body:"7 din ka streak hasil karein"}},
+  {id:'streak14', title:"Two-Week Devotion", body:"Reach a 14-day streak", icon:'flame', ur:{title:"Do Hafton Ki Lagan", body:"14 din ka streak hasil karein"}},
   {id:'perfect', title:"Flawless", body:"Finish a lesson with no mistakes", icon:'gem', ur:{title:"Be-aib", body:"Bina ghalti ke sabaq mukammal karein"}},
+  {id:'triple_flawless', title:"Triple Flawless", body:"Finish 3 lessons in a row with no mistakes", icon:'gem', ur:{title:"Teharra Be-aib", body:"Lagataar 3 sabaq bina ghalti ke mukammal karein"}},
+  {id:'century', title:"Century Scholar", body:"Earn 100 XP", icon:'bolt', ur:{title:"Sau Ka Aalim", body:"100 XP hasil karein"}},
+  {id:'quarter', title:"Quarter Moon", body:"Complete 3 days", icon:'compass', ur:{title:"Chauthai Chand", body:"3 din mukammal karein"}},
   {id:'halfway', title:"Halfway There", body:"Complete Day 5", icon:'compass', ur:{title:"Aadha Safar", body:"Din 5 mukammal karein"}},
-  {id:'finisher', title:"Nahw Master", body:"Complete all 10 days", icon:'crown', ur:{title:"Nahw Ka Ustad", body:"Sare 10 din mukammal karein"}}
+  {id:'finisher', title:"Nahw Master", body:"Complete all 10 days", icon:'crown', ur:{title:"Nahw Ka Ustad", body:"Sare 10 din mukammal karein"}},
+  {id:'polyglot', title:"Language Explorer", body:"Switch the app's language", icon:'book', ur:{title:"Zaban Ka Musafir", body:"App ki zaban badlein"}}
 ];
 
 const RANKS = [

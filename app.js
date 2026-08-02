@@ -62,7 +62,7 @@ function buildStarfield(){
 /* ---------- COMPANION: astronaut riding a small ship — no facial features (blank visor only) ---------- */
 /* ---------- PLATFORMER ASTRONAUT: no facial features, body language only ---------- */
 function astronautReadySVG(){
-  // standing tall, one hand to the chin in thought — the idle/ready pose
+  // standing tall, one hand to the chin in thought, head tilted, a little "?" floating by the helmet
   const suitFill = '#F2EFE4';
   return `<svg viewBox="0 0 30 42" class="astro-sprite">
     <path d="M12 25 L11 38" stroke="${suitFill}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
@@ -74,11 +74,12 @@ function astronautReadySVG(){
     <circle cx="19.3" cy="11.8" r="1.7" fill="${suitFill}"/>
     <rect x="9.5" y="15.5" width="11" height="9.5" rx="4.4" fill="${suitFill}"/>
     <circle cx="15" cy="20" r="1.6" fill="var(--star-gold)"/>
-    <g transform="rotate(-7 15 8)">
+    <g transform="rotate(-14 15 8)">
       <circle cx="15" cy="8" r="6.4" fill="${suitFill}"/>
       <circle cx="15" cy="8" r="4.9" fill="url(#visorGrad)"/>
       <ellipse cx="12.9" cy="5.6" rx="1.5" ry="0.9" fill="#EAF7F4" opacity="0.7"/>
     </g>
+    <text x="21.5" y="4.5" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="700" fill="var(--star-gold)" transform="rotate(10 21.5 4.5)">?</text>
   </svg>`;
 }
 function astronautCelebrateSVG(){
@@ -433,6 +434,9 @@ const STRINGS = {
     ch_flawless_title:"Flawless Run", ch_flawless_desc:"Finish 3 lessons in a row with zero mistakes",
     ch_double_title:"Double Session", ch_double_desc:"Complete 2 lessons in a single day",
     ch_full_title:"Full Constellation", ch_full_desc:"Complete all 10 days of the path",
+    ch_xp_title:"XP Century", ch_xp_desc:"Earn 100 XP",
+    ch_2week_title:"Two-Week Flame", ch_2week_desc:"Reach a 14-day streak",
+    ch_quarter_title:"Quarter Moon", ch_quarter_desc:"Complete 3 days of the path",
     insights_eyebrow:"Know Yourself ✨", insights_title:"Insights",
     insights_empty:"Complete a few exercises and your strong points + focus areas will show up here ✨",
     insights_strong_empty:"Keep going — not enough data yet.", insights_weak_empty:"No clear focus areas yet — nice work!",
@@ -470,6 +474,9 @@ const STRINGS = {
     ch_flawless_title:"Be-aib Daur", ch_flawless_desc:"Lagataar 3 sabaq bina ghalti ke mukammal karein",
     ch_double_title:"Do Sabaq", ch_double_desc:"Ek din mein 2 sabaq mukammal karein",
     ch_full_title:"Poora Kahkashan", ch_full_desc:"Raaste ke sare 10 din mukammal karein",
+    ch_xp_title:"100 XP", ch_xp_desc:"100 XP hasil karein",
+    ch_2week_title:"Do Hafton Ka Shola", ch_2week_desc:"14 din ka streak hasil karein",
+    ch_quarter_title:"Chauthai Chand", ch_quarter_desc:"Raaste ke 3 din mukammal karein",
     insights_eyebrow:"Khud Ko Jaanein ✨", insights_title:"Jaiza",
     insights_empty:"Kuch exercises mukammal karein aur aapki mazboot aur kamzor jaghain yahan nazar aayengi ✨",
     insights_strong_empty:"Jari rakhein — abhi kaafi data nahi hai.", insights_weak_empty:"Abhi koi khaas kamzor jagah nahi — shabash!",
@@ -491,7 +498,9 @@ function t(key){
 function setLang(l){
   state.lang = (l==='ur') ? 'ur' : 'en';
   saveState();
+  queueAchievement(ACHIEVEMENTS.find(a=>a.id==='polyglot'));
   render();
+  setTimeout(flushToasts, 300);
 }
 window.setLang = setLang;
 
@@ -1035,8 +1044,11 @@ function finishLesson(){
     state.materialCompletions[unit.id] = {mistakes, at: today};
     saveState();
     if(mistakes === 0) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='perfect'));
+    if(state.perfectRunCount >= 3) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='triple_flawless'));
     if(state.streak >= 3) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='streak3'));
     if(state.streak >= 7) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='streak7'));
+    if(state.streak >= 14) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='streak14'));
+    if(state.xp >= 100) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='century'));
     navigate('result', {unit, mistakes, xpGained: (unit.exercises.length - mistakes) * 10});
     return;
   }
@@ -1061,8 +1073,12 @@ function finishLesson(){
   if(mistakes === 0){
     queueAchievement(ACHIEVEMENTS.find(a=>a.id==='perfect'));
   }
+  if(state.perfectRunCount >= 3) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='triple_flawless'));
   if(state.streak >= 3) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='streak3'));
   if(state.streak >= 7) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='streak7'));
+  if(state.streak >= 14) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='streak14'));
+  if(state.xp >= 100) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='century'));
+  if(Object.keys(state.completedUnits).length === 3) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='quarter'));
   if(unit.id === 5) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='halfway'));
   if(Object.keys(state.completedUnits).length === UNITS.length) queueAchievement(ACHIEVEMENTS.find(a=>a.id==='finisher'));
 
@@ -1214,6 +1230,9 @@ function renderChallenges(){
     {icon:'flame', title:t('ch_streak_title'), desc:t('ch_streak_desc'), progress:Math.min(state.streak,7), goal:7},
     {icon:'gem', title:t('ch_flawless_title'), desc:t('ch_flawless_desc'), progress:Math.min(state.perfectRunCount,3), goal:3},
     {icon:'bolt', title:t('ch_double_title'), desc:t('ch_double_desc'), progress:Math.min(lessonsTodayCount,2), goal:2},
+    {icon:'compass', title:t('ch_quarter_title'), desc:t('ch_quarter_desc'), progress:Math.min(completedCount,3), goal:3},
+    {icon:'bolt', title:t('ch_xp_title'), desc:t('ch_xp_desc'), progress:Math.min(state.xp,100), goal:100},
+    {icon:'flame', title:t('ch_2week_title'), desc:t('ch_2week_desc'), progress:Math.min(state.streak,14), goal:14},
     {icon:'crown', title:t('ch_full_title'), desc:t('ch_full_desc'), progress:completedCount, goal:10}
   ];
   const cards = challenges.map(c=>{
